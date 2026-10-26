@@ -15,7 +15,8 @@
 - [x] Dark UI uses SVG icon assets and no decorative emoji.
 - [x] Local Streamlit server is running on port 8501.
 - [ ] Browser visual QA could not run because the Chrome DevTools connector reports that the Chrome executable is missing.
-- [ ] Public deployment remains incomplete: the Replit connector returned an internal “Unknown tool” error and this workspace has no configured deploy provider credentials. The local app is available at `http://localhost:8501`.
+- [x] Public GitHub repository is published at https://github.com/shivam2931120/StoryScout.
+- [ ] Streamlit Community Cloud deployment needs the owner to authorize the repository in the Streamlit workspace and create an app from `main` / `app.py`; this environment has no connected Streamlit deployment session.
 - [x] CPU-only Sentence Transformers model was downloaded, indexes were cached, and the semantic and hybrid retrieval benchmarks ran.
 
-The primary remaining work is external: collect independent human relevance labels and connect a working Python hosting account for public deployment.
+The primary remaining work is external: collect independent human relevance labels and complete the Streamlit Community Cloud authorization/deployment step.
