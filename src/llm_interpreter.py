@@ -48,7 +48,6 @@ class NemotronQueryInterpreter:
         self.model = model or os.getenv("STORYSCOUT_NVIDIA_MODEL", "nvidia/nemotron-3.5-lightning-30b-a3b")
         self.last_call_ok: bool | None = None
         self.last_error_code: str | None = None
-        self.catalog_titles: list[str] = []
         if client is None:
             from openai import OpenAI
             client = OpenAI(api_key=api_key, base_url="https://integrate.api.nvidia.com/v1", timeout=20.0, max_retries=1)
@@ -88,7 +87,7 @@ class NemotronQueryInterpreter:
                         "character phrases, produce a useful catalog search query rather than help. Correct obvious misspellings, "
                         "expand character names into matching catalog concepts, and keep search_query short."
                     )},
-                    {"role": "user", "content": json.dumps({"message": text, "active_preferences": active, "catalog_titles": self.catalog_titles}, ensure_ascii=False)},
+                    {"role": "user", "content": json.dumps({"message": text, "active_preferences": active}, ensure_ascii=False)},
                 ],
                 response_format={"type": "json_object"},
                 max_tokens=1000,

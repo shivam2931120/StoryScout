@@ -148,7 +148,7 @@ with st.sidebar:
     st.divider()
 
 api_key = configured_api_key(st.secrets)
-catalog_paths = [DEMO_FILES["book"], DEMO_FILES["movie"], ROOT / "data/expanded/books.csv", ROOT / "data/expanded/movies.csv"]
+catalog_paths = [DEMO_FILES["book"], DEMO_FILES["movie"], ROOT / "data/expanded/books.csv", ROOT / "data/expanded/movies.csv", ROOT / "data/enriched/descriptions.csv"]
 catalog_version = tuple((path.stat().st_mtime_ns, path.stat().st_size) if path.exists() else (0, 0) for path in catalog_paths)
 engine, catalogs = load_engine(mode, api_key, catalog_version)
 st.session_state.state.retrieval_mode = mode
@@ -206,8 +206,10 @@ with tab_chat:
                 display_tags = item.genres or item.theme_tags[:3]
                 prefix = "" if item.genres else "Subject · "
                 tags = " ".join(f'<span class="tag">{escape(prefix + g[:48])}</span>' for g in display_tags)
+                if item.description_provenance:
+                    tags += f'<span class="tag">AI summary · {escape(item.description_source.split(" (")[0])}</span>'
                 description = item.description
-                if item.source.startswith(("movielens", "project-gutenberg")):
+                if item.source.startswith(("movielens", "project-gutenberg")) and not item.description_provenance:
                     description = ""
                 meta_line = " &nbsp;·&nbsp; ".join(escape(value) for value in metadata)
                 description_html = f"<p>{escape(description)}</p>" if description else ""
@@ -215,6 +217,8 @@ with tab_chat:
                 st.markdown(f'<div class="card"><div class="card-top"><h4>{escape(item.title)}</h4></div>{tags}{description_html}{meta_html}<div class="card-why">{escape(rec.explanation)}</div></div>', unsafe_allow_html=True)
                 if item.source_url.startswith(("https://", "http://")):
                     st.link_button("View source", item.source_url, key=f"source_{item.id}")
+                if item.description_source_url.startswith(("https://", "http://")):
+                    st.link_button("Summary source", item.description_source_url, key=f"summary_source_{item.id}")
 with tab_nlp:
     st.markdown("""### How the pipeline works
 1. A transparent rule baseline detects intent and explicit media.

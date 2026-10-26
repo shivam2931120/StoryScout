@@ -1,6 +1,6 @@
 # StoryScout
 
-StoryScout is a local-first college NLP project: one conversational assistant for book discovery (BookBuddy) and mood-aware movie discovery (CinemaSense). It combines rule-based intent detection, typed preference extraction, TF-IDF lexical retrieval, optional Sentence Transformers embeddings, hard filters, cross-media similarity, grounded explanations, and a Streamlit chat UI.
+StoryScout is a local-first college NLP project: one conversational assistant for book discovery (BookBuddy) and mood-aware movie discovery (CinemaSense). It combines rule-based intent detection, typed preference extraction, TF-IDF lexical retrieval, shared CPU Sentence Transformer embeddings, hard filters, cross-media similarity, grounded explanations, and a Streamlit chat UI.
 
 The interface uses a dark neumorphic theme. No API key is required: TF-IDF runs locally, and the public MiniLM model can be downloaded without credentials. If you later use a gated Hugging Face model, set `HF_TOKEN` in your shell or Streamlit secrets; never put tokens in source files or commit them.
 
@@ -12,8 +12,6 @@ Optional NVIDIA Nemotron query interpretation can normalize misspellings, identi
 cd StoryScout
 python3 -m venv .venv
 .venv/bin/python -m pip install -r requirements.txt
-.venv/bin/python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
-.venv/bin/python -m pip install -r requirements-semantic.txt
 .venv/bin/python scripts/prepare_data.py
 .venv/bin/python scripts/build_indexes.py
 .venv/bin/python -m pytest -q
@@ -23,9 +21,9 @@ python3 -m venv .venv
 
 ## Deploy
 
-Push this repository to GitHub, then open [Streamlit Community Cloud](https://share.streamlit.io/), choose **Create app**, and select this repository, the `main` branch, and `app.py`. The app does not require a secret to run. The checked-in dependencies use the local TF-IDF NLP fallback on Community Cloud; install the optional CPU Sentence Transformers dependencies from `requirements-semantic.txt` only when the deployment environment has enough memory. If you configure `NVIDIA_API_KEY` in Streamlit's app Secrets, it is used only on the server for optional query interpretation. Never commit API keys or `.streamlit/secrets.toml`.
+Push this repository to GitHub, then open [Streamlit Community Cloud](https://share.streamlit.io/), choose **Create app**, and select this repository, the `main` branch, and `app.py`. The app does not require a secret to run. `requirements.txt` installs the CPU sentence-embedding model used locally; first startup downloads the model and builds its indexes. If model download or loading fails, the app falls back to TF-IDF. `NVIDIA_API_KEY` is optional for query interpretation and sourced description enrichment; configure it only in Streamlit's app Secrets. Never commit API keys or `.streamlit/secrets.toml`.
 
-The bundled demonstration catalog contains 14 books and 13 movies. Project Gutenberg metadata adds 10,000 English book records; MovieLens latest-small adds 9,737 movie records. The active deduplicated catalog contains 10,005 books and 9,744 movies. Neither public source contains plot descriptions, and missing fields remain unknown. If the embedding model is cached, hybrid retrieval uses `sentence-transformers/all-MiniLM-L6-v2` on CPU. If the model is not available, the app reports and uses TF-IDF fallback. Model weights are not committed.
+The bundled demonstration catalog contains 14 books and 13 movies. Project Gutenberg metadata adds 10,000 English book records; MovieLens latest-small adds 9,737 movie records. The active deduplicated catalog contains 10,005 books and 9,744 movies. Neither catalog has descriptions for most records. Optional Wikipedia-sourced, Nemotron-paraphrased descriptions live separately in `data/enriched/descriptions.csv`; records without a source match remain undescribed. Hybrid retrieval uses `sentence-transformers/all-MiniLM-L6-v2` on CPU when available and falls back to TF-IDF if model download/loading fails. Model weights are not committed.
 
 ## Verified environment
 
@@ -56,6 +54,8 @@ This writes `data/expanded/books.csv` and `data/expanded/movies.csv` when the pu
 ## Evaluation and classifier
 
 `.venv/bin/python scripts/evaluate.py` evaluates 44 retrieval queries and 25 preference conversations, writing JSON, a readable summary, and per-query CSV results under `artifacts/`. Labels are developer-authored, not independent human evaluation. Mixed-media retrieval is scored separately per domain. Semantic metrics are omitted unless the sentence embedding model actually runs. The Evaluation tab exports a judgment sheet for human relevance ratings and summarizes completed sheets separately. Run `.venv/bin/python scripts/train_classifiers.py` for the held-out movie genre experiment using title-only features; books with too few labeled genres are skipped.
+
+To add optional summaries for records with no supplied description, configure `NVIDIA_API_KEY` server-side and run `.venv/bin/python scripts/enrich_descriptions.py`. The script looks up exact-title Wikipedia leads, asks Nemotron to paraphrase only the supplied source text, and saves summaries with source URL, model, and provenance in `data/enriched/descriptions.csv`. No summary is created when an exact source page is not found or the model returns no grounded text. Review the source terms before redistribution; Wikipedia summaries are attributed under CC BY-SA 4.0. Existing search indexes are invalidated when this file changes.
 
 ## Troubleshooting
 

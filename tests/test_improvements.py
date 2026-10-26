@@ -1,5 +1,5 @@
 from src.preferences import merge_preferences, parse_preferences
-from src.retrieval import RetrievalIndex, combine_hybrid_scores
+from src.retrieval import RetrievalIndex, calibrate_semantic_scores, combine_hybrid_scores
 from src.schemas import CatalogItem, Preferences
 from src.data_loader import catalog_identity
 from src.title_matching import correct_catalog_query
@@ -61,6 +61,11 @@ def test_hybrid_score_maps_cosine_components_to_shared_unit_range():
     import numpy as np
     combined = combine_hybrid_scores(np.array([0.8, 0.8]), np.array([-1.0, 1.0]))
     assert np.allclose(combined, [0.36, 0.91])
+
+
+def test_weak_semantic_similarity_does_not_receive_an_artificial_positive_score():
+    import numpy as np
+    assert np.allclose(calibrate_semantic_scores(np.array([-0.2, 0.0, 0.18, 0.40, 0.62, 0.9])), [0, 0, 0, 0.5, 1, 1])
 
 
 def test_fuzzy_query_correction_uses_catalog_title_tokens(catalogs):

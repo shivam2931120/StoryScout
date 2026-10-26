@@ -30,13 +30,16 @@ class CatalogItem:
     runtime_minutes: int | None = None
     cast: str | None = None
     verified_warnings: list[str] = field(default_factory=list)
+    description_source: str = ""
+    description_source_url: str = ""
+    description_provenance: str = ""
 
     @property
     def search_text(self) -> str:
         # MovieLens supplies labels, not plot text; its explanatory display
         # placeholder must never become a shared lexical/semantic signal.
         metadata_only_source = self.source.startswith("movielens") or self.source.startswith("project-gutenberg")
-        searchable_description = "" if metadata_only_source else self.description
+        searchable_description = "" if metadata_only_source and not self.description_provenance else self.description
         parts = [self.title, searchable_description, " ".join(self.genres),
                  " ".join(self.mood_tags), " ".join(self.theme_tags), " ".join(self.search_aliases)]
         parts.extend(x for x in [self.authors, self.director, self.language] if x)
@@ -109,7 +112,11 @@ def item_from_row(row: dict[str, Any], media_type: MediaType) -> CatalogItem:
     split = lambda value: [x.strip().lower() for x in str(value or "").split("|") if x.strip()]
     return CatalogItem(
         id=str(row.get("id", "")), media_type=media_type, title=str(row.get("title", "Unknown")),
-        description=str(row.get("description", "")), genres=split(row.get("genres")),
+        description=str(row.get("description", "")),
+        description_source=str(row.get("description_source") or ""),
+        description_source_url=str(row.get("description_source_url") or ""),
+        description_provenance=str(row.get("description_provenance") or ""),
+        genres=split(row.get("genres")),
         language=str(row.get("language") or "Unknown"), year=optional_int(row.get("year")),
         source=str(row.get("source") or "unknown"), source_url=str(row.get("source_url") or ""),
         mood_tags=split(row.get("mood_tags")), theme_tags=split(row.get("theme_tags")),

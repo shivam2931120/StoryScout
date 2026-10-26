@@ -65,4 +65,33 @@ def load_active_catalogs(demo_files: dict | None = None, expanded_dir: str | Pat
             if identity not in known:
                 catalogs[domain].append(item)
                 known.add(identity)
+    apply_description_enrichment(catalogs)
     return catalogs
+
+
+def apply_description_enrichment(catalogs: dict[str, list[CatalogItem]], path: str | Path | None = None) -> int:
+    """Attach source-backed short summaries without overwriting catalog fields."""
+    path = Path(path) if path else DATA_DIR / "enriched" / "descriptions.csv"
+    if not path.exists():
+        return 0
+    frame = pd.read_csv(path, dtype=str, keep_default_na=False)
+    required = {"id", "description", "description_source", "description_source_url", "description_provenance"}
+    missing = required - set(frame.columns)
+    if missing:
+        raise ValueError(f"{path} is missing fields: {', '.join(sorted(missing))}")
+    if frame["id"].duplicated().any():
+        raise ValueError(f"{path} has duplicate item IDs")
+    by_id = {item.id: item for items in catalogs.values() for item in items}
+    applied = 0
+    for row in frame.to_dict(orient="records"):
+        item = by_id.get(row["id"])
+        if not item or not row["description"].strip() or item.description_provenance:
+            continue
+        if not item.source.startswith(("movielens", "project-gutenberg")):
+            continue
+        item.description = row["description"].strip()
+        item.description_source = row["description_source"].strip()
+        item.description_source_url = row["description_source_url"].strip()
+        item.description_provenance = row["description_provenance"].strip()
+        applied += 1
+    return applied

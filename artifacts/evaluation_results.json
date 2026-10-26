@@ -24,28 +24,28 @@
         "status": "measured",
         "semantic_ran": false,
         "retrieval_used": "tfidf",
-        "index_preparation_ms": 134.66,
-        "mean_query_latency_ms_after_indexing": 16.152,
+        "index_preparation_ms": 911.16,
+        "mean_query_latency_ms_after_indexing": 13.6,
         "by_domain": {
           "book": {
             "queries": 27,
             "precision_at_5": 0.1778,
             "recall_at_5": 0.5556,
-            "mrr_at_5": 0.484,
+            "mrr_at_5": 0.4858,
             "hard_constraint_compliance": 1.0
           },
           "movie": {
             "queries": 27,
-            "precision_at_5": 0.1778,
-            "recall_at_5": 0.3426,
-            "mrr_at_5": 0.3296,
+            "precision_at_5": 0.163,
+            "recall_at_5": 0.2932,
+            "mrr_at_5": 0.3204,
             "hard_constraint_compliance": 1.0
           }
         },
         "macro_average_of_book_and_movie_metrics": {
-          "precision_at_5": 0.1778,
-          "recall_at_5": 0.4491,
-          "mrr_at_5": 0.4068,
+          "precision_at_5": 0.1704,
+          "recall_at_5": 0.4244,
+          "mrr_at_5": 0.4031,
           "hard_constraint_compliance": 1.0
         }
       },
@@ -53,8 +53,8 @@
         "status": "measured",
         "semantic_ran": true,
         "retrieval_used": "semantic",
-        "index_preparation_ms": 4201.93,
-        "mean_query_latency_ms_after_indexing": 94.087,
+        "index_preparation_ms": 108816.37,
+        "mean_query_latency_ms_after_indexing": 86.47,
         "by_domain": {
           "book": {
             "queries": 27,
@@ -65,16 +65,16 @@
           },
           "movie": {
             "queries": 27,
-            "precision_at_5": 0.1704,
-            "recall_at_5": 0.2932,
-            "mrr_at_5": 0.2994,
+            "precision_at_5": 0.1556,
+            "recall_at_5": 0.2685,
+            "mrr_at_5": 0.2932,
             "hard_constraint_compliance": 1.0
           }
         },
         "macro_average_of_book_and_movie_metrics": {
-          "precision_at_5": 0.1667,
-          "recall_at_5": 0.3997,
-          "mrr_at_5": 0.3741,
+          "precision_at_5": 0.1593,
+          "recall_at_5": 0.3873,
+          "mrr_at_5": 0.371,
           "hard_constraint_compliance": 1.0
         }
       },
@@ -82,28 +82,28 @@
         "status": "measured",
         "semantic_ran": true,
         "retrieval_used": "hybrid",
-        "index_preparation_ms": 177.41,
-        "mean_query_latency_ms_after_indexing": 100.741,
+        "index_preparation_ms": 233.98,
+        "mean_query_latency_ms_after_indexing": 85.417,
         "by_domain": {
           "book": {
             "queries": 27,
-            "precision_at_5": 0.1926,
-            "recall_at_5": 0.5617,
-            "mrr_at_5": 0.5586,
+            "precision_at_5": 0.1778,
+            "recall_at_5": 0.537,
+            "mrr_at_5": 0.4858,
             "hard_constraint_compliance": 1.0
           },
           "movie": {
             "queries": 27,
-            "precision_at_5": 0.2074,
-            "recall_at_5": 0.3858,
-            "mrr_at_5": 0.3549,
+            "precision_at_5": 0.1926,
+            "recall_at_5": 0.3611,
+            "mrr_at_5": 0.3642,
             "hard_constraint_compliance": 1.0
           }
         },
         "macro_average_of_book_and_movie_metrics": {
-          "precision_at_5": 0.2,
-          "recall_at_5": 0.4738,
-          "mrr_at_5": 0.4567,
+          "precision_at_5": 0.1852,
+          "recall_at_5": 0.4491,
+          "mrr_at_5": 0.425,
           "hard_constraint_compliance": 1.0
         }
       }

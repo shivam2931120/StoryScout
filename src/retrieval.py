@@ -23,9 +23,18 @@ def _sentence_model():
     return SentenceTransformer(MODEL_NAME, device="cpu", local_files_only=local_only)
 
 
+SEMANTIC_COSINE_FLOOR = 0.18
+SEMANTIC_COSINE_CEILING = 0.62
+
+
+def calibrate_semantic_scores(semantic: np.ndarray) -> np.ndarray:
+    """Map weak semantic matches to zero instead of treating cosine 0 as 0.5."""
+    return np.clip((semantic - SEMANTIC_COSINE_FLOOR) / (SEMANTIC_COSINE_CEILING - SEMANTIC_COSINE_FLOOR), 0.0, 1.0)
+
+
 def combine_hybrid_scores(lexical: np.ndarray, semantic: np.ndarray) -> np.ndarray:
-    """Blend lexical cosine [0, 1] and remapped semantic cosine [-1, 1]."""
-    semantic_unit = np.clip((semantic + 1.0) / 2.0, 0.0, 1.0)
+    """Blend lexical cosine [0, 1] with threshold-calibrated semantic cosine."""
+    semantic_unit = calibrate_semantic_scores(semantic)
     return 0.45 * lexical + 0.55 * semantic_unit
 
 class RetrievalIndex:
@@ -104,7 +113,7 @@ class RetrievalIndex:
         if self.semantic_available:
             qemb = self.model.encode([build_query_text(query)], normalize_embeddings=True, show_progress_bar=False)
             semantic = cosine_similarity(qemb, self.embeddings[eligible_indices]).ravel()
-        if semantic is not None and self.mode == "semantic": scores = semantic
+        if semantic is not None and self.mode == "semantic": scores = calibrate_semantic_scores(semantic)
         elif semantic is not None and self.mode == "hybrid": scores = combine_hybrid_scores(lexical, semantic)
         else: scores = lexical
         if not np.any(scores > 0):

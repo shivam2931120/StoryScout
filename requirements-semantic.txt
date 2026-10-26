@@ -1,2 +1,4 @@
-# Install a CPU-only PyTorch wheel first (see README), then this file.
-sentence-transformers>=3.0,<6
+# Official CPU wheels keep the deployed app off CUDA/GPU packages.
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.14.1+cpu
+sentence-transformers==5.7.0

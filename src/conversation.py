@@ -10,8 +10,6 @@ class StoryScoutEngine:
     def __init__(self, catalogs: dict[str, list[CatalogItem]], indexes: dict[str, object], retrieval_mode: str = "hybrid", query_interpreter=None):
         self.catalogs, self.indexes, self.retrieval_mode = catalogs, indexes, retrieval_mode
         self.query_interpreter = query_interpreter
-        if self.query_interpreter is not None:
-            self.query_interpreter.catalog_titles = [value for items in catalogs.values() for item in items for value in [item.title, *item.search_aliases]]
 
     def reset(self, state: ConversationState) -> ConversationState:
         state.messages.clear(); state.preferences = state.preferences.__class__(); state.media_selection = "both"; state.has_explicit_media = False; state.selected_reference_id = None; state.last_recommendations.clear(); state.pending_title_choices.clear()

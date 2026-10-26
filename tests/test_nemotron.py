@@ -44,4 +44,6 @@ def test_nemotron_normalizes_query_and_drives_local_retrieval(catalogs):
     assert state.media_selection == "books"
     assert interpreter.last_call_ok is True
     assert fake.kwargs["model"] == "nvidia/nemotron-3.5-lightning-30b-a3b"
-    assert json.loads(fake.kwargs["messages"][1]["content"])["message"] == "narnnia"
+    request_payload = json.loads(fake.kwargs["messages"][1]["content"])
+    assert request_payload["message"] == "narnnia"
+    assert "catalog_titles" not in request_payload

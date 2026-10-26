@@ -10,26 +10,26 @@ Mixed-media queries are scored separately for each active domain; book and movie
 ### tfidf
 Status: measured
 
-- book: P@5 0.1778, Recall@5 0.5556, MRR@5 0.484, hard-filter compliance 1.0 (27 domain queries)
-- movie: P@5 0.1778, Recall@5 0.3426, MRR@5 0.3296, hard-filter compliance 1.0 (27 domain queries)
-- Domain macro average: P@5 0.1778, Recall@5 0.4491, MRR@5 0.4068, hard-filter compliance 1.0
-- Mean search latency after indexing: 16.152 ms; index setup: 134.66 ms
+- book: P@5 0.1778, Recall@5 0.5556, MRR@5 0.4858, hard-filter compliance 1.0 (27 domain queries)
+- movie: P@5 0.163, Recall@5 0.2932, MRR@5 0.3204, hard-filter compliance 1.0 (27 domain queries)
+- Domain macro average: P@5 0.1704, Recall@5 0.4244, MRR@5 0.4031, hard-filter compliance 1.0
+- Mean search latency after indexing: 13.6 ms; index setup: 911.16 ms
 
 ### semantic
 Status: measured
 
 - book: P@5 0.163, Recall@5 0.5062, MRR@5 0.4488, hard-filter compliance 1.0 (27 domain queries)
-- movie: P@5 0.1704, Recall@5 0.2932, MRR@5 0.2994, hard-filter compliance 1.0 (27 domain queries)
-- Domain macro average: P@5 0.1667, Recall@5 0.3997, MRR@5 0.3741, hard-filter compliance 1.0
-- Mean search latency after indexing: 94.087 ms; index setup: 4201.93 ms
+- movie: P@5 0.1556, Recall@5 0.2685, MRR@5 0.2932, hard-filter compliance 1.0 (27 domain queries)
+- Domain macro average: P@5 0.1593, Recall@5 0.3873, MRR@5 0.371, hard-filter compliance 1.0
+- Mean search latency after indexing: 86.47 ms; index setup: 108816.37 ms
 
 ### hybrid
 Status: measured
 
-- book: P@5 0.1926, Recall@5 0.5617, MRR@5 0.5586, hard-filter compliance 1.0 (27 domain queries)
-- movie: P@5 0.2074, Recall@5 0.3858, MRR@5 0.3549, hard-filter compliance 1.0 (27 domain queries)
-- Domain macro average: P@5 0.2, Recall@5 0.4738, MRR@5 0.4567, hard-filter compliance 1.0
-- Mean search latency after indexing: 100.741 ms; index setup: 177.41 ms
+- book: P@5 0.1778, Recall@5 0.537, MRR@5 0.4858, hard-filter compliance 1.0 (27 domain queries)
+- movie: P@5 0.1926, Recall@5 0.3611, MRR@5 0.3642, hard-filter compliance 1.0 (27 domain queries)
+- Domain macro average: P@5 0.1852, Recall@5 0.4491, MRR@5 0.425, hard-filter compliance 1.0
+- Mean search latency after indexing: 85.417 ms; index setup: 233.98 ms
 
 ## Preference extraction
 
