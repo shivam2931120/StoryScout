@@ -1,0 +1,2 @@
+# Install a CPU-only PyTorch wheel first (see README), then this file.
+sentence-transformers>=3.0,<6

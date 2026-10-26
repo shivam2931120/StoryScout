@@ -1,0 +1,170 @@
+{
+  "book": {
+    "status": "skipped",
+    "record_count": 10005,
+    "reason": "Insufficient labeled records after the fixed training-only rare-label cutoff."
+  },
+  "movie": {
+    "status": "measured",
+    "records": 9744,
+    "train_records": 7795,
+    "test_records": 1949,
+    "input_fields": [
+      "title"
+    ],
+    "random_state": 42,
+    "test_fraction": 0.2,
+    "rare_label_threshold_training_support": 20,
+    "labels": {
+      "action": {
+        "train_support": 1455,
+        "test_support": 372,
+        "precision": 0.419,
+        "recall": 0.4866,
+        "f1": 0.4502
+      },
+      "adventure": {
+        "train_support": 1021,
+        "test_support": 246,
+        "precision": 0.3097,
+        "recall": 0.4431,
+        "f1": 0.3645
+      },
+      "animation": {
+        "train_support": 498,
+        "test_support": 114,
+        "precision": 0.1872,
+        "recall": 0.386,
+        "f1": 0.2521
+      },
+      "comedy": {
+        "train_support": 3035,
+        "test_support": 723,
+        "precision": 0.5385,
+        "recall": 0.5035,
+        "f1": 0.5204
+      },
+      "crime": {
+        "train_support": 946,
+        "test_support": 253,
+        "precision": 0.2543,
+        "recall": 0.3478,
+        "f1": 0.2938
+      },
+      "documentary": {
+        "train_support": 348,
+        "test_support": 92,
+        "precision": 0.1087,
+        "recall": 0.2717,
+        "f1": 0.1553
+      },
+      "drama": {
+        "train_support": 3485,
+        "test_support": 878,
+        "precision": 0.5303,
+        "recall": 0.6868,
+        "f1": 0.5985
+      },
+      "family": {
+        "train_support": 539,
+        "test_support": 127,
+        "precision": 0.2373,
+        "recall": 0.4409,
+        "f1": 0.3085
+      },
+      "fantasy": {
+        "train_support": 645,
+        "test_support": 138,
+        "precision": 0.1517,
+        "recall": 0.3188,
+        "f1": 0.2056
+      },
+      "film noir": {
+        "train_support": 68,
+        "test_support": 19,
+        "precision": 0.0253,
+        "recall": 0.1053,
+        "f1": 0.0408
+      },
+      "horror": {
+        "train_support": 786,
+        "test_support": 192,
+        "precision": 0.2974,
+        "recall": 0.5312,
+        "f1": 0.3813
+      },
+      "imax": {
+        "train_support": 126,
+        "test_support": 31,
+        "precision": 0.0595,
+        "recall": 0.1613,
+        "f1": 0.087
+      },
+      "musical": {
+        "train_support": 260,
+        "test_support": 74,
+        "precision": 0.0957,
+        "recall": 0.2432,
+        "f1": 0.1374
+      },
+      "mystery": {
+        "train_support": 465,
+        "test_support": 109,
+        "precision": 0.0962,
+        "recall": 0.2752,
+        "f1": 0.1425
+      },
+      "romance": {
+        "train_support": 1261,
+        "test_support": 333,
+        "precision": 0.2818,
+        "recall": 0.3724,
+        "f1": 0.3208
+      },
+      "science fiction": {
+        "train_support": 796,
+        "test_support": 183,
+        "precision": 0.2899,
+        "recall": 0.4372,
+        "f1": 0.3486
+      },
+      "thriller": {
+        "train_support": 1497,
+        "test_support": 395,
+        "precision": 0.334,
+        "recall": 0.4203,
+        "f1": 0.3722
+      },
+      "war": {
+        "train_support": 302,
+        "test_support": 80,
+        "precision": 0.1346,
+        "recall": 0.2625,
+        "f1": 0.178
+      },
+      "western": {
+        "train_support": 136,
+        "test_support": 31,
+        "precision": 0.0248,
+        "recall": 0.1613,
+        "f1": 0.0429
+      }
+    },
+    "micro_avg": {
+      "precision": 0.3175,
+      "recall": 0.4708,
+      "f1-score": 0.3792
+    },
+    "macro_avg": {
+      "precision": 0.2303,
+      "recall": 0.3608,
+      "f1-score": 0.2737
+    },
+    "weighted_avg": {
+      "precision": 0.3647,
+      "recall": 0.4708,
+      "f1-score": 0.4053
+    },
+    "limitations": "MovieLens genres are coarse source labels. The title-only input is intentionally conservative, excludes genre/tag fields, and is not used by the live recommender. Train-only support filtering can omit rare labels from held-out scores."
+  }
+}

@@ -1,0 +1,521 @@
+[
+  {
+    "query": "short mystery book under 300 pages",
+    "media": "books",
+    "relevant_ids": [
+      "book_003",
+      "book_011"
+    ],
+    "constraints": {
+      "max_pages": 300
+    },
+    "category": "book length and genre"
+  },
+  {
+    "query": "science fiction book about space and survival",
+    "media": "books",
+    "relevant_ids": [
+      "book_005",
+      "book_002"
+    ],
+    "constraints": {},
+    "category": "book themes"
+  },
+  {
+    "query": "cozy comforting fantasy to read",
+    "media": "books",
+    "relevant_ids": [
+      "book_004",
+      "book_009",
+      "book_014"
+    ],
+    "constraints": {},
+    "category": "book mood"
+  },
+  {
+    "query": "a book about artificial intelligence",
+    "media": "books",
+    "relevant_ids": [
+      "book_010"
+    ],
+    "constraints": {},
+    "category": "book theme"
+  },
+  {
+    "query": "thoughtful dystopian science fiction novel",
+    "media": "books",
+    "relevant_ids": [
+      "book_008"
+    ],
+    "constraints": {},
+    "category": "book genre"
+  },
+  {
+    "query": "classic romance book",
+    "media": "books",
+    "relevant_ids": [
+      "book_006"
+    ],
+    "constraints": {},
+    "category": "book genre"
+  },
+  {
+    "query": "fantasy book about a magical journey",
+    "media": "books",
+    "relevant_ids": [
+      "book_013",
+      "book_014",
+      "book_007"
+    ],
+    "constraints": {},
+    "category": "book theme"
+  },
+  {
+    "query": "hopeful science fiction book under 250 pages",
+    "media": "books",
+    "relevant_ids": [
+      "book_008",
+      "book_002",
+      "book_010"
+    ],
+    "constraints": {
+      "max_pages": 250
+    },
+    "category": "book length"
+  },
+  {
+    "query": "inspiring adventure book about a journey",
+    "media": "books",
+    "relevant_ids": [
+      "book_012",
+      "book_001",
+      "book_013"
+    ],
+    "constraints": {},
+    "category": "book theme"
+  },
+  {
+    "query": "detective mystery novel",
+    "media": "books",
+    "relevant_ids": [
+      "book_011",
+      "book_003"
+    ],
+    "constraints": {},
+    "category": "book genre"
+  },
+  {
+    "query": "mystery book but no horror",
+    "media": "books",
+    "relevant_ids": [
+      "book_003"
+    ],
+    "constraints": {
+      "excluded_genres": [
+        "horror"
+      ]
+    },
+    "category": "negation"
+  },
+  {
+    "query": "English family fantasy book",
+    "media": "books",
+    "relevant_ids": [
+      "book_004",
+      "book_014"
+    ],
+    "constraints": {
+      "language": "English"
+    },
+    "category": "language"
+  },
+  {
+    "query": "short fantasy book under 200 pages",
+    "media": "books",
+    "relevant_ids": [
+      "book_004"
+    ],
+    "constraints": {
+      "max_pages": 200
+    },
+    "category": "book length"
+  },
+  {
+    "query": "science fiction book published after 2000",
+    "media": "books",
+    "relevant_ids": [
+      "book_005",
+      "book_007"
+    ],
+    "constraints": {
+      "min_year": 2001
+    },
+    "category": "year"
+  },
+  {
+    "query": "adventure book under 220 pages",
+    "media": "books",
+    "relevant_ids": [
+      "book_002",
+      "book_012"
+    ],
+    "constraints": {
+      "max_pages": 220
+    },
+    "category": "book length"
+  },
+  {
+    "query": "uplifting family movie",
+    "media": "movies",
+    "relevant_ids": [
+      "movie_004",
+      "movie_012",
+      "movie_013"
+    ],
+    "constraints": {},
+    "category": "movie mood"
+  },
+  {
+    "query": "uplifting movie under two hours",
+    "media": "movies",
+    "relevant_ids": [
+      "movie_004",
+      "movie_005",
+      "movie_010",
+      "movie_012"
+    ],
+    "constraints": {
+      "max_runtime": 120
+    },
+    "category": "movie runtime"
+  },
+  {
+    "query": "time travel comedy movie",
+    "media": "movies",
+    "relevant_ids": [
+      "movie_002"
+    ],
+    "constraints": {},
+    "category": "movie theme"
+  },
+  {
+    "query": "thoughtful science fiction about artificial intelligence",
+    "media": "movies",
+    "relevant_ids": [
+      "movie_007",
+      "movie_012"
+    ],
+    "constraints": {},
+    "category": "movie theme"
+  },
+  {
+    "query": "funny mystery crime movie",
+    "media": "movies",
+    "relevant_ids": [
+      "movie_008"
+    ],
+    "constraints": {},
+    "category": "movie genre"
+  },
+  {
+    "query": "fantasy adventure movie",
+    "media": "movies",
+    "relevant_ids": [
+      "movie_006",
+      "movie_010",
+      "movie_013"
+    ],
+    "constraints": {},
+    "category": "movie genre"
+  },
+  {
+    "query": "comforting animated movie",
+    "media": "movies",
+    "relevant_ids": [
+      "movie_009",
+      "movie_012"
+    ],
+    "constraints": {},
+    "category": "movie mood"
+  },
+  {
+    "query": "uplifting historical drama movie",
+    "media": "movies",
+    "relevant_ids": [
+      "movie_011"
+    ],
+    "constraints": {},
+    "category": "movie genre"
+  },
+  {
+    "query": "movie under 100 minutes",
+    "media": "movies",
+    "relevant_ids": [
+      "movie_005",
+      "movie_010",
+      "movie_012"
+    ],
+    "constraints": {
+      "max_runtime": 100
+    },
+    "category": "movie runtime"
+  },
+  {
+    "query": "science fiction movie about space",
+    "media": "movies",
+    "relevant_ids": [
+      "movie_001",
+      "movie_003"
+    ],
+    "constraints": {},
+    "category": "movie theme"
+  },
+  {
+    "query": "family science fiction under 90 minutes",
+    "media": "movies",
+    "relevant_ids": [
+      "movie_012"
+    ],
+    "constraints": {
+      "max_runtime": 90
+    },
+    "category": "movie runtime"
+  },
+  {
+    "query": "mystery movie without horror",
+    "media": "movies",
+    "relevant_ids": [
+      "movie_008"
+    ],
+    "constraints": {
+      "excluded_genres": [
+        "horror"
+      ]
+    },
+    "category": "negation"
+  },
+  {
+    "query": "lighthearted movie under 110 minutes",
+    "media": "movies",
+    "relevant_ids": [
+      "movie_004",
+      "movie_005",
+      "movie_010",
+      "movie_012"
+    ],
+    "constraints": {
+      "max_runtime": 110
+    },
+    "category": "movie runtime"
+  },
+  {
+    "query": "science fiction movie released after 2015",
+    "media": "movies",
+    "relevant_ids": [
+      "movie_007"
+    ],
+    "constraints": {
+      "min_year": 2016
+    },
+    "category": "year"
+  },
+  {
+    "query": "English language movie between 2000 and 2020",
+    "media": "movies",
+    "relevant_ids": [
+      "movie_004",
+      "movie_006",
+      "movie_008",
+      "movie_009",
+      "movie_011",
+      "movie_013"
+    ],
+    "constraints": {
+      "min_year": 2000,
+      "max_year": 2020,
+      "language": "English"
+    },
+    "category": "year and language"
+  },
+  {
+    "query": "books and movies about time travel",
+    "media": "both",
+    "relevant_ids": [
+      "book_002",
+      "movie_001",
+      "movie_002",
+      "movie_007"
+    ],
+    "constraints": {},
+    "category": "mixed themes"
+  },
+  {
+    "query": "comforting story to read or watch",
+    "media": "both",
+    "relevant_ids": [
+      "book_004",
+      "book_009",
+      "movie_004",
+      "movie_009",
+      "movie_012"
+    ],
+    "constraints": {},
+    "category": "mixed mood"
+  },
+  {
+    "query": "friendship and a big journey in books and movies",
+    "media": "both",
+    "relevant_ids": [
+      "book_001",
+      "book_013",
+      "movie_002",
+      "movie_004",
+      "movie_006"
+    ],
+    "constraints": {},
+    "category": "mixed themes"
+  },
+  {
+    "query": "mystery books and movies",
+    "media": "both",
+    "relevant_ids": [
+      "book_003",
+      "book_011",
+      "movie_008"
+    ],
+    "constraints": {},
+    "category": "mixed genre"
+  },
+  {
+    "query": "science fiction stories after 2010 in books or movies",
+    "media": "both",
+    "relevant_ids": [
+      "book_005",
+      "movie_001",
+      "movie_003",
+      "movie_007"
+    ],
+    "constraints": {
+      "min_year": 2011
+    },
+    "category": "mixed year"
+  },
+  {
+    "query": "fantasy adventure across books and films",
+    "media": "both",
+    "relevant_ids": [
+      "book_001",
+      "book_013",
+      "book_014",
+      "movie_006",
+      "movie_010",
+      "movie_013"
+    ],
+    "constraints": {},
+    "category": "mixed genre"
+  },
+  {
+    "query": "hopeful family stories to read or watch",
+    "media": "both",
+    "relevant_ids": [
+      "book_004",
+      "book_014",
+      "movie_004",
+      "movie_012",
+      "movie_013"
+    ],
+    "constraints": {},
+    "category": "mixed mood"
+  },
+  {
+    "query": "no horror, something gentle in a book or movie",
+    "media": "both",
+    "relevant_ids": [
+      "book_004",
+      "book_014",
+      "movie_009",
+      "movie_012"
+    ],
+    "constraints": {
+      "excluded_genres": [
+        "horror"
+      ]
+    },
+    "category": "mixed negation"
+  },
+  {
+    "query": "books under 300 pages and movies under 100 minutes",
+    "media": "both",
+    "relevant_ids": [
+      "book_003",
+      "book_006",
+      "movie_005",
+      "movie_010",
+      "movie_012"
+    ],
+    "constraints": {
+      "max_pages": 300,
+      "max_runtime": 100
+    },
+    "category": "separate length constraints"
+  },
+  {
+    "query": "English science fiction from 2000 to 2020, books and movies",
+    "media": "both",
+    "relevant_ids": [
+      "book_005",
+      "movie_001",
+      "movie_003",
+      "movie_007"
+    ],
+    "constraints": {
+      "min_year": 2000,
+      "max_year": 2020,
+      "language": "English"
+    },
+    "category": "mixed year and language"
+  },
+  {
+    "query": "Recommend a book similar to Interstellar, with space and survival themes",
+    "media": "books",
+    "reference_id": "movie_001",
+    "relevant_ids": [
+      "book_005"
+    ],
+    "constraints": {},
+    "category": "movie-to-book cross-media"
+  },
+  {
+    "query": "Find a movie with a similar adventure feel to The Hobbit",
+    "media": "movies",
+    "reference_id": "book_001",
+    "relevant_ids": [
+      "movie_006",
+      "movie_013"
+    ],
+    "constraints": {},
+    "category": "book-to-movie cross-media"
+  },
+  {
+    "query": "More books like The Hobbit",
+    "media": "books",
+    "reference_id": "book_001",
+    "relevant_ids": [
+      "book_013",
+      "book_014"
+    ],
+    "constraints": {},
+    "category": "same-media book similarity"
+  },
+  {
+    "query": "Movies similar to Arrival",
+    "media": "movies",
+    "reference_id": "movie_007",
+    "relevant_ids": [
+      "movie_001",
+      "movie_003"
+    ],
+    "constraints": {},
+    "category": "same-media movie similarity"
+  }
+]

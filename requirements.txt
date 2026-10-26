@@ -1,0 +1,7 @@
+pandas>=2.2,<3
+numpy>=2.0,<3
+scikit-learn>=1.5,<2
+streamlit>=1.40,<2
+openai>=1.50,<3
+pytest>=8,<10
+pytest-cov>=5,<7

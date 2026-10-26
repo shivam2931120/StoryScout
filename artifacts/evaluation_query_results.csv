@@ -1,0 +1,163 @@
+mode,query,reference_id,category,domain,relevant_ids,returned_ids,hits,precision_at_5,recall_at_5,mrr_at_5,hard_constraint_compliance
+tfidf,short mystery book under 300 pages,,book length and genre,book,book_003|book_011,book_003|book_011,2,0.4,1.0,1.0,1.0
+tfidf,science fiction book about space and survival,,book themes,book,book_002|book_005,book_pg_55200|book_pg_43826|book_pg_15976|book_pg_58659|book_pg_50290,0,0.0,0.0,0.0,1.0
+tfidf,cozy comforting fantasy to read,,book mood,book,book_004|book_009|book_014,book_pg_26622|book_009|book_pg_52798|book_pg_924|book_001,1,0.2,0.3333333333333333,0.5,1.0
+tfidf,a book about artificial intelligence,,book theme,book,book_010,book_pg_33374|book_pg_55200|book_pg_63821|book_010|book_pg_43826,1,0.2,1.0,0.25,1.0
+tfidf,thoughtful dystopian science fiction novel,,book genre,book,book_008,book_008|book_pg_22110|book_pg_27968|book_pg_69394|book_pg_21582,1,0.2,1.0,1.0,1.0
+tfidf,classic romance book,,book genre,book,book_006,book_pg_60547|book_pg_38611|book_pg_17244|book_pg_11461|book_pg_16283,0,0.0,0.0,0.0,1.0
+tfidf,fantasy book about a magical journey,,book theme,book,book_007|book_013|book_014,book_pg_55200|book_pg_43826|book_pg_45377|book_pg_29790|book_pg_52101,0,0.0,0.0,0.0,1.0
+tfidf,hopeful science fiction book under 250 pages,,book length,book,book_002|book_008|book_010,book_008|book_012|book_004|book_002|book_010,3,0.6,1.0,1.0,1.0
+tfidf,inspiring adventure book about a journey,,book theme,book,book_001|book_012|book_013,book_pg_55200|book_pg_43826|book_012|book_pg_45377|book_009,1,0.2,0.3333333333333333,0.3333333333333333,1.0
+tfidf,detective mystery novel,,book genre,book,book_003|book_011,book_pg_69286|book_pg_50037|book_pg_2736|book_pg_23641|book_pg_17763,0,0.0,0.0,0.0,1.0
+tfidf,mystery book but no horror,,negation,book,book_003,book_003,1,0.2,1.0,1.0,1.0
+tfidf,English family fantasy book,,language,book,book_004|book_014,book_pg_37344|book_pg_7477|book_pg_46108|book_pg_20645|book_pg_24711,0,0.0,0.0,0.0,1.0
+tfidf,short fantasy book under 200 pages,,book length,book,book_004,book_004,1,0.2,1.0,1.0,1.0
+tfidf,science fiction book published after 2000,,year,book,book_005|book_007,book_005,1,0.2,0.5,1.0,1.0
+tfidf,adventure book under 220 pages,,book length,book,book_002|book_012,book_002|book_012,2,0.4,1.0,1.0,1.0
+tfidf,uplifting family movie,,movie mood,movie,movie_004|movie_012|movie_013,movie_ml_4241|movie_ml_239|movie_ml_8372|movie_ml_128968|movie_ml_2354,0,0.0,0.0,0.0,1.0
+tfidf,uplifting movie under two hours,,movie runtime,movie,movie_004|movie_005|movie_010|movie_012,movie_010|movie_004|movie_002,2,0.4,0.5,1.0,1.0
+tfidf,time travel comedy movie,,movie theme,movie,movie_002,movie_ml_71106|movie_001|movie_007|movie_ml_5544|movie_002,1,0.2,1.0,0.2,1.0
+tfidf,thoughtful science fiction about artificial intelligence,,movie theme,movie,movie_007|movie_012,movie_ml_4370|movie_007|movie_012|movie_ml_160271|movie_ml_133217,2,0.4,1.0,0.5,1.0
+tfidf,funny mystery crime movie,,movie genre,movie,movie_008,movie_ml_66509|movie_ml_58301|movie_ml_2796|movie_ml_3446|movie_ml_4912,0,0.0,0.0,0.0,1.0
+tfidf,fantasy adventure movie,,movie genre,movie,movie_006|movie_010|movie_013,movie_ml_26590|movie_ml_50798|movie_ml_108932|movie_ml_2399|movie_ml_89305,0,0.0,0.0,0.0,1.0
+tfidf,comforting animated movie,,movie mood,movie,movie_009|movie_012,movie_ml_26913|movie_ml_94160|movie_ml_4388|movie_ml_8512|movie_ml_61348,0,0.0,0.0,0.0,1.0
+tfidf,uplifting historical drama movie,,movie genre,movie,movie_011,movie_ml_4388|movie_ml_8512|movie_ml_61348|movie_ml_3007|movie_ml_43919,0,0.0,0.0,0.0,1.0
+tfidf,movie under 100 minutes,,movie runtime,movie,movie_005|movie_010|movie_012,movie_012|movie_010|movie_005,3,0.6,1.0,1.0,1.0
+tfidf,science fiction movie about space,,movie theme,movie,movie_001|movie_003,movie_ml_7988|movie_ml_3827|movie_ml_1831|movie_ml_121007|movie_ml_673,0,0.0,0.0,0.0,1.0
+tfidf,family science fiction under 90 minutes,,movie runtime,movie,movie_012,movie_012,1,0.2,1.0,1.0,1.0
+tfidf,mystery movie without horror,,negation,movie,movie_008,movie_ml_4562|movie_ml_8814|movie_ml_5461|movie_ml_491|movie_ml_6770,0,0.0,0.0,0.0,1.0
+tfidf,lighthearted movie under 110 minutes,,movie runtime,movie,movie_004|movie_005|movie_010|movie_012,movie_005,1,0.2,0.25,1.0,1.0
+tfidf,science fiction movie released after 2015,,year,movie,movie_007,movie_ml_163985|movie_ml_168252|movie_ml_187593|movie_ml_186587|movie_ml_122904,0,0.0,0.0,0.0,1.0
+tfidf,English language movie between 2000 and 2020,,year and language,movie,movie_004|movie_006|movie_008|movie_009|movie_011|movie_013,movie_007|movie_004|movie_011|movie_005|movie_008,3,0.6,0.5,0.5,1.0
+tfidf,books and movies about time travel,,mixed themes,book,book_002,book_pg_3256|book_002|book_pg_68483|book_pg_47013|book_pg_61110,1,0.2,1.0,0.5,1.0
+tfidf,books and movies about time travel,,mixed themes,movie,movie_001|movie_002|movie_007,movie_ml_71106|movie_ml_104374|movie_ml_1322|movie_001|movie_007,2,0.4,0.6666666666666666,0.25,1.0
+tfidf,comforting story to read or watch,,mixed mood,book,book_004|book_009,book_pg_26622|book_pg_52798|book_pg_8198|book_pg_74095|book_pg_924,0,0.0,0.0,0.0,1.0
+tfidf,comforting story to read or watch,,mixed mood,movie,movie_004|movie_009|movie_012,movie_ml_95720|movie_ml_2956|movie_ml_96811|movie_ml_2108|movie_ml_946,0,0.0,0.0,0.0,1.0
+tfidf,friendship and a big journey in books and movies,,mixed themes,book,book_001|book_013,book_pg_3103|book_pg_3256|book_001|book_pg_64150|book_pg_47013,1,0.2,0.5,0.3333333333333333,1.0
+tfidf,friendship and a big journey in books and movies,,mixed themes,movie,movie_002|movie_004|movie_006,movie_010|movie_005|movie_ml_3055|movie_ml_143525|movie_004,1,0.2,0.3333333333333333,0.2,1.0
+tfidf,mystery books and movies,,mixed genre,book,book_003|book_011,book_pg_3256|book_pg_47013|book_pg_78901|book_pg_68850|book_pg_19157,0,0.0,0.0,0.0,1.0
+tfidf,mystery books and movies,,mixed genre,movie,movie_008,movie_ml_5475|movie_ml_113|movie_ml_451|movie_ml_4409|movie_ml_31427,0,0.0,0.0,0.0,1.0
+tfidf,science fiction stories after 2010 in books or movies,,mixed year,book,book_005,book_005,1,0.2,1.0,1.0,1.0
+tfidf,science fiction stories after 2010 in books or movies,,mixed year,movie,movie_001|movie_003|movie_007,movie_ml_102880|movie_ml_173205|movie_ml_133217|movie_ml_90405|movie_ml_162344,0,0.0,0.0,0.0,1.0
+tfidf,fantasy adventure across books and films,,mixed genre,book,book_001|book_013|book_014,book_pg_3256|book_001|book_pg_47013|book_pg_78901|book_pg_19157,1,0.2,0.3333333333333333,0.5,1.0
+tfidf,fantasy adventure across books and films,,mixed genre,movie,movie_006|movie_010|movie_013,movie_ml_54190|movie_ml_86960|movie_ml_172497|movie_ml_89586|movie_ml_549,0,0.0,0.0,0.0,1.0
+tfidf,hopeful family stories to read or watch,,mixed mood,book,book_004|book_014,book_pg_26622|book_pg_47405|book_pg_52798|book_pg_924|book_pg_8198,0,0.0,0.0,0.0,1.0
+tfidf,hopeful family stories to read or watch,,mixed mood,movie,movie_004|movie_012|movie_013,movie_ml_95720|movie_ml_65088|movie_ml_7815|movie_ml_60735|movie_ml_2754,0,0.0,0.0,0.0,1.0
+tfidf,"no horror, something gentle in a book or movie",,mixed negation,book,book_004|book_014,book_009|book_006|book_008|book_014,1,0.2,0.5,0.25,1.0
+tfidf,"no horror, something gentle in a book or movie",,mixed negation,movie,movie_009|movie_012,movie_ml_5324|movie_ml_27762|movie_ml_140481|movie_ml_43684|movie_ml_4410,0,0.0,0.0,0.0,1.0
+tfidf,books under 300 pages and movies under 100 minutes,,separate length constraints,book,book_003|book_006,book_002|book_011|book_004|book_010|book_006,1,0.2,0.5,0.2,1.0
+tfidf,books under 300 pages and movies under 100 minutes,,separate length constraints,movie,movie_005|movie_010|movie_012,movie_010|movie_005|movie_012,3,0.6,1.0,1.0,1.0
+tfidf,"English science fiction from 2000 to 2020, books and movies",,mixed year and language,book,book_005,book_005|book_007,1,0.2,1.0,1.0,1.0
+tfidf,"English science fiction from 2000 to 2020, books and movies",,mixed year and language,movie,movie_001|movie_003|movie_007,movie_007|movie_001|movie_011|movie_004|movie_003,3,0.6,1.0,1.0,1.0
+tfidf,"Recommend a book similar to Interstellar, with space and survival themes",movie_001,movie-to-book cross-media,book,book_005,book_002|book_pg_73313|book_pg_18361|book_pg_66245|book_005,1,0.2,1.0,0.2,1.0
+tfidf,Find a movie with a similar adventure feel to The Hobbit,book_001,book-to-movie cross-media,movie,movie_006|movie_013,movie_006|movie_ml_118696|movie_004|movie_ml_98809|movie_009,1,0.2,0.5,1.0,1.0
+tfidf,More books like The Hobbit,book_001,same-media book similarity,book,book_013|book_014,book_013|book_009|book_004|book_pg_39185|book_014,2,0.4,1.0,1.0,1.0
+tfidf,Movies similar to Arrival,movie_007,same-media movie similarity,movie,movie_001|movie_003,movie_ml_4370|movie_ml_7984|movie_ml_748|movie_001|movie_ml_71106,1,0.2,0.5,0.25,1.0
+semantic,short mystery book under 300 pages,,book length and genre,book,book_003|book_011,book_003|book_011|book_002|book_009|book_004,2,0.4,1.0,1.0,1.0
+semantic,science fiction book about space and survival,,book themes,book,book_002|book_005,book_pg_65242|book_pg_58659|book_pg_6717|book_pg_70541|book_pg_24749,0,0.0,0.0,0.0,1.0
+semantic,cozy comforting fantasy to read,,book mood,book,book_004|book_009|book_014,book_pg_11116|book_pg_10211|book_pg_6884|book_pg_32831|book_014,1,0.2,0.3333333333333333,0.2,1.0
+semantic,a book about artificial intelligence,,book theme,book,book_010,book_010|book_pg_61540|book_pg_31611|book_pg_32327|book_pg_33374,1,0.2,1.0,1.0,1.0
+semantic,thoughtful dystopian science fiction novel,,book genre,book,book_008,book_008|book_pg_70962|book_pg_31651|book_pg_29416|book_pg_28705,1,0.2,1.0,1.0,1.0
+semantic,classic romance book,,book genre,book,book_006,book_pg_42596|book_pg_59273|book_pg_26635|book_pg_28236|book_pg_7424,0,0.0,0.0,0.0,1.0
+semantic,fantasy book about a magical journey,,book theme,book,book_007|book_013|book_014,book_pg_13367|book_pg_7477|book_014|book_pg_75999|book_pg_65490,1,0.2,0.3333333333333333,0.3333333333333333,1.0
+semantic,hopeful science fiction book under 250 pages,,book length,book,book_002|book_008|book_010,book_002|book_008|book_010|book_012|book_004,3,0.6,1.0,1.0,1.0
+semantic,inspiring adventure book about a journey,,book theme,book,book_001|book_012|book_013,book_pg_35774|book_pg_75999|book_pg_49287|book_pg_71212|book_pg_54485,0,0.0,0.0,0.0,1.0
+semantic,detective mystery novel,,book genre,book,book_003|book_011,book_pg_20152|book_pg_45455|book_pg_40909|book_pg_59369|book_pg_72816,0,0.0,0.0,0.0,1.0
+semantic,mystery book but no horror,,negation,book,book_003,book_003|book_014|book_004|book_001|book_007,1,0.2,1.0,1.0,1.0
+semantic,English family fantasy book,,language,book,book_004|book_014,book_pg_11116|book_pg_28565|book_pg_30469|book_pg_41729|book_pg_63302,0,0.0,0.0,0.0,1.0
+semantic,short fantasy book under 200 pages,,book length,book,book_004,book_004|book_002,1,0.2,1.0,1.0,1.0
+semantic,science fiction book published after 2000,,year,book,book_005|book_007,book_005|book_007,2,0.4,1.0,1.0,1.0
+semantic,adventure book under 220 pages,,book length,book,book_002|book_012,book_004|book_002|book_012|book_008,2,0.4,1.0,0.5,1.0
+semantic,uplifting family movie,,movie mood,movie,movie_004|movie_012|movie_013,movie_ml_2177|movie_ml_5538|movie_ml_6338|movie_ml_4023|movie_ml_953,0,0.0,0.0,0.0,1.0
+semantic,uplifting movie under two hours,,movie runtime,movie,movie_004|movie_005|movie_010|movie_012,movie_004|movie_010|movie_002|movie_007|movie_005,3,0.6,0.75,1.0,1.0
+semantic,time travel comedy movie,,movie theme,movie,movie_002,movie_ml_3571|movie_ml_3617|movie_ml_6249|movie_ml_128975|movie_ml_2968,0,0.0,0.0,0.0,1.0
+semantic,thoughtful science fiction about artificial intelligence,,movie theme,movie,movie_007|movie_012,movie_ml_4370|movie_ml_96655|movie_ml_27074|movie_012|movie_ml_136800,1,0.2,0.5,0.25,1.0
+semantic,funny mystery crime movie,,movie genre,movie,movie_008,movie_ml_695|movie_ml_2413|movie_ml_121469|movie_ml_7073|movie_ml_1627,0,0.0,0.0,0.0,1.0
+semantic,fantasy adventure movie,,movie genre,movie,movie_006|movie_010|movie_013,movie_ml_59387|movie_ml_2143|movie_ml_45074|movie_ml_102720|movie_ml_130450,0,0.0,0.0,0.0,1.0
+semantic,comforting animated movie,,movie mood,movie,movie_009|movie_012,movie_ml_3429|movie_ml_5538|movie_ml_3785|movie_ml_239|movie_ml_6888,0,0.0,0.0,0.0,1.0
+semantic,uplifting historical drama movie,,movie genre,movie,movie_011,movie_ml_115216|movie_ml_7065|movie_ml_49957|movie_ml_135815|movie_ml_3420,0,0.0,0.0,0.0,1.0
+semantic,movie under 100 minutes,,movie runtime,movie,movie_005|movie_010|movie_012,movie_005|movie_010|movie_012,3,0.6,1.0,1.0,1.0
+semantic,science fiction movie about space,,movie theme,movie,movie_001|movie_003,movie_ml_3033|movie_ml_3827|movie_ml_7988|movie_ml_128902|movie_ml_2038,0,0.0,0.0,0.0,1.0
+semantic,family science fiction under 90 minutes,,movie runtime,movie,movie_012,movie_012,1,0.2,1.0,1.0,1.0
+semantic,mystery movie without horror,,negation,movie,movie_008,movie_ml_4388|movie_ml_335|movie_ml_587|movie_ml_5120|movie_ml_4808,0,0.0,0.0,0.0,1.0
+semantic,lighthearted movie under 110 minutes,,movie runtime,movie,movie_004|movie_005|movie_010|movie_012,movie_010|movie_004|movie_005|movie_012,4,0.8,1.0,1.0,1.0
+semantic,science fiction movie released after 2015,,year,movie,movie_007,movie_ml_179053|movie_ml_158842|movie_ml_179819|movie_ml_160080|movie_ml_160565,0,0.0,0.0,0.0,1.0
+semantic,English language movie between 2000 and 2020,,year and language,movie,movie_004|movie_006|movie_008|movie_009|movie_011|movie_013,movie_007|movie_004|movie_001|movie_008|movie_005,2,0.4,0.3333333333333333,0.5,1.0
+semantic,books and movies about time travel,,mixed themes,book,book_002,book_pg_31215|book_002|book_pg_32853|book_pg_22559|book_pg_31357,1,0.2,1.0,0.5,1.0
+semantic,books and movies about time travel,,mixed themes,movie,movie_001|movie_002|movie_007,movie_ml_70599|movie_002|movie_ml_6780|movie_ml_3959|movie_ml_5171,1,0.2,0.3333333333333333,0.5,1.0
+semantic,comforting story to read or watch,,mixed mood,book,book_004|book_009,book_pg_40312|book_pg_4597|book_pg_1876|book_pg_19909|book_pg_36861,0,0.0,0.0,0.0,1.0
+semantic,comforting story to read or watch,,mixed mood,movie,movie_004|movie_009|movie_012,movie_ml_2754|movie_ml_4189|movie_ml_82041|movie_ml_159717|movie_ml_58332,0,0.0,0.0,0.0,1.0
+semantic,friendship and a big journey in books and movies,,mixed themes,book,book_001|book_013,book_004|book_pg_63261|book_pg_7019|book_pg_73672|book_pg_71978,0,0.0,0.0,0.0,1.0
+semantic,friendship and a big journey in books and movies,,mixed themes,movie,movie_002|movie_004|movie_006,movie_ml_95309|movie_ml_222|movie_ml_2589|movie_ml_44864|movie_ml_8533,0,0.0,0.0,0.0,1.0
+semantic,mystery books and movies,,mixed genre,book,book_003|book_011,book_pg_65783|book_pg_20152|book_pg_29704|book_pg_75288|book_pg_43584,0,0.0,0.0,0.0,1.0
+semantic,mystery books and movies,,mixed genre,movie,movie_008,movie_ml_257|movie_ml_27537|movie_ml_74545|movie_ml_335|movie_ml_8870,0,0.0,0.0,0.0,1.0
+semantic,science fiction stories after 2010 in books or movies,,mixed year,book,book_005,book_005,1,0.2,1.0,1.0,1.0
+semantic,science fiction stories after 2010 in books or movies,,mixed year,movie,movie_001|movie_003|movie_007,movie_ml_135885|movie_ml_95720|movie_ml_89898|movie_ml_142420|movie_ml_103341,0,0.0,0.0,0.0,1.0
+semantic,fantasy adventure across books and films,,mixed genre,book,book_001|book_013|book_014,book_pg_68300|book_pg_50658|book_pg_50931|book_pg_32972|book_pg_1154,0,0.0,0.0,0.0,1.0
+semantic,fantasy adventure across books and films,,mixed genre,movie,movie_006|movie_010|movie_013,movie_ml_7153|movie_ml_41566|movie_ml_82169|movie_ml_59387|movie_ml_5952,0,0.0,0.0,0.0,1.0
+semantic,hopeful family stories to read or watch,,mixed mood,book,book_004|book_014,book_pg_4597|book_pg_25659|book_pg_17202|book_pg_19909|book_pg_9466,0,0.0,0.0,0.0,1.0
+semantic,hopeful family stories to read or watch,,mixed mood,movie,movie_004|movie_012|movie_013,movie_ml_39307|movie_ml_1583|movie_ml_1654|movie_ml_2161|movie_ml_279,0,0.0,0.0,0.0,1.0
+semantic,"no horror, something gentle in a book or movie",,mixed negation,book,book_004|book_014,book_003|book_009|book_014|book_004|book_001,2,0.4,1.0,0.3333333333333333,1.0
+semantic,"no horror, something gentle in a book or movie",,mixed negation,movie,movie_009|movie_012,movie_ml_98279|movie_ml_4814|movie_ml_662|movie_ml_6873|movie_ml_8588,0,0.0,0.0,0.0,1.0
+semantic,books under 300 pages and movies under 100 minutes,,separate length constraints,book,book_003|book_006,book_002|book_009|book_011|book_006|book_004,1,0.2,0.5,0.25,1.0
+semantic,books under 300 pages and movies under 100 minutes,,separate length constraints,movie,movie_005|movie_010|movie_012,movie_010|movie_005|movie_012,3,0.6,1.0,1.0,1.0
+semantic,"English science fiction from 2000 to 2020, books and movies",,mixed year and language,book,book_005,book_005|book_007,1,0.2,1.0,1.0,1.0
+semantic,"English science fiction from 2000 to 2020, books and movies",,mixed year and language,movie,movie_001|movie_003|movie_007,movie_003|movie_007|movie_001|movie_013|movie_011,3,0.6,1.0,1.0,1.0
+semantic,"Recommend a book similar to Interstellar, with space and survival themes",movie_001,movie-to-book cross-media,book,book_005,book_pg_66245|book_pg_18361|book_pg_73313|book_pg_24101|book_pg_58912,0,0.0,0.0,0.0,1.0
+semantic,Find a movie with a similar adventure feel to The Hobbit,book_001,book-to-movie cross-media,movie,movie_006|movie_013,movie_ml_98809|movie_006|movie_ml_106489|movie_ml_118696|movie_ml_1015,1,0.2,0.5,0.5,1.0
+semantic,More books like The Hobbit,book_001,same-media book similarity,book,book_013|book_014,book_013|book_004|book_pg_49287|book_pg_35774|book_pg_55856,1,0.2,0.5,1.0,1.0
+semantic,Movies similar to Arrival,movie_007,same-media movie similarity,movie,movie_001|movie_003,movie_ml_748|movie_ml_70599|movie_001|movie_ml_5322|movie_ml_166635,1,0.2,0.5,0.3333333333333333,1.0
+hybrid,short mystery book under 300 pages,,book length and genre,book,book_003|book_011,book_003|book_011|book_002|book_009|book_004,2,0.4,1.0,1.0,1.0
+hybrid,science fiction book about space and survival,,book themes,book,book_002|book_005,book_pg_58659|book_pg_6717|book_pg_24101|book_pg_69535|book_pg_65242,0,0.0,0.0,0.0,1.0
+hybrid,cozy comforting fantasy to read,,book mood,book,book_004|book_009|book_014,book_009|book_pg_26622|book_014|book_pg_11116|book_004,3,0.6,1.0,1.0,1.0
+hybrid,a book about artificial intelligence,,book theme,book,book_010,book_pg_33374|book_010|book_pg_63821|book_pg_55200|book_pg_61540,1,0.2,1.0,0.5,1.0
+hybrid,thoughtful dystopian science fiction novel,,book genre,book,book_008,book_008|book_pg_23636|book_pg_29416|book_pg_31651|book_pg_32108,1,0.2,1.0,1.0,1.0
+hybrid,classic romance book,,book genre,book,book_006,book_pg_59273|book_pg_42596|book_pg_16283|book_pg_9982|book_pg_28236,0,0.0,0.0,0.0,1.0
+hybrid,fantasy book about a magical journey,,book theme,book,book_007|book_013|book_014,book_pg_7477|book_pg_43826|book_pg_55200|book_pg_52101|book_pg_75999,0,0.0,0.0,0.0,1.0
+hybrid,hopeful science fiction book under 250 pages,,book length,book,book_002|book_008|book_010,book_002|book_008|book_012|book_004|book_010,3,0.6,1.0,1.0,1.0
+hybrid,inspiring adventure book about a journey,,book theme,book,book_001|book_012|book_013,book_pg_75999|book_012|book_pg_43826|book_pg_35774|book_pg_49287,1,0.2,0.3333333333333333,0.5,1.0
+hybrid,detective mystery novel,,book genre,book,book_003|book_011,book_pg_69286|book_pg_45455|book_pg_20152|book_pg_6805|book_pg_11451,0,0.0,0.0,0.0,1.0
+hybrid,mystery book but no horror,,negation,book,book_003,book_003|book_014|book_004|book_001|book_007,1,0.2,1.0,1.0,1.0
+hybrid,English family fantasy book,,language,book,book_004|book_014,book_pg_28565|book_pg_46108|book_pg_11116|book_pg_25456|book_pg_7477,0,0.0,0.0,0.0,1.0
+hybrid,short fantasy book under 200 pages,,book length,book,book_004,book_004|book_002,1,0.2,1.0,1.0,1.0
+hybrid,science fiction book published after 2000,,year,book,book_005|book_007,book_005|book_007,2,0.4,1.0,1.0,1.0
+hybrid,adventure book under 220 pages,,book length,book,book_002|book_012,book_002|book_004|book_012|book_008,2,0.4,1.0,1.0,1.0
+hybrid,uplifting family movie,,movie mood,movie,movie_004|movie_012|movie_013,movie_ml_128968|movie_ml_5538|movie_ml_239|movie_ml_3287|movie_ml_2354,0,0.0,0.0,0.0,1.0
+hybrid,uplifting movie under two hours,,movie runtime,movie,movie_004|movie_005|movie_010|movie_012,movie_004|movie_010|movie_002|movie_007|movie_005,3,0.6,0.75,1.0,1.0
+hybrid,time travel comedy movie,,movie theme,movie,movie_002,movie_ml_71106|movie_ml_3571|movie_002|movie_ml_2968|movie_ml_100083,1,0.2,1.0,0.3333333333333333,1.0
+hybrid,thoughtful science fiction about artificial intelligence,,movie theme,movie,movie_007|movie_012,movie_ml_4370|movie_007|movie_012|movie_ml_160271|movie_ml_96655,2,0.4,1.0,0.5,1.0
+hybrid,funny mystery crime movie,,movie genre,movie,movie_008,movie_ml_121469|movie_ml_2796|movie_ml_58301|movie_ml_3446|movie_ml_6975,0,0.0,0.0,0.0,1.0
+hybrid,fantasy adventure movie,,movie genre,movie,movie_006|movie_010|movie_013,movie_ml_50798|movie_ml_108932|movie_ml_59387|movie_ml_2143|movie_ml_89305,0,0.0,0.0,0.0,1.0
+hybrid,comforting animated movie,,movie mood,movie,movie_009|movie_012,movie_ml_26913|movie_ml_3785|movie_ml_4388|movie_ml_239|movie_ml_6888,0,0.0,0.0,0.0,1.0
+hybrid,uplifting historical drama movie,,movie genre,movie,movie_011,movie_ml_50798|movie_ml_61348|movie_ml_8512|movie_ml_3007|movie_ml_100083,0,0.0,0.0,0.0,1.0
+hybrid,movie under 100 minutes,,movie runtime,movie,movie_005|movie_010|movie_012,movie_005|movie_010|movie_012,3,0.6,1.0,1.0,1.0
+hybrid,science fiction movie about space,,movie theme,movie,movie_001|movie_003,movie_ml_7988|movie_ml_3827|movie_ml_1831|movie_ml_121007|movie_ml_924,0,0.0,0.0,0.0,1.0
+hybrid,family science fiction under 90 minutes,,movie runtime,movie,movie_012,movie_012,1,0.2,1.0,1.0,1.0
+hybrid,mystery movie without horror,,negation,movie,movie_008,movie_ml_4562|movie_ml_4388|movie_ml_8512|movie_ml_8814|movie_ml_50798,0,0.0,0.0,0.0,1.0
+hybrid,lighthearted movie under 110 minutes,,movie runtime,movie,movie_004|movie_005|movie_010|movie_012,movie_005|movie_010|movie_004|movie_012,4,0.8,1.0,1.0,1.0
+hybrid,science fiction movie released after 2015,,year,movie,movie_007,movie_ml_160080|movie_ml_187593|movie_ml_158842|movie_ml_168252|movie_ml_122904,0,0.0,0.0,0.0,1.0
+hybrid,English language movie between 2000 and 2020,,year and language,movie,movie_004|movie_006|movie_008|movie_009|movie_011|movie_013,movie_007|movie_004|movie_001|movie_008|movie_005,2,0.4,0.3333333333333333,0.5,1.0
+hybrid,books and movies about time travel,,mixed themes,book,book_002,book_pg_31215|book_002|book_pg_68483|book_pg_32853|book_pg_31357,1,0.2,1.0,0.5,1.0
+hybrid,books and movies about time travel,,mixed themes,movie,movie_001|movie_002|movie_007,movie_ml_71106|movie_ml_104374|movie_ml_1322|movie_002|movie_ml_70599,1,0.2,0.3333333333333333,0.25,1.0
+hybrid,comforting story to read or watch,,mixed mood,book,book_004|book_009,book_pg_26622|book_pg_924|book_pg_52798|book_pg_53991|book_pg_53675,0,0.0,0.0,0.0,1.0
+hybrid,comforting story to read or watch,,mixed mood,movie,movie_004|movie_009|movie_012,movie_ml_95720|movie_ml_4189|movie_ml_5749|movie_ml_96811|movie_ml_2108,0,0.0,0.0,0.0,1.0
+hybrid,friendship and a big journey in books and movies,,mixed themes,book,book_001|book_013,book_001|book_pg_45687|book_pg_3103|book_009|book_004,1,0.2,0.5,1.0,1.0
+hybrid,friendship and a big journey in books and movies,,mixed themes,movie,movie_002|movie_004|movie_006,movie_010|movie_004|movie_005|movie_002|movie_006,3,0.6,1.0,0.5,1.0
+hybrid,mystery books and movies,,mixed genre,book,book_003|book_011,book_pg_3256|book_pg_65783|book_pg_20152|book_pg_41525|book_pg_6805,0,0.0,0.0,0.0,1.0
+hybrid,mystery books and movies,,mixed genre,movie,movie_008,movie_ml_5475|movie_ml_4409|movie_ml_113|movie_ml_31427|movie_ml_8773,0,0.0,0.0,0.0,1.0
+hybrid,science fiction stories after 2010 in books or movies,,mixed year,book,book_005,book_005,1,0.2,1.0,1.0,1.0
+hybrid,science fiction stories after 2010 in books or movies,,mixed year,movie,movie_001|movie_003|movie_007,movie_ml_102880|movie_ml_95720|movie_ml_135885|movie_ml_89898|movie_ml_133217,0,0.0,0.0,0.0,1.0
+hybrid,fantasy adventure across books and films,,mixed genre,book,book_001|book_013|book_014,book_001|book_pg_14110|book_pg_63192|book_pg_50658|book_pg_51968,1,0.2,0.3333333333333333,1.0,1.0
+hybrid,fantasy adventure across books and films,,mixed genre,movie,movie_006|movie_010|movie_013,movie_ml_54190|movie_ml_59387|movie_ml_41566|movie_ml_65651|movie_ml_7153,0,0.0,0.0,0.0,1.0
+hybrid,hopeful family stories to read or watch,,mixed mood,book,book_004|book_014,book_pg_4597|book_pg_25659|book_pg_924|book_pg_26622|book_pg_17202,0,0.0,0.0,0.0,1.0
+hybrid,hopeful family stories to read or watch,,mixed mood,movie,movie_004|movie_012|movie_013,movie_ml_65088|movie_ml_2754|movie_ml_1583|movie_ml_39307|movie_ml_173205,0,0.0,0.0,0.0,1.0
+hybrid,"no horror, something gentle in a book or movie",,mixed negation,book,book_004|book_014,book_009|book_003|book_014|book_004|book_001,2,0.4,1.0,0.3333333333333333,1.0
+hybrid,"no horror, something gentle in a book or movie",,mixed negation,movie,movie_009|movie_012,movie_ml_5324|movie_ml_1554|movie_ml_4388|movie_ml_27762|movie_ml_43684,0,0.0,0.0,0.0,1.0
+hybrid,books under 300 pages and movies under 100 minutes,,separate length constraints,book,book_003|book_006,book_002|book_009|book_011|book_006|book_004,1,0.2,0.5,0.25,1.0
+hybrid,books under 300 pages and movies under 100 minutes,,separate length constraints,movie,movie_005|movie_010|movie_012,movie_010|movie_005|movie_012,3,0.6,1.0,1.0,1.0
+hybrid,"English science fiction from 2000 to 2020, books and movies",,mixed year and language,book,book_005,book_005|book_007,1,0.2,1.0,1.0,1.0
+hybrid,"English science fiction from 2000 to 2020, books and movies",,mixed year and language,movie,movie_001|movie_003|movie_007,movie_007|movie_001|movie_003|movie_011|movie_004,3,0.6,1.0,1.0,1.0
+hybrid,"Recommend a book similar to Interstellar, with space and survival themes",movie_001,movie-to-book cross-media,book,book_005,book_pg_18361|book_pg_73313|book_pg_66245|book_pg_66396|book_002,0,0.0,0.0,0.0,1.0
+hybrid,Find a movie with a similar adventure feel to The Hobbit,book_001,book-to-movie cross-media,movie,movie_006|movie_013,movie_006|movie_ml_98809|movie_ml_118696|movie_004|movie_ml_5322,1,0.2,0.5,1.0,1.0
+hybrid,More books like The Hobbit,book_001,same-media book similarity,book,book_013|book_014,book_013|book_004|book_009|book_pg_49287|book_pg_35774,1,0.2,0.5,1.0,1.0
+hybrid,Movies similar to Arrival,movie_007,same-media movie similarity,movie,movie_001|movie_003,movie_ml_748|movie_001|movie_ml_4370|movie_ml_7984|movie_ml_70599,1,0.2,0.5,0.5,1.0

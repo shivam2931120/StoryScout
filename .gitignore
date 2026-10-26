@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+.pytest_cache/
+*.pyc
+artifacts/*.pkl
+artifacts/*.npy
+artifacts/*.npz
+artifacts/*.safetensors
+artifacts/.cache/
+artifacts/embeddings_*.npy
+.streamlit/*
+!.streamlit/config.toml
+.env
