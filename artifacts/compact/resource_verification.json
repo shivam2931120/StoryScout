@@ -1,0 +1,10 @@
+{
+  "image_id": "sha256:bb67ad14d818d818232e80c646232cf5ade33aab24acff7ff80bc4ff58a4640f",
+  "memory_limit_bytes": 536870912,
+  "memory_swap_limit_bytes": 536870912,
+  "cpu_nanos": 100000000,
+  "peak_cgroup_memory_bytes": 357654528,
+  "oom_killed": false,
+  "health": "healthy",
+  "note": "Candidate free-tier image; exact final-image verification is stored separately."
+}

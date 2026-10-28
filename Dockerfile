@@ -25,7 +25,7 @@ WORKDIR /app
 ENV PYTHONUNBUFFERED=1 TOKENIZERS_PARALLELISM=false OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MALLOC_ARENA_MAX=2 \
     STORYSCOUT_RETRIEVAL_MODE=hybrid STORYSCOUT_USE_NVIDIA=false \
     STORYSCOUT_CATALOG_PROFILE=compact STORYSCOUT_EMBEDDING_BACKEND=onnx PORT=8000
-RUN apt-get update && apt-get install -y --no-install-recommends libgomp1 && rm -rf /var/lib/apt/lists/* && useradd --create-home --uid 10001 scout
+RUN apt-get update && apt-get install -y --no-install-recommends libgomp1 curl && rm -rf /var/lib/apt/lists/* && useradd --create-home --uid 10001 scout
 COPY --from=nlp /usr/local/lib/python3.14/site-packages/ /usr/local/lib/python3.14/site-packages/
 COPY --from=nlp /usr/local/bin/ /usr/local/bin/
 COPY --from=nlp /app/src/ ./src/
@@ -39,5 +39,5 @@ COPY artifacts/compact/ ./artifacts/compact/
 COPY --from=frontend /web/dist ./frontend/dist/
 USER scout
 EXPOSE 8000
-HEALTHCHECK --interval=30s --timeout=5s --start-period=120s CMD python -c "import os,urllib.request; urllib.request.urlopen('http://127.0.0.1:'+os.getenv('PORT','8000')+'/api/ready',timeout=4)"
+HEALTHCHECK --interval=30s --timeout=5s --start-period=300s CMD curl --fail --silent --max-time 4 "http://127.0.0.1:${PORT:-8000}/api/ready" > /dev/null
 CMD ["sh", "-c", "exec uvicorn api.main:app --host 0.0.0.0 --port ${PORT:-8000} --workers 1"]

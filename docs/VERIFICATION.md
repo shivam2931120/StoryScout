@@ -1,4 +1,6 @@
-# NLP search verification — 2026-10-28
+# Full-catalog verification snapshot — 2026-10-28
+
+For the current free-tier image and deployment, see [FREE_HOSTING.md](FREE_HOSTING.md). The following records the earlier full-catalog revision.
 
 - `python -m pytest -q`: **71 passed**. Tests cover source constraints, state,
   media, mood/negation, separate lengths, refinements, cross-media references,
@@ -48,9 +50,8 @@ See `SEARCH_TUNING.md` for baseline comparison and preparation timing.
 
 The previous React migration's Docker image was built and checked offline
 (`artifacts/container_verification.json`). **That is a historical result**.
-The current Dockerfile also trains the new lightweight plot classifier and
-builds new text indexes, but this revised image has not been rebuilt in this
-verification pass. Current checks used the local production React build and
+At the time of this full-catalog snapshot, its Dockerfile trained the plot classifier and
+builds new text indexes, but that image had not been rebuilt in that verification pass. Current free-tier container and deployment checks are recorded in FREE_HOSTING.md. Current checks used the local production React build and
 Python environment. Public deployment has not been performed in this revision.
 
 ## Remaining limitations

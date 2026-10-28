@@ -1,0 +1,14 @@
+{
+  "checked_at_utc": "2026-10-28T15:38:23.065886+00:00",
+  "image_id": "sha256:457951e2085ff1d953febf8c4d79e38d482cd3f2f4817289c9e38fd720a02751",
+  "image_name": "storyscout:free-final",
+  "memory_limit_bytes": 536870912,
+  "memory_swap_limit_bytes": 536870912,
+  "cpu_nanos": 100000000,
+  "peak_cgroup_memory_bytes": 318066688,
+  "oom_killed": false,
+  "health": "healthy",
+  "cold_start_limit_applied": true,
+  "health_probe": "curl HTTP /api/ready; 300-second startup grace",
+  "note": "Final image: cold-start and seven HTTP scenarios passed with 512 MB and 0.1 CPU limits from launch. The initial Python probe was replaced after it proved too expensive under that cap."
+}

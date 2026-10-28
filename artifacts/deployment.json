@@ -1,0 +1,27 @@
+{
+  "verified_at_utc": "2026-10-28T15:39:25.422705+00:00",
+  "url": "https://storyscout-eaw7.onrender.com",
+  "repository": "https://github.com/shivam2931120/StoryScout",
+  "service_id": "srv-dbh16getlv9c73dk5jhg",
+  "plan": "free",
+  "region": "singapore",
+  "first_verified_public_deploy_id": "dep-dbh16gutlv9c73dk5ksg",
+  "first_verified_application_commit": "799830d0d622614b5e557c69ccc7ecdd23ce1a20",
+  "profile": "compact",
+  "embedding_backend": "onnx",
+  "counts": {
+    "book": 1000,
+    "movie": 1500
+  },
+  "public_http_scenarios_passed": 7,
+  "python_tests_passed": 73,
+  "public_browser_verified": true,
+  "local_final_container_resource_verified": true,
+  "verification_records": [
+    "artifacts/compact/public_api_verification.json",
+    "artifacts/compact/public_browser_verification.json",
+    "artifacts/compact/public_checks/preference_v2_results.json",
+    "artifacts/compact/final_container_verification.json",
+    "artifacts/compact/final_resource_verification.json"
+  ]
+}

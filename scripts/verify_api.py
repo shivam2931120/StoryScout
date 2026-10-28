@@ -8,9 +8,10 @@ import time
 import httpx
 
 
-def verify(base_url: str) -> dict:
+def verify(base_url: str, startup_timeout: int = 300) -> dict:
     with httpx.Client(base_url=base_url, timeout=65) as client:
-        for _ in range(120):
+        deadline=time.monotonic()+startup_timeout
+        while time.monotonic()<deadline:
             try:
                 response=client.get('/api/health',timeout=3)
                 response.raise_for_status()
@@ -19,7 +20,7 @@ def verify(base_url: str) -> dict:
                 pass  # A newly started container may not have bound its port yet.
             time.sleep(1)
         else:
-            raise RuntimeError('The application did not become ready within the startup check window.')
+            raise RuntimeError(f'The application did not become ready within {startup_timeout} seconds.')
         meta = client.get('/api/meta')
         meta.raise_for_status()
         checks = []
@@ -67,8 +68,9 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--base-url', default='http://127.0.0.1:8000')
     parser.add_argument('--output', default='artifacts/api_verification.json')
+    parser.add_argument('--startup-timeout',type=int,default=300)
     args = parser.parse_args()
-    result = verify(args.base_url)
+    result = verify(args.base_url,args.startup_timeout)
     target = Path(args.output)
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(json.dumps(result, indent=2))

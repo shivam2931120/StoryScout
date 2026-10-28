@@ -1,5 +1,7 @@
 # Free deployment: React + FastAPI + local semantic NLP
 
+Live and verified: https://storyscout-eaw7.onrender.com. Service ID: `srv-dbh16getlv9c73dk5jhg`; plan: `free`. See FREE_HOSTING.md for actual checks.
+
 The root Dockerfile and `render.yaml` target Render's **free** web-service plan.
 One container serves React and the Python API. No API key, payment method,
 external inference endpoint, database, or separate frontend host is required.

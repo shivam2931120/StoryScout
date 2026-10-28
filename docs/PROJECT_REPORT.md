@@ -63,7 +63,7 @@ Sentence Transformers ran successfully on CPU using the same model for both doma
 
 ## Limitations
 
-Public-source metadata is uneven: the expanded book source has no plot descriptions, publication years, page counts, or genres; MovieLens has no plot, language, runtime, director, cast, or warnings. Source-backed plots and metadata now supplement MovieLens, while book text/page coverage remains limited. Unknowns remain unknown. Authored relevance labels are incomplete. No independent human evaluation has yet been collected. The original interface was deployed on Streamlit Community Cloud. The React/FastAPI interface has a single-service Docker deployment path; its public deployment is a separate step. Browser conversations and saved items are local to each device, without account synchronization.
+Public-source metadata is uneven: the expanded book source has no plot descriptions, publication years, page counts, or genres; MovieLens has no plot, language, runtime, director, cast, or warnings. Source-backed plots and metadata now supplement MovieLens, while book text/page coverage remains limited. Unknowns remain unknown. Authored relevance labels are incomplete. No independent human evaluation has yet been collected. The original interface was deployed on Streamlit Community Cloud. The React/FastAPI interface is deployed publicly as one free Render Docker service with a compact catalog and quantized local semantic encoder: https://storyscout-eaw7.onrender.com. Browser conversations and saved items are local to each device, without account synchronization.
 
 ## Future scope
 
@@ -76,3 +76,16 @@ Collect human relevance labels through the included workflow and expand source-b
 - [Sentence Transformers API documentation](https://sbert.net/docs/package_reference/sentence_transformer/model.html).
 - [NVIDIA Nemotron 3.5 Lightning model card](https://build.nvidia.com/nvidia/nemotron-3.5-lightning-30b-a3b) and [Wikimedia reuse terms](https://foundation.wikimedia.org/wiki/Terms_of_Use).
 - scikit-learn documentation for [TfidfVectorizer](https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html), [OneVsRestClassifier](https://scikit-learn.org/stable/modules/generated/sklearn.multiclass.OneVsRestClassifier.html), and [classification metrics](https://scikit-learn.org/stable/modules/model_evaluation.html).
+
+
+## Free-tier deployment revision
+
+The deployment now uses a deterministic 1,000-book / 1,500-movie subset and the
+official quantized MiniLM ONNX encoder, preserving local semantic NLP while
+reducing memory. The full local source corpus and Sentence Transformers runtime
+remain available. The compact 44-query benchmark measured hybrid P@5 0.2926,
+Recall@5 0.7500, MRR@5 0.7639 and hard-filter compliance 1.000. This is a smaller
+candidate-pool experiment; it is not a controlled quantization improvement claim.
+Candidate container checks passed under 512 MB / 0.1 CPU, with observed memory
+around 304 MiB and seven successful HTTP scenarios. Current results, resource
+checks and deployment status are recorded in FREE_HOSTING.md and artifacts/compact/.

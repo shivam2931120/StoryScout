@@ -1,0 +1,34 @@
+{
+  "url": "https://storyscout-eaw7.onrender.com",
+  "desktop_viewport": [
+    1440,
+    1000
+  ],
+  "mixed_request": "Find books and movies about time travel",
+  "first_titles": [
+    "The Time Machine",
+    "The Ultroom Error",
+    "The time-raider",
+    "Back to the Future",
+    "Primer",
+    "Interstellar"
+  ],
+  "next_titles": [
+    "Me, Myself and I",
+    "As Long As You Wish",
+    "The Day of the Boomer Dukes",
+    "Bill & Ted's Excellent Adventure",
+    "Terminator Genisys",
+    "The Butterfly Effect"
+  ],
+  "next_pick_overlap": 0,
+  "bookmark_survived_reload": true,
+  "mobile_viewport_width": 390,
+  "mobile_document_width": 390,
+  "console_errors": 0,
+  "console_warnings": 0,
+  "screenshots": [
+    "output/playwright/public-conversation.png",
+    "output/playwright/public-mobile-saved.png"
+  ]
+}

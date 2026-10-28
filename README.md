@@ -1,5 +1,7 @@
 # StoryScout
 
+**Live application:** https://storyscout-eaw7.onrender.com — Render free tier, local semantic NLP, no API key required.
+
 StoryScout is a college NLP project: one conversational assistant for book discovery (BookBuddy) and mood-aware movie discovery (CinemaSense). It combines rule-based intent detection, typed preference extraction, TF-IDF lexical retrieval, shared CPU Sentence Transformer embeddings, hard filters, cross-media similarity, and grounded explanations. The main interface is React, connected to the Python engine through FastAPI. The previous Streamlit app remains available for comparison.
 
 The interface follows the supplied dark archival design: charcoal surfaces, teal highlights, bundled SVG artwork and icons, real preference and item drawers, a responsive conversation view, saved stories, and recent conversations. Bookmarks and conversations persist in the current browser. No API key is required: TF-IDF runs locally, and the public MiniLM model can be downloaded without credentials. Decorative artwork is not an official publisher cover or movie poster.

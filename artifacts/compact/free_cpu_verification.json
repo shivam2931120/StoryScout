@@ -1,0 +1,96 @@
+{
+  "executed_at_utc": "2026-10-28T15:22:34.247375+00:00",
+  "base_url": "http://127.0.0.1:8001",
+  "catalog_counts": {
+    "book": 1000,
+    "movie": 1500
+  },
+  "active_modes": {
+    "book": "hybrid (TF-IDF + sentence embeddings)",
+    "movie": "hybrid (TF-IDF + sentence embeddings)"
+  },
+  "checks": [
+    {
+      "scenario": "Book recommendation",
+      "status": "passed",
+      "latency_ms": 797.7,
+      "returned_ids": {
+        "book": [
+          "book_003",
+          "book_011"
+        ]
+      }
+    },
+    {
+      "scenario": "Movie recommendation",
+      "status": "passed",
+      "latency_ms": 602.4,
+      "returned_ids": {
+        "movie": [
+          "movie_010",
+          "movie_ml_1812",
+          "movie_004"
+        ]
+      }
+    },
+    {
+      "scenario": "Mixed recommendation",
+      "status": "passed",
+      "latency_ms": 1096.0,
+      "returned_ids": {
+        "book": [
+          "book_009",
+          "book_004",
+          "book_008"
+        ],
+        "movie": [
+          "movie_012",
+          "movie_ml_1812",
+          "movie_004"
+        ]
+      }
+    },
+    {
+      "scenario": "Movie to books",
+      "status": "passed",
+      "latency_ms": 1204.2,
+      "returned_ids": {
+        "book": [
+          "book_002",
+          "book_005",
+          "book_pg_66396"
+        ]
+      }
+    },
+    {
+      "scenario": "Book to movies",
+      "status": "passed",
+      "latency_ms": 597.5,
+      "returned_ids": {
+        "movie": [
+          "movie_006",
+          "movie_010",
+          "movie_013"
+        ]
+      }
+    },
+    {
+      "scenario": "Follow-up and reference inheritance",
+      "status": "passed",
+      "latency_ms": 1501.8,
+      "returned_ids": {
+        "movie": [
+          "movie_ml_3981",
+          "movie_ml_5882",
+          "movie_ml_4777"
+        ]
+      }
+    },
+    {
+      "scenario": "Reset preferences and reference",
+      "status": "passed",
+      "latency_ms": 8.0,
+      "returned_ids": {}
+    }
+  ]
+}
