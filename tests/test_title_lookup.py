@@ -137,3 +137,10 @@ def test_reference_without_description_or_genres_cannot_claim_content_similarity
     reply, results = directory_engine.handle('Recommend similar movies', ConversationState(), reference_id='movie_no')
     assert results == {}
     assert 'no synopsis or genre metadata' in reply
+
+
+def test_character_topic_alias_is_not_claimed_as_title(directory_engine):
+    directory_engine.catalogs['book'][0].search_aliases.append('a hobbit character')
+    _, results = directory_engine.handle('a hobbit character', ConversationState())
+    assert directory_engine.last_title_matches == []
+    assert any(results.values())

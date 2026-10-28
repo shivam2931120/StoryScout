@@ -70,7 +70,7 @@ class TitleDirectory:
         self.records = {record["id"]: record for record in records}
         self.keys = {}
         for record in self.records.values():
-            for name in [*title_names(record["title"]), *record.get("search_aliases", [])]:
+            for name in title_names(record["title"]):
                 self.keys.setdefault(title_key(name), set()).add(record["id"])
 
     @classmethod
@@ -97,7 +97,7 @@ class TitleDirectory:
         key = title_key(query)
         active = {item.id: item for item in active_items}
         ids = set(self.keys.get(key, ()))
-        ids.update(item.id for item in active_items if key in {title_key(a) for a in [*title_names(item.title), *item.search_aliases]})
+        ids.update(item.id for item in active_items if key in {title_key(a) for a in title_names(item.title)})
         # Typo matches are suggestions, never an automatic exact-title claim.
         approximate = False
         if not ids and len(key) >= 8:

@@ -10,7 +10,8 @@ Title lookup now runs before preference interpretation. It uses a local compress
 metadata directory covering all 10,005 book and 9,744 movie source records. Case,
 punctuation, accents, initial/trailing articles and `&`/`and` are normalized.
 An optional trailing release year narrows remakes. Close spelling suggestions are
-labeled as suggestions. Identical media/title/year records are deduplicated,
+labeled as suggestions. Character/topic search aliases are excluded from title identity
+matching and remain signals for NLP discovery. Identical media/title/year records are deduplicated,
 preferring active/demo records. Several distinct matches remain visible as cards;
 opening the intended card selects its details and similarity actions.
 
@@ -49,6 +50,6 @@ Recall@5 and MRR@5. They do not measure universal title coverage or independent
 human recommendation quality. Titles absent from the source catalog cannot be
 looked up offline.
 
-Validation also passed all **92 pytest tests** and **seven HTTP conversation
+Validation also passed all **93 pytest tests** and **seven HTTP conversation
 scenarios**, covering books, movies, mixed results, both cross-media directions,
 refinement and reset. The React production build succeeded.
