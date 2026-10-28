@@ -102,6 +102,7 @@ def create_app(engine: StoryScoutEngine | None = None) -> FastAPI:
         all_items = [x for items in current.catalogs.values() for x in items]
         starters = [next((x for x in all_items if x.title == title and x.source.startswith("demo")), None) for title in titles]
         return {"counts": {k: len(v) for k, v in current.catalogs.items()}, "status": catalog_status(all_items),
+                "catalog_profile":os.getenv('STORYSCOUT_CATALOG_PROFILE','full'),"embedding_backend":os.getenv('STORYSCOUT_EMBEDDING_BACKEND','torch'),
                 "genres": GENRES, "moods": MOODS, "modes": modes(current), "model": MODEL_NAME,
                 "coverage":{domain:{'plot_text':sum(bool(x.retrieval_text) for x in items),'descriptions':sum(bool(x.retrieval_text or x.description_provenance or x.source=='demo') for x in items),
                     'known_runtime':sum(x.runtime_minutes is not None for x in items),'known_pages':sum(x.page_count is not None for x in items),'source_languages':sum(x.language.lower()!='unknown' for x in items),
@@ -168,19 +169,22 @@ def create_app(engine: StoryScoutEngine | None = None) -> FastAPI:
 
     @app.get("/api/evaluation")
     def evaluation():
-        path = ROOT / "artifacts/evaluation_results.json"
+        directory=ROOT/'artifacts/compact' if os.getenv('STORYSCOUT_CATALOG_PROFILE')=='compact' and (ROOT/'artifacts/compact/evaluation_results.json').exists() else ROOT/'artifacts'
+        path = directory / "evaluation_results.json"
+        preference_path=directory/'preference_v2_results.json' if directory.name=='compact' else ROOT/'artifacts/search_tuning/preference_v2_results.json'
         return {"results": json.loads(path.read_text()) if path.exists() else None,
                 "summary": (ROOT / "artifacts/evaluation_summary.md").read_text() if (ROOT / "artifacts/evaluation_summary.md").exists() else "Not evaluated yet.",
                 "genre_classifier": json.loads((ROOT / "artifacts/genre_classifier_results.json").read_text()) if (ROOT / "artifacts/genre_classifier_results.json").exists() else None,
                 "genre_text_classifier": json.loads((ROOT/'artifacts/genre_text_results.json').read_text()) if (ROOT/'artifacts/genre_text_results.json').exists() else None,
-                "preference_search": json.loads((ROOT/'artifacts/search_tuning/preference_v2_results.json').read_text()) if (ROOT/'artifacts/search_tuning/preference_v2_results.json').exists() else None,
+                "preference_search": json.loads(preference_path.read_text()) if preference_path.exists() else None,
+                "profile":os.getenv('STORYSCOUT_CATALOG_PROFILE','full'),
                 "judgments": "Developer-authored judgments; not independent human evaluation."}
 
     @app.get("/api/evaluation/template")
     def judgment_template():
         import pandas as pd
         current = ready_engine()
-        path = ROOT / "artifacts/evaluation_query_results.csv"
+        path = ROOT / ("artifacts/compact/evaluation_query_results.csv" if os.getenv('STORYSCOUT_CATALOG_PROFILE')=='compact' else "artifacts/evaluation_query_results.csv")
         if not path.exists():
             raise HTTPException(404, "Run scripts/evaluate.py to prepare candidates first.")
         titles = {x.id: x.title for group in current.catalogs.values() for x in group}

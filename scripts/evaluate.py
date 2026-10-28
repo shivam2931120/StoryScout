@@ -8,6 +8,7 @@ import json
 import statistics
 import sys
 import time
+import os
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from src.config import ARTIFACT_DIR
@@ -18,6 +19,7 @@ from src.preferences import parse_preferences, merge_preferences
 from src.schemas import Preferences
 
 ROOT = Path(__file__).resolve().parents[1]
+OUTPUT_DIR=Path(os.getenv('STORYSCOUT_EVALUATION_DIR',str(ARTIFACT_DIR)))
 QUERY_FILE = ROOT / "data/evaluation_queries.json"
 PREFERENCE_FILE = ROOT / "data/preference_evaluation.json"
 
@@ -173,10 +175,10 @@ def main() -> None:
         results["retrieval_benchmark"]["models"][mode] = metrics
         query_details.extend(details)
 
-    ARTIFACT_DIR.mkdir(parents=True, exist_ok=True)
-    (ARTIFACT_DIR / "evaluation_results.json").write_text(json.dumps(results, indent=2), encoding="utf-8")
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    (OUTPUT_DIR / "evaluation_results.json").write_text(json.dumps(results, indent=2), encoding="utf-8")
     if query_details:
-        with (ARTIFACT_DIR / "evaluation_query_results.csv").open("w", newline="", encoding="utf-8") as file:
+        with (OUTPUT_DIR / "evaluation_query_results.csv").open("w", newline="", encoding="utf-8") as file:
             writer = csv.DictWriter(file, fieldnames=query_details[0].keys(),lineterminator='\n')
             writer.writeheader(); writer.writerows(query_details)
     catalog_summary = ", ".join(f"{domain}: {values['records']:,}" for domain, values in results["active_catalog"].items())
@@ -194,7 +196,7 @@ def main() -> None:
     for field, values in results["preference_extraction"]["field_exact_match"].items():
         lines.append(f"| {field} | {values['exact_match']} | {values['support']} |")
     lines += ["", "Limitations: labels are developer-authored and incomplete; valid results outside the judged IDs can be undercounted. Semantic metrics are omitted unless the model actually ran.", ""]
-    (ARTIFACT_DIR / "evaluation_summary.md").write_text("\n".join(lines), encoding="utf-8")
+    (OUTPUT_DIR / "evaluation_summary.md").write_text("\n".join(lines), encoding="utf-8")
     print(json.dumps(results, indent=2))
 
 

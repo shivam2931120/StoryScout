@@ -4,6 +4,7 @@ from __future__ import annotations
 from pathlib import Path
 import re
 import json
+import os,gzip
 import pandas as pd
 from .config import DATA_DIR, DEMO_FILES
 from .preprocessing import normalize_text
@@ -54,6 +55,11 @@ def catalog_identity(item: CatalogItem) -> tuple[str, str]:
 
 def load_active_catalogs(demo_files: dict | None = None, expanded_dir: str | Path | None = None) -> dict[str, list[CatalogItem]]:
     """Load the same demo + expanded records and dedupe policy everywhere."""
+    if demo_files is None and expanded_dir is None and os.getenv('STORYSCOUT_CATALOG_PROFILE')=='compact':
+        with gzip.open(DATA_DIR/'compact/catalogs.json.gz','rt',encoding='utf-8') as source:
+            catalogs={domain:[CatalogItem(**row) for row in rows] for domain,rows in json.load(source).items()}
+        for items in catalogs.values():validate_catalog(items)
+        return catalogs
     demo_files = demo_files or DEMO_FILES
     expanded_dir = Path(expanded_dir) if expanded_dir else DATA_DIR / "expanded"
     catalogs = {domain: load_catalog(demo_files[domain], domain) for domain in ("book", "movie")}

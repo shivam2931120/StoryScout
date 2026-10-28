@@ -1,138 +1,102 @@
-# Deploy the React + FastAPI application
+# Free deployment: React + FastAPI + local semantic NLP
 
-The main application now uses React/Vite for the interface and the existing
-Python NLP engine behind FastAPI. The production build is served by FastAPI
-itself. One service hosts the interface, API, catalogs, and model. The previous
-Streamlit application remains available as `app.py`, but Streamlit Community
-Cloud cannot host this new full application. Your existing Streamlit deployment
-will continue to show the Streamlit version until you migrate the link.
+The root Dockerfile and `render.yaml` target Render's **free** web-service plan.
+One container serves React and the Python API. No API key, payment method,
+external inference endpoint, database, or separate frontend host is required.
 
-## Run locally (tested)
+## What fits the free profile
 
-From `/home/shivam/StoryScout`:
+The source repository keeps the full catalog and research experiments. The
+container loads a deterministic subset of **1,000 books and 1,500 movies**.
+`prepare_compact_catalog.py` preserves demo/reference titles, prioritizes known
+movie runtimes and plot text, then uses stable hashes. It never fabricates data.
 
-```bash
-.venv/bin/python -m pip install -r requirements-api.txt
-cd frontend
-npm ci
-npm run build
-cd ..
-.venv/bin/python -m uvicorn api.main:app --host 127.0.0.1 --port 8000
-```
+Semantic search runs the official quantized ONNX export of the pretrained
+`sentence-transformers/all-MiniLM-L6-v2` model. It retains the original tokenizer,
+256-token truncation, masked mean pooling and normalized 384-dimensional vectors.
+TF-IDF, local genre predictions, mood/theme signals, hard filters, MMR and
+conversation state remain in Python. The full local setup can still use Sentence
+Transformers/PyTorch; the free image does not load PyTorch.
 
-Open http://127.0.0.1:8000. The same server serves the built React files and
-`/api/*`. `/docs` shows the API schema. `/api/health` reports preparing/ready/error;
-`/api/ready` returns 200 only after search is ready. The page displays preparation
-progress while the public MiniLM model and indexes load.
+The public model, compact data, TF-IDF indexes and embeddings are prepared during
+Docker build. Normal startup and requests do not download models or call a chat
+API. Model/cache files are excluded from Git. The runtime is a non-root user.
 
-For frontend development, run `npm run dev` inside `frontend/` in a second
-terminal. Open http://127.0.0.1:5173. Vite proxies `/api` to port 8000. Rebuild
-with `npm run build` when reviewing production behavior on port 8000. No Node
-server is needed in production.
-
-## Container deployment
+## Terminal deployment
 
 ```bash
-docker build -t storyscout .
-docker run --rm --name storyscout -p 8000:8000 storyscout
-```
-
-The multi-stage Dockerfile builds React, installs CPU Python dependencies,
-downloads the public embedding model, prepares indexes in the image, and runs
-one Uvicorn worker as a non-root user. No API key is required to build or run.
-Do not mount an empty directory over `artifacts/`: that hides the prepared model
-and indexes. Weights and caches are excluded from Git and the Docker context;
-the public weights downloaded during `docker build` live only in the image.
-
-The container reads `$PORT`, defaulting to 8000. Allocate at least 2GB RAM for
-the full catalog and semantic model, then observe your platform's memory
-metrics; this is a practical starting point, not a guarantee. One worker avoids
-duplicating model memory. If memory is limited, explicitly set
-`STORYSCOUT_RETRIEVAL_MODE=tfidf`; this remains lexical NLP retrieval and the UI
-accurately reports it. A tiny free instance may not hold the semantic model.
-
-## Render: one web service
-
-1. Commit and push the React/API/Docker changes to your GitHub repository
-   `shivam2931120/StoryScout` on `main` (exclude keys, caches, node_modules, and
-   design.zip).
-2. In Render choose **New → Web Service**, connect GitHub, and select that repo.
-3. Select branch `main`, **Docker** as the language/runtime, repository root as
-   the root directory, and `./Dockerfile` as the Dockerfile path. Keep the Docker
-   command empty so the Dockerfile's command is used.
-4. Choose an instance with sufficient memory; compare current platform pricing
-   before creating a paid instance. No paid resources are created by this repo.
-5. Set `STORYSCOUT_RETRIEVAL_MODE=hybrid` and
-   `STORYSCOUT_USE_NVIDIA=false`. Set the health-check path to `/api/ready`.
-6. Deploy. Building scientific packages and downloading the public embedding
-   model can take several minutes. Wait for `/api/ready` to return 200.
-7. Open your Render URL. Verify books, movies, both, a cross-media request,
-   follow-up filters, and a saved story. Pipeline shows the actual active mode.
-8. Share the Render URL instead of the old Streamlit URL. Future pushes to the
-   connected GitHub branch can trigger Render updates.
-
-Official references checked during implementation:
-[Docker on Render](https://render.com/docs/docker),
-[web services and port binding](https://render.com/docs/web-services),
-[health checks](https://render.com/docs/health-checks).
-
-## Optional NVIDIA interpretation
-
-The default app uses local rules, TF-IDF, and sentence embeddings. To enable
-the existing optional query interpreter, set these only in the backend service's
-private environment settings:
-
-```text
-STORYSCOUT_USE_NVIDIA=true
-NVIDIA_API_KEY=<your-private-server-key>
-```
-
-Messages will then be sent to NVIDIA for interpretation. Catalog retrieval,
-hard filters, and explanations still run in Python. Never place a secret in any
-`VITE_*` variable: those become public JavaScript. `.streamlit/secrets.toml` can
-still supply a local development key, but is excluded from Docker and Git.
-The frontend does not display provider marketing text; its NLP page documents
-whether external interpretation is active. API failures preserve local parsing.
-
-## Separate frontend/backend hosting (optional)
-
-The single-service setup is simpler. If separate hosting is required, build
-React with `VITE_API_URL=https://your-python-service.example` and set the backend
-`STORYSCOUT_ALLOWED_ORIGINS=https://your-frontend.example` (comma-separated for
-multiple exact origins). Serve `frontend/dist` on a static host. The API still
-requires a Python/container host with sufficient model memory. Rebuild the
-frontend after changing its API URL. HTTPS is required for `crypto.randomUUID`
-on non-localhost origins.
-
-## Storage and limitations
-
-Conversations and bookmarks persist in each browser's localStorage. They are
-not cloud accounts, synchronized devices, or collaborative filtering. Each
-request carries validated preference state, so one visitor cannot accidentally
-inherit another visitor's conversation. Large or malformed request fields are
-rejected. Catalog records and evaluation snapshots are local read-only inputs.
-No private repository file is served by the static route. This is a college
-project deployment, without account authentication or a usage quota system.
-
-## Verification
-
-```bash
-.venv/bin/python -m pip install pytest
+cd /home/shivam/StoryScout
+# Run tests and build/test the image before publishing:
 .venv/bin/python -m pytest -q
-.venv/bin/python scripts/evaluate.py
-.venv/bin/python scripts/verify_api.py
-cd frontend && npm run build
+docker build -t storyscout:free .
+docker run -d --name storyscout-free-check --memory=512m --memory-swap=512m \
+  -p 8001:8000 storyscout:free
+.venv/bin/python scripts/verify_api.py --base-url http://127.0.0.1:8001 \
+  --output artifacts/free_container_verification.json
+
+# Authenticate once if these CLIs are not already connected:
+gh auth login
+render login
+
+# Push reviewed application files; keys, caches and design.zip are ignored.
+git add .
+git commit -m "Deploy StoryScout with compact local semantic NLP"
+git push origin main
+
+render blueprints validate render.yaml --output json
+render services create --name storyscout --type web_service --runtime docker \
+  --repo https://github.com/shivam2931120/StoryScout --branch main \
+  --region singapore --plan free --num-instances 1 \
+  --health-check-path /api/ready \
+  --env-var STORYSCOUT_RETRIEVAL_MODE=hybrid \
+  --env-var STORYSCOUT_USE_NVIDIA=false \
+  --env-var STORYSCOUT_CATALOG_PROFILE=compact \
+  --env-var STORYSCOUT_EMBEDDING_BACKEND=onnx --confirm --output json
 ```
 
-Python API tests exercise state round-trips, reference selection, cross-media
-inheritance, authoritative form filters, reset, independent client state,
-invalid input, contradictions, unknown records, and preparation status. Browser
-checks and actual container verification are recorded in `VERIFICATION.md`.
+Record the returned service ID and URL. Deploys are created automatically from
+`main`. Inspect with `render deploys list SERVICE_ID --output json` and
+`render logs --resources SERVICE_ID --limit 50 --output json`. Verify the public
+URL using `scripts/verify_api.py --base-url YOUR_URL`. Do not create a second
+service on each update; push to `main` or trigger `render deploys create` for the
+existing service.
 
+The service's Docker command stays empty so its image command binds to
+`0.0.0.0:$PORT`. Readiness is `/api/ready`, which returns 200 after indexes load.
 
-The latest NLP revision indexes 6,023 local plots and trains a lightweight
-TF-IDF genre classifier during Docker build. First chunk embedding preparation
-measured about 9.4 minutes on the development CPU; allow sufficient build time.
-Subsequent document edits reuse unchanged vectors through an ignored cache
-manifest. Model/cache files stay out of Git. The revised Dockerfile has not
-been rebuilt in the latest verification pass; see `VERIFICATION.md`.
+## Reproduce compact preparation locally
+
+```bash
+.venv/bin/python -m pip install -r requirements-free.txt
+.venv/bin/python scripts/prepare_compact_catalog.py
+.venv/bin/python scripts/prepare_onnx_model.py
+STORYSCOUT_CATALOG_PROFILE=compact STORYSCOUT_EMBEDDING_BACKEND=onnx \
+  .venv/bin/python scripts/build_indexes.py
+STORYSCOUT_CATALOG_PROFILE=compact STORYSCOUT_EMBEDDING_BACKEND=onnx \
+  .venv/bin/python -m uvicorn api.main:app --host 127.0.0.1 --port 8000
+```
+
+React is built with `npm ci && npm run build` from `frontend/`. The container
+builds it automatically. To run the full local catalog and PyTorch encoder,
+install `requirements-api.txt` and leave both profile/backend variables unset.
+The free image bundles only the compact catalog; changing its profile to full
+is not supported by that image.
+
+## Evaluation and limits
+
+Full-catalog and compact-profile evaluation results are stored separately.
+The hosted Evaluation page uses `artifacts/compact/` when available. The plot
+classifier's held-out report remains an experiment on the larger source corpus;
+it is not a claim of accuracy for every recommendation.
+
+Free services can sleep when idle, have limited CPU/RAM, and can take time to
+wake. No uptime or multi-user performance guarantee is made. Browser conversations
+and bookmarks stay in each device's localStorage. Missing book page counts and
+unknown warning labels remain limitations. The UI reports actual active modes;
+a model-loading failure is shown as TF-IDF fallback, never semantic retrieval.
+
+Official references: [Render Docker](https://render.com/docs/docker),
+[free services](https://render.com/docs/free),
+[health checks](https://render.com/docs/health-checks),
+[MiniLM model](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2),
+[ONNX Runtime quantization](https://onnxruntime.ai/docs/performance/model-optimizations/quantization.html).

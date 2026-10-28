@@ -63,6 +63,7 @@ export function PipelinePage({ meta }) {
         <p>
           Model: <code>{meta?.model || "Loading…"}</code>
         </p>
+        <p>Encoder runtime: {meta?.embedding_backend==='onnx'?'Quantized ONNX CPU; same pretrained MiniLM architecture':'Sentence Transformers CPU'}. Catalog profile: {meta?.catalog_profile || 'full'}.</p>
         <p>
           {meta?.optional_interpreter
             ? "Optional NVIDIA interpretation is enabled. Submitted messages are sent to NVIDIA; filtering and ranking remain in the local Python pipeline."

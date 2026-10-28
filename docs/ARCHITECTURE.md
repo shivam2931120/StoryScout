@@ -44,3 +44,13 @@ Conversation state now includes a retained content query and served item IDs,
 which support topic-preserving refinements and nonrepeating next picks. Full plot
 text stays on the Python server; the browser receives opening excerpts, source
 provenance, keywords, and ranking components.
+
+
+The free hosted profile uses the same pretrained MiniLM architecture via its
+official quantized ONNX export, with the original tokenizer, 256-token cap,
+masked mean pooling and L2 normalization. It does not import PyTorch. Both
+media share 384-dimensional vectors, while TF-IDF, preference merging, hard
+filters, mood/theme signals, classifier predictions and MMR remain local Python.
+The compact source subset contains 1,000 books and 1,500 movies. Its model cache
+keys include the ONNX backend to prevent mixing quantized and original vectors.
+The full local profile continues to use Sentence Transformers when configured.

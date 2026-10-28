@@ -1,0 +1,9 @@
+# Tested lightweight semantic runtime; deliberately does not install PyTorch.
+pandas==2.3.3
+numpy==2.5.4
+scikit-learn==1.9.1
+fastapi==0.162.0
+uvicorn==0.54.0
+httpx==0.28.1
+onnxruntime==1.31.1
+tokenizers==0.23.3

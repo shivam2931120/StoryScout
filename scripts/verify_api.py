@@ -11,9 +11,15 @@ import httpx
 def verify(base_url: str) -> dict:
     with httpx.Client(base_url=base_url, timeout=65) as client:
         for _ in range(120):
-            if client.get('/api/health').json()['status'] == 'ready':
-                break
+            try:
+                response=client.get('/api/health',timeout=3)
+                response.raise_for_status()
+                if response.json()['status']=='ready':break
+            except (httpx.HTTPError,ValueError):
+                pass  # A newly started container may not have bound its port yet.
             time.sleep(1)
+        else:
+            raise RuntimeError('The application did not become ready within the startup check window.')
         meta = client.get('/api/meta')
         meta.raise_for_status()
         checks = []

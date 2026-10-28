@@ -75,3 +75,19 @@ Scripts: `prepare_nlp_catalog.py --plots-only` rebuilds exact plot matches;
 acquisition. Source snapshots are bundled for immediate use; API availability
 can affect future acquisitions. MovieLens research-use conditions continue to
 apply to the combined catalog.
+
+
+## Free-hosting subset
+
+`data/compact/catalogs.json.gz` is a deterministic subset of the same sourced
+records: 1,000 books and 1,500 movies, including all 1,322 known movie runtimes,
+1,451 movie plots and all demo/reference titles. No metadata is generated to
+fill gaps. `scripts/prepare_compact_catalog.py` prioritizes demo titles, known
+movie runtimes and source plots; books prioritize descriptions and documented
+subject mappings, with stable SHA-256 tie breaking. The manifest records counts
+and policy. Source URLs, per-field provenance, and original usage terms remain.
+The compressed snapshot permits low-memory loading without reading the full
+expanded catalogs. Both full source datasets and reproducible scripts remain
+in the repository. The model is the official Apache-2.0 quantized ONNX export
+of all-MiniLM-L6-v2 at revision `1110a243fdf4706b3f48f1d95db1a4f5529b4d41`;
+weights and model checksums stay in the ignored artifact cache/container image.

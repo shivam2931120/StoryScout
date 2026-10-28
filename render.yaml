@@ -5,7 +5,7 @@ services:
     repo: https://github.com/shivam2931120/StoryScout
     branch: main
     region: singapore
-    plan: 1c-2g
+    plan: free
     dockerfilePath: ./Dockerfile
     dockerContext: .
     healthCheckPath: /api/ready
@@ -16,3 +16,7 @@ services:
         value: hybrid
       - key: STORYSCOUT_USE_NVIDIA
         value: "false"
+      - key: STORYSCOUT_CATALOG_PROFILE
+        value: compact
+      - key: STORYSCOUT_EMBEDDING_BACKEND
+        value: onnx

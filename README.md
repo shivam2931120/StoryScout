@@ -47,7 +47,7 @@ python3 -m venv .venv
 ## Deploy
 
 For **React + FastAPI**, the root multi-stage Dockerfile builds the interface,
-caches the public embedding model and indexes, and serves everything from one
+caches the quantized MiniLM model and indexes for a compact free-tier catalog, and serves everything from one
 container web service. See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for exact
 Docker and Render settings, environment variables, and memory guidance.
 Streamlit Community Cloud can continue serving the previous Streamlit app;
@@ -136,3 +136,20 @@ The prepared supplement files are already bundled. To reproduce preparation:
 
 Metadata acquisition is bounded, resumable, and can encounter public API rate
 limits. The bundled snapshot works offline after model/index preparation.
+
+## Free hosted profile
+
+The default Docker/Render deployment now uses the **free** plan with 1,000
+books and 1,500 movies (1,451 with plot text; 1,322 with known runtimes). The
+full 10,005/9,744 source catalog remains available locally. A deterministic
+subset preserves demo references and prioritizes verified lengths/source text.
+
+The free runtime uses the official quantized MiniLM ONNX export, original
+tokenizer and masked mean pooling. It keeps local semantic retrieval, TF-IDF,
+classification features, structured preferences and diversity; no chat API is
+required. PyTorch/Sentence Transformers remain available in the full local
+setup. `requirements-free.txt` pins the lightweight hosting dependencies.
+
+See `docs/DEPLOYMENT.md` for terminal deployment commands and
+`artifacts/compact/` for compact-profile evaluation. The two profiles' metrics
+are kept separate. Free hosting can sleep when idle and has limited CPU.

@@ -1,0 +1,21 @@
+{
+  "model": "sentence-transformers/all-MiniLM-L6-v2",
+  "backend": "official quint8 ONNX",
+  "samples": 6,
+  "vector_shape": [
+    6,
+    384
+  ],
+  "cosine_to_original_per_sample": [
+    0.993712306022644,
+    0.9930747151374817,
+    0.9921547770500183,
+    0.9948455095291138,
+    0.9921665191650391,
+    0.9936851263046265
+  ],
+  "minimum_cosine_to_original": 0.9921547770500183,
+  "robot_friendship_similarity": 0.5835765600204468,
+  "robot_to_detective_similarity": 0.12232061475515366,
+  "space_pair_similarity": 0.6871150732040405
+}

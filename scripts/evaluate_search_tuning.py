@@ -14,11 +14,12 @@ import httpx
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--base-url',default='http://127.0.0.1:8000')
+    parser.add_argument('--output-dir',default='artifacts/search_tuning')
     args=parser.parse_args()
     root=Path(__file__).resolve().parents[1]
-    target=root/'artifacts/search_tuning'
+    target=root/args.output_dir
     target.mkdir(parents=True,exist_ok=True)
-    baseline=json.loads((target/'preference_v1_baseline.json').read_text())
+    baseline=json.loads((root/'artifacts/search_tuning/preference_v1_baseline.json').read_text())
     rows=[]
     with httpx.Client(base_url=args.base_url,timeout=120) as client:
         meta=client.get('/api/meta').json()

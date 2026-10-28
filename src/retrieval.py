@@ -1,6 +1,6 @@
 """Lexical, semantic, and hybrid retrieval with hard filters before ranking."""
 from __future__ import annotations
-import hashlib, json, pickle, time
+import hashlib, json, pickle, time, os
 from functools import lru_cache
 from pathlib import Path
 import numpy as np
@@ -15,6 +15,9 @@ from .query_understanding import MOOD_PROTOTYPES, THEME_PROTOTYPES, meaningful_q
 
 @lru_cache(maxsize=1)
 def _sentence_model():
+    if os.getenv('STORYSCOUT_EMBEDDING_BACKEND')=='onnx':
+        from .onnx_encoder import QuantizedMiniLM
+        return QuantizedMiniLM()
     from sentence_transformers import SentenceTransformer
     try:
         from huggingface_hub import try_to_load_from_cache
