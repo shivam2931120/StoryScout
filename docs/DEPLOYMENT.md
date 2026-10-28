@@ -9,7 +9,9 @@ external inference endpoint, database, or separate frontend host is required.
 ## What fits the free profile
 
 The source repository keeps the full catalog and research experiments. The
-container loads a deterministic subset of **1,000 books and 1,500 movies**.
+container semantically indexes a deterministic subset of **1,000 books and 1,500 movies**.
+A separate compressed title metadata directory covers all **19,749 source records**
+for identity lookup; it contains no full plots or additional embedding vectors.
 `prepare_compact_catalog.py` preserves demo/reference titles, prioritizes known
 movie runtimes and plot text, then uses stable hashes. It never fabricates data.
 

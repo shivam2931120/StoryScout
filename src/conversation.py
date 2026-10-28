@@ -3,16 +3,22 @@ import re
 from .schemas import ConversationState, CatalogItem, Recommendation
 from .preferences import parse_preferences, merge_preferences
 from .intents import detect_media
-from .title_matching import resolve_title, correct_catalog_query
+from .title_matching import resolve_title, correct_catalog_query, TitleDirectory
 from .cross_media import reference_context
 from .explanations import explain, explain_reference
 from .query_understanding import build_search_query
 
 class StoryScoutEngine:
-    def __init__(self, catalogs: dict[str, list[CatalogItem]], indexes: dict[str, object], retrieval_mode: str = "hybrid", query_interpreter=None):
+    def __init__(self, catalogs: dict[str, list[CatalogItem]], indexes: dict[str, object], retrieval_mode: str = "hybrid", query_interpreter=None, title_directory=None):
         self.catalogs, self.indexes, self.retrieval_mode = catalogs, indexes, retrieval_mode
         self.query_interpreter = query_interpreter
         self.last_diagnostics = {}
+        self.title_directory = title_directory or TitleDirectory()
+        self.last_title_matches = []
+        self.last_title_lookup = False
+
+    def get_item(self, item_id):
+        return next((item for group in self.catalogs.values() for item in group if item.id == item_id), None) or self.title_directory.get(item_id)
 
     def reset(self, state: ConversationState) -> ConversationState:
         state.messages.clear(); state.preferences = state.preferences.__class__(); state.media_selection = "both"; state.has_explicit_media = False; state.selected_reference_id = None; state.last_recommendations.clear(); state.pending_title_choices.clear()
@@ -22,9 +28,39 @@ class StoryScoutEngine:
     def _active_domains(self, selection: str) -> list[str]:
         return ["book", "movie"] if selection == "both" else (["book"] if selection == "books" else ["movie"])
 
-    def handle(self, text: str, state: ConversationState, *, reference_id: str | None = None) -> tuple[str, dict[str, list[Recommendation]]]:
+    def handle(self, text: str, state: ConversationState, *, reference_id: str | None = None, lookup_id: str | None = None) -> tuple[str, dict[str, list[Recommendation]]]:
         self.last_diagnostics={}
+        self.last_title_matches = []
+        self.last_title_lookup = False
         parsed = parse_preferences(text)
+        # Resolve the complete title before interpreting words such as dark, no,
+        # short or romance as instructions. Similarity requests keep the NLP path.
+        controls = {"reset", "reset my preferences", "help", "show preferences", "why did you recommend this"}
+        if not reference_id and parsed.intent not in {"reset", "help", "show_preferences", "explain", "more"} and text.strip().lower().rstrip("?.!") not in controls and not parsed.reference_query:
+            matches, approximate, explicit = self.title_directory.lookup(text, [x for group in self.catalogs.values() for x in group], state.media_selection)
+            if lookup_id:
+                selected = self.get_item(lookup_id)
+                matches, approximate, explicit = ([selected] if selected else []), False, True
+            if matches or explicit:
+                self.last_title_lookup = True
+                state.pending_title_choices.clear()
+                requested = re.match(r"^(?:find|show|search(?: for)?|look up)\s+(?:(?:the|a)\s+)?(movie|film|book)\b", text, re.I)
+                if requested:
+                    state.media_selection = "books" if requested[1].lower() == "book" else "movies"
+                    state.has_explicit_media = True
+                state.messages.append({"role": "user", "content": text})
+                for item in matches:
+                    _, conflicts = self.indexes[item.media_type]._hard_filter(item, state.preferences)
+                    if state.preferences.language and item.language.lower() == "unknown":
+                        conflicts = ["language is unknown; cannot verify " + state.preferences.language if note.startswith("language is not ") else note for note in conflicts]
+                    explanation = "Possible title spelling match." if approximate else "Matched the catalog title directly."
+                    if conflicts:
+                        explanation += " Current recommendation filters: " + "; ".join(conflicts) + ". This is a title lookup, not a verified filtered recommendation."
+                    if state.preferences.negative_content and not item.verified_warnings:
+                        explanation += " Content suitability is unknown; no verified warning labels are available."
+                    self.last_title_matches.append((item, explanation))
+                reply = ("Did you mean one of these titles?" if approximate else "Found the title in the catalog." if len(matches) == 1 else "Several titles match. Open the one you meant.") if matches else "That title is not in the local title directory. Try another spelling or a topic search."
+                return reply, {}
         search_query = text
         nemotron_failed = False
         if self.query_interpreter and parsed.intent not in {"reset", "help", "show_preferences", "explain", "more"}:
@@ -71,13 +107,17 @@ class StoryScoutEngine:
         reference = None
         all_items = self.catalogs["book"] + self.catalogs["movie"]
         if reference_id:
-            reference = next((item for item in all_items if item.id == reference_id), None)
+            reference = self.get_item(reference_id)
             if reference:
                 state.selected_reference_id = reference.id
                 state.preferences.referenced_title = reference.title
                 state.pending_title_choices.clear()
         elif parsed.reference_query:
-            reference, choices = resolve_title(parsed.reference_query, self.catalogs["book"] + self.catalogs["movie"])
+            exact, approximate, _ = self.title_directory.lookup(parsed.reference_query, all_items)
+            if exact and not approximate:
+                reference, choices = (exact[0] if len(exact) == 1 else None), exact
+            else:
+                reference, choices = resolve_title(parsed.reference_query, all_items)
             if reference is None and choices:
                 state.pending_title_choices = [x.id for x in choices]
                 return "I found multiple possible reference titles: " + ", ".join(x.title for x in choices) + ". Please name one.", {}
@@ -87,11 +127,13 @@ class StoryScoutEngine:
             else:
                 state.selected_reference_id = None
         elif state.selected_reference_id and (parsed.intent in {'refine','more'} or re.match(r"^(also|only|make|what about|show me|more|shorter)\b", text.lower().strip())):
-            reference = next((item for item in all_items if item.id == state.selected_reference_id), None)
+            reference = self.get_item(state.selected_reference_id)
         else:
             state.selected_reference_id = None
             state.preferences.referenced_title = None
             state.pending_title_choices.clear()
+        if reference and reference.source.startswith(("movielens", "project-gutenberg")) and not (reference.retrieval_text or reference.description_provenance or reference.genres or reference.theme_tags):
+            return f"I found '{reference.title}', but its source has no synopsis or genre metadata for meaningful content comparison. Choose a described reference or search for themes directly.", {}
         followup = parsed.intent in {'refine','more'} or 'replace_genres' in parsed.explicit_fields or bool(re.match(r'^(also|only|make|what about|show me|more|shorter)\b',text.lower().strip()))
         effective, topic = build_search_query(search_query,state.preferences,state.last_content_query,followup)
         state.last_content_query=topic

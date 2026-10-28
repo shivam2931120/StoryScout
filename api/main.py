@@ -22,6 +22,7 @@ from fastapi.staticfiles import StaticFiles
 from api.models import ChatRequest, JudgmentRequest
 from src.config import ROOT, MODEL_NAME
 from src.conversation import StoryScoutEngine
+from src.title_matching import TitleDirectory
 from src.data_loader import load_active_catalogs, catalog_status
 from src.description_enrichment import get_server_api_key
 from src.llm_interpreter import NemotronQueryInterpreter
@@ -40,7 +41,7 @@ def make_engine() -> StoryScoutEngine:
     indexes = {domain: RetrievalIndex(items, mode=mode) for domain, items in catalogs.items()}
     # External interpretation is an explicit server option; local NLP is default.
     key = get_server_api_key() if os.getenv("STORYSCOUT_USE_NVIDIA", "false").lower() == "true" else None
-    return StoryScoutEngine(catalogs, indexes, mode, NemotronQueryInterpreter(key) if key else None)
+    return StoryScoutEngine(catalogs, indexes, mode, NemotronQueryInterpreter(key) if key else None, title_directory=TitleDirectory.load(ROOT / "data/compact/titles.json.gz"))
 
 
 def item_payload(item):
@@ -102,6 +103,7 @@ def create_app(engine: StoryScoutEngine | None = None) -> FastAPI:
         all_items = [x for items in current.catalogs.values() for x in items]
         starters = [next((x for x in all_items if x.title == title and x.source.startswith("demo")), None) for title in titles]
         return {"counts": {k: len(v) for k, v in current.catalogs.items()}, "status": catalog_status(all_items),
+                "title_directory_count":len(current.title_directory.records),
                 "catalog_profile":os.getenv('STORYSCOUT_CATALOG_PROFILE','full'),"embedding_backend":os.getenv('STORYSCOUT_EMBEDDING_BACKEND','torch'),
                 "genres": GENRES, "moods": MOODS, "modes": modes(current), "model": MODEL_NAME,
                 "coverage":{domain:{'plot_text':sum(bool(x.retrieval_text) for x in items),'descriptions':sum(bool(x.retrieval_text or x.description_provenance or x.source=='demo') for x in items),
@@ -119,11 +121,12 @@ def create_app(engine: StoryScoutEngine | None = None) -> FastAPI:
         prior_seen=list(state.seen_recommendations)
         state.messages = state.messages[-60:]
         state.retrieval_mode = current.retrieval_mode
-        items = {x.id: x for group in current.catalogs.values() for x in group}
-        if request.reference_id and request.reference_id not in items:
+        if request.reference_id and not current.get_item(request.reference_id):
             raise HTTPException(404, "Reference title is not in this catalog.")
-        if state.selected_reference_id and state.selected_reference_id not in items:
+        if state.selected_reference_id and not current.get_item(state.selected_reference_id):
             state.selected_reference_id = None
+        if request.lookup_id and not current.get_item(request.lookup_id):
+            raise HTTPException(404, "Title is not in the local directory.")
         pref = state.preferences
         # Recompute contradictions from real preferences, never trust client flags.
         pref.contradiction_messages = []
@@ -135,28 +138,32 @@ def create_app(engine: StoryScoutEngine | None = None) -> FastAPI:
         start = time.perf_counter()
         with app.state.lock:
             current.last_diagnostics={}
+            current.last_title_matches=[]
+            current.last_title_lookup=False
             if parse:
-                reply, results = current.handle(request.message, state, reference_id=request.reference_id)
+                reply, results = current.handle(request.message, state, reference_id=request.reference_id, lookup_id=request.lookup_id)
             elif pref.contradiction_messages:
                 reply, results = "Please resolve these preferences: " + " ".join(pref.contradiction_messages), {}
             else:
-                reference = items.get(state.selected_reference_id)
+                reference = current.get_item(state.selected_reference_id)
                 results = current.recommend(request.message, state, reference)
                 reply = "Your preferences are applied. Here are the matching stories." if any(results.values()) else current.empty_message(state)
+            title_matches = [{"item": item_payload(item), "explanation": explanation, "match_type": "title_lookup"} for item, explanation in current.last_title_matches]
+            title_lookup = current.last_title_lookup
             diagnostics={k:dict(v) for k,v in current.last_diagnostics.items()}
         results = {domain: group[:request.per_domain] for domain, group in results.items()}
         state.last_recommendations = [rec.item.id for group in results.values() for rec in group]
         state.seen_recommendations=[] if parse and parse_preferences(request.message).intent=='reset' else list(dict.fromkeys(prior_seen+state.last_recommendations))[-300:]
         state.messages = state.messages[-60:]
         parsed = parse_preferences(request.message)
-        trace = {"intent": parsed.intent if parse else "preference_edit", "method": "rule baseline" + (" + optional NVIDIA interpretation" if current.query_interpreter else ""),
-                 "extracted_fields": sorted(parsed.explicit_fields) if parse else [], "active_modes": modes(current),
+        trace = {"intent": "title_lookup" if title_lookup else (parsed.intent if parse else "preference_edit"), "method": "rule baseline" + (" + optional NVIDIA interpretation" if current.query_interpreter else ""),
+                 "extracted_fields": sorted(parsed.explicit_fields) if parse and not title_lookup else [], "active_modes": modes(current),
                  "retrieval":diagnostics,"content_query":state.last_content_query,
                  "latency_ms": round((time.perf_counter() - start) * 1000, 1)}
-        return {"reply": reply, "state": asdict(state), "results": {domain: [{"item": item_payload(rec.item), "similarity_score": rec.score,
+        return {"reply": reply, "title_matches": title_matches, "state": asdict(state), "results": {domain: [{"item": item_payload(rec.item), "similarity_score": rec.score,
                 "lexical_score": rec.lexical_score, "semantic_score": rec.semantic_score, "explanation": rec.explanation,
                 "score_components":rec.score_components,"matched_terms":rec.matched_terms} for rec in group] for domain, group in results.items()},
-                "choices": [item_payload(items[x]) for x in state.pending_title_choices if x in items], "trace": trace}
+                "choices": [item_payload(current.get_item(x)) for x in state.pending_title_choices if current.get_item(x)], "trace": trace}
 
     @app.post("/api/chat")
     def chat(request: ChatRequest):
@@ -210,7 +217,7 @@ def create_app(engine: StoryScoutEngine | None = None) -> FastAPI:
     @app.get("/api/items/{item_id}")
     def item(item_id: str):
         current = ready_engine()
-        found = next((x for group in current.catalogs.values() for x in group if x.id == item_id), None)
+        found = current.get_item(item_id)
         if found is None:
             raise HTTPException(404, "Title is not in this catalog.")
         return item_payload(found)

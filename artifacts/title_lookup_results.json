@@ -1,0 +1,566 @@
+{
+  "executed_at": "2026-10-28T19:04:07.312011+00:00",
+  "base_url": "http://127.0.0.1:8000",
+  "judgment_method": "Developer-authored source title identities, manually listed by catalog ID; not independent human relevance judgments.",
+  "limitations": "Small regression set of known catalog titles. Measures identity retrieval, not narrative recommendation quality or discovery of titles absent from the sources.",
+  "cases": 42,
+  "passed": 42,
+  "rows": [
+    {
+      "query": "love and other drugs",
+      "constrained": false,
+      "expected_ids": [
+        "movie_ml_82167"
+      ],
+      "actual_ids": [
+        "movie_ml_82167"
+      ],
+      "passed": true,
+      "preferences_retained": true,
+      "latency_ms": 46.33
+    },
+    {
+      "query": "love and other drugs",
+      "constrained": true,
+      "expected_ids": [
+        "movie_ml_82167"
+      ],
+      "actual_ids": [
+        "movie_ml_82167"
+      ],
+      "passed": true,
+      "preferences_retained": true,
+      "latency_ms": 34.17
+    },
+    {
+      "query": "Love & Other Drugs",
+      "constrained": false,
+      "expected_ids": [
+        "movie_ml_82167"
+      ],
+      "actual_ids": [
+        "movie_ml_82167"
+      ],
+      "passed": true,
+      "preferences_retained": true,
+      "latency_ms": 29.06
+    },
+    {
+      "query": "Love & Other Drugs",
+      "constrained": true,
+      "expected_ids": [
+        "movie_ml_82167"
+      ],
+      "actual_ids": [
+        "movie_ml_82167"
+      ],
+      "passed": true,
+      "preferences_retained": true,
+      "latency_ms": 23.37
+    },
+    {
+      "query": "Find a movie called Love and Other Drugs",
+      "constrained": false,
+      "expected_ids": [
+        "movie_ml_82167"
+      ],
+      "actual_ids": [
+        "movie_ml_82167"
+      ],
+      "passed": true,
+      "preferences_retained": true,
+      "latency_ms": 28.53
+    },
+    {
+      "query": "Find a movie called Love and Other Drugs",
+      "constrained": true,
+      "expected_ids": [
+        "movie_ml_82167"
+      ],
+      "actual_ids": [
+        "movie_ml_82167"
+      ],
+      "passed": true,
+      "preferences_retained": true,
+      "latency_ms": 27.4
+    },
+    {
+      "query": "the dark knight",
+      "constrained": false,
+      "expected_ids": [
+        "movie_ml_58559"
+      ],
+      "actual_ids": [
+        "movie_ml_58559"
+      ],
+      "passed": true,
+      "preferences_retained": true,
+      "latency_ms": 23.15
+    },
+    {
+      "query": "the dark knight",
+      "constrained": true,
+      "expected_ids": [
+        "movie_ml_58559"
+      ],
+      "actual_ids": [
+        "movie_ml_58559"
+      ],
+      "passed": true,
+      "preferences_retained": true,
+      "latency_ms": 22.61
+    },
+    {
+      "query": "No Country for Old Men",
+      "constrained": false,
+      "expected_ids": [
+        "movie_ml_55820"
+      ],
+      "actual_ids": [
+        "movie_ml_55820"
+      ],
+      "passed": true,
+      "preferences_retained": true,
+      "latency_ms": 23.94
+    },
+    {
+      "query": "No Country for Old Men",
+      "constrained": true,
+      "expected_ids": [
+        "movie_ml_55820"
+      ],
+      "actual_ids": [
+        "movie_ml_55820"
+      ],
+      "passed": true,
+      "preferences_retained": true,
+      "latency_ms": 27.17
+    },
+    {
+      "query": "The Big Short",
+      "constrained": false,
+      "expected_ids": [
+        "movie_ml_148626"
+      ],
+      "actual_ids": [
+        "movie_ml_148626"
+      ],
+      "passed": true,
+      "preferences_retained": true,
+      "latency_ms": 22.92
+    },
+    {
+      "query": "The Big Short",
+      "constrained": true,
+      "expected_ids": [
+        "movie_ml_148626"
+      ],
+      "actual_ids": [
+        "movie_ml_148626"
+      ],
+      "passed": true,
+      "preferences_retained": true,
+      "latency_ms": 28.24
+    },
+    {
+      "query": "Interstellar",
+      "constrained": false,
+      "expected_ids": [
+        "movie_001"
+      ],
+      "actual_ids": [
+        "movie_001"
+      ],
+      "passed": true,
+      "preferences_retained": true,
+      "latency_ms": 25.39
+    },
+    {
+      "query": "Interstellar",
+      "constrained": true,
+      "expected_ids": [
+        "movie_001"
+      ],
+      "actual_ids": [
+        "movie_001"
+      ],
+      "passed": true,
+      "preferences_retained": true,
+      "latency_ms": 23.47
+    },
+    {
+      "query": "The Hobbit",
+      "constrained": false,
+      "expected_ids": [
+        "book_001"
+      ],
+      "actual_ids": [
+        "book_001"
+      ],
+      "passed": true,
+      "preferences_retained": true,
+      "latency_ms": 23.17
+    },
+    {
+      "query": "The Hobbit",
+      "constrained": true,
+      "expected_ids": [
+        "book_001"
+      ],
+      "actual_ids": [
+        "book_001"
+      ],
+      "passed": true,
+      "preferences_retained": true,
+      "latency_ms": 27.81
+    },
+    {
+      "query": "Pulp Fiction",
+      "constrained": false,
+      "expected_ids": [
+        "movie_ml_296"
+      ],
+      "actual_ids": [
+        "movie_ml_296"
+      ],
+      "passed": true,
+      "preferences_retained": true,
+      "latency_ms": 25.77
+    },
+    {
+      "query": "Pulp Fiction",
+      "constrained": true,
+      "expected_ids": [
+        "movie_ml_296"
+      ],
+      "actual_ids": [
+        "movie_ml_296"
+      ],
+      "passed": true,
+      "preferences_retained": true,
+      "latency_ms": 23.59
+    },
+    {
+      "query": "Inception",
+      "constrained": false,
+      "expected_ids": [
+        "movie_ml_79132"
+      ],
+      "actual_ids": [
+        "movie_ml_79132"
+      ],
+      "passed": true,
+      "preferences_retained": true,
+      "latency_ms": 22.8
+    },
+    {
+      "query": "Inception",
+      "constrained": true,
+      "expected_ids": [
+        "movie_ml_79132"
+      ],
+      "actual_ids": [
+        "movie_ml_79132"
+      ],
+      "passed": true,
+      "preferences_retained": true,
+      "latency_ms": 27.29
+    },
+    {
+      "query": "Titanic",
+      "constrained": false,
+      "expected_ids": [
+        "movie_ml_1721",
+        "movie_ml_3404"
+      ],
+      "actual_ids": [
+        "movie_ml_1721",
+        "movie_ml_3404"
+      ],
+      "passed": true,
+      "preferences_retained": true,
+      "latency_ms": 27.09
+    },
+    {
+      "query": "Titanic",
+      "constrained": true,
+      "expected_ids": [
+        "movie_ml_1721",
+        "movie_ml_3404"
+      ],
+      "actual_ids": [
+        "movie_ml_1721",
+        "movie_ml_3404"
+      ],
+      "passed": true,
+      "preferences_retained": true,
+      "latency_ms": 23.39
+    },
+    {
+      "query": "Titanic (1997)",
+      "constrained": false,
+      "expected_ids": [
+        "movie_ml_1721"
+      ],
+      "actual_ids": [
+        "movie_ml_1721"
+      ],
+      "passed": true,
+      "preferences_retained": true,
+      "latency_ms": 22.72
+    },
+    {
+      "query": "Titanic (1997)",
+      "constrained": true,
+      "expected_ids": [
+        "movie_ml_1721"
+      ],
+      "actual_ids": [
+        "movie_ml_1721"
+      ],
+      "passed": true,
+      "preferences_retained": true,
+      "latency_ms": 27.11
+    },
+    {
+      "query": "The Matrix",
+      "constrained": false,
+      "expected_ids": [
+        "movie_ml_2571"
+      ],
+      "actual_ids": [
+        "movie_ml_2571"
+      ],
+      "passed": true,
+      "preferences_retained": true,
+      "latency_ms": 28.02
+    },
+    {
+      "query": "The Matrix",
+      "constrained": true,
+      "expected_ids": [
+        "movie_ml_2571"
+      ],
+      "actual_ids": [
+        "movie_ml_2571"
+      ],
+      "passed": true,
+      "preferences_retained": true,
+      "latency_ms": 24.72
+    },
+    {
+      "query": "The Godfather",
+      "constrained": false,
+      "expected_ids": [
+        "movie_ml_858"
+      ],
+      "actual_ids": [
+        "movie_ml_858"
+      ],
+      "passed": true,
+      "preferences_retained": true,
+      "latency_ms": 38.86
+    },
+    {
+      "query": "The Godfather",
+      "constrained": true,
+      "expected_ids": [
+        "movie_ml_858"
+      ],
+      "actual_ids": [
+        "movie_ml_858"
+      ],
+      "passed": true,
+      "preferences_retained": true,
+      "latency_ms": 26.23
+    },
+    {
+      "query": "The Time Machine",
+      "constrained": false,
+      "expected_ids": [
+        "book_002",
+        "movie_ml_3959",
+        "movie_ml_5171"
+      ],
+      "actual_ids": [
+        "book_002",
+        "movie_ml_3959",
+        "movie_ml_5171"
+      ],
+      "passed": true,
+      "preferences_retained": true,
+      "latency_ms": 57.22
+    },
+    {
+      "query": "The Time Machine",
+      "constrained": true,
+      "expected_ids": [
+        "movie_ml_3959",
+        "movie_ml_5171"
+      ],
+      "actual_ids": [
+        "movie_ml_3959",
+        "movie_ml_5171"
+      ],
+      "passed": true,
+      "preferences_retained": true,
+      "latency_ms": 30.49
+    },
+    {
+      "query": "The Shawshank Redemption",
+      "constrained": false,
+      "expected_ids": [
+        "movie_ml_318"
+      ],
+      "actual_ids": [
+        "movie_ml_318"
+      ],
+      "passed": true,
+      "preferences_retained": true,
+      "latency_ms": 33.37
+    },
+    {
+      "query": "The Shawshank Redemption",
+      "constrained": true,
+      "expected_ids": [
+        "movie_ml_318"
+      ],
+      "actual_ids": [
+        "movie_ml_318"
+      ],
+      "passed": true,
+      "preferences_retained": true,
+      "latency_ms": 36.37
+    },
+    {
+      "query": "Look up Interstellar",
+      "constrained": false,
+      "expected_ids": [
+        "movie_001"
+      ],
+      "actual_ids": [
+        "movie_001"
+      ],
+      "passed": true,
+      "preferences_retained": true,
+      "latency_ms": 37.89
+    },
+    {
+      "query": "Look up Interstellar",
+      "constrained": true,
+      "expected_ids": [
+        "movie_001"
+      ],
+      "actual_ids": [
+        "movie_001"
+      ],
+      "passed": true,
+      "preferences_retained": true,
+      "latency_ms": 35.27
+    },
+    {
+      "query": "Love and Other Drugz",
+      "constrained": false,
+      "expected_ids": [
+        "movie_ml_82167"
+      ],
+      "actual_ids": [
+        "movie_ml_82167"
+      ],
+      "passed": true,
+      "preferences_retained": true,
+      "latency_ms": 59.31
+    },
+    {
+      "query": "Love and Other Drugz",
+      "constrained": true,
+      "expected_ids": [
+        "movie_ml_82167"
+      ],
+      "actual_ids": [
+        "movie_ml_82167"
+      ],
+      "passed": true,
+      "preferences_retained": true,
+      "latency_ms": 63.77
+    },
+    {
+      "query": "Amelie",
+      "constrained": false,
+      "expected_ids": [
+        "movie_ml_4973"
+      ],
+      "actual_ids": [
+        "movie_ml_4973"
+      ],
+      "passed": true,
+      "preferences_retained": true,
+      "latency_ms": 42.54
+    },
+    {
+      "query": "Amelie",
+      "constrained": true,
+      "expected_ids": [
+        "movie_ml_4973"
+      ],
+      "actual_ids": [
+        "movie_ml_4973"
+      ],
+      "passed": true,
+      "preferences_retained": true,
+      "latency_ms": 67.5
+    },
+    {
+      "query": "1984",
+      "constrained": false,
+      "expected_ids": [
+        "movie_ml_2117"
+      ],
+      "actual_ids": [
+        "movie_ml_2117"
+      ],
+      "passed": true,
+      "preferences_retained": true,
+      "latency_ms": 34.89
+    },
+    {
+      "query": "1984",
+      "constrained": true,
+      "expected_ids": [
+        "movie_ml_2117"
+      ],
+      "actual_ids": [
+        "movie_ml_2117"
+      ],
+      "passed": true,
+      "preferences_retained": true,
+      "latency_ms": 51.61
+    },
+    {
+      "query": "Nineteen Eighty-Four",
+      "constrained": false,
+      "expected_ids": [
+        "movie_ml_2117"
+      ],
+      "actual_ids": [
+        "movie_ml_2117"
+      ],
+      "passed": true,
+      "preferences_retained": true,
+      "latency_ms": 37.07
+    },
+    {
+      "query": "Nineteen Eighty-Four",
+      "constrained": true,
+      "expected_ids": [
+        "movie_ml_2117"
+      ],
+      "actual_ids": [
+        "movie_ml_2117"
+      ],
+      "passed": true,
+      "preferences_retained": true,
+      "latency_ms": 35.75
+    }
+  ]
+}

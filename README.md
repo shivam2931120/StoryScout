@@ -155,3 +155,8 @@ setup. `requirements-free.txt` pins the lightweight hosting dependencies.
 See `docs/DEPLOYMENT.md` for terminal deployment commands and
 `artifacts/compact/` for compact-profile evaluation. The two profiles' metrics
 are kept separate. Free hosting can sleep when idle and has limited CPU.
+
+Bare title searches use a separate local directory of all 19,749 source records,
+including records outside the compact semantic index. Title words do not become
+preferences; remakes and filter conflicts are shown explicitly. See
+[title lookup behavior and its executed benchmark](docs/TITLE_LOOKUP.md).

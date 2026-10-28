@@ -355,7 +355,7 @@ export function DetailDrawer({ rec, saved, onSave, onClose, onSimilar, busy }) {
         <section className="fit-panel">
           <h3>
             <Sparkles size={16} />
-            Why this fits your request
+            {rec.match_type === "title_lookup" ? "Title match" : "Why this fits your request"}
           </h3>
           <p>{rec.explanation}</p>
         </section>

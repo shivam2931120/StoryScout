@@ -1,0 +1,136 @@
+{
+  "judgment_method": "Developer-authored source title identities, manually listed by catalog ID; not independent human relevance judgments.",
+  "limitations": "Small regression set of known catalog titles. Measures identity retrieval, not narrative recommendation quality or discovery of titles absent from the sources.",
+  "queries": [
+    {
+      "query": "love and other drugs",
+      "expected_ids": [
+        "movie_ml_82167"
+      ]
+    },
+    {
+      "query": "Love & Other Drugs",
+      "expected_ids": [
+        "movie_ml_82167"
+      ]
+    },
+    {
+      "query": "Find a movie called Love and Other Drugs",
+      "expected_ids": [
+        "movie_ml_82167"
+      ]
+    },
+    {
+      "query": "the dark knight",
+      "expected_ids": [
+        "movie_ml_58559"
+      ]
+    },
+    {
+      "query": "No Country for Old Men",
+      "expected_ids": [
+        "movie_ml_55820"
+      ]
+    },
+    {
+      "query": "The Big Short",
+      "expected_ids": [
+        "movie_ml_148626"
+      ]
+    },
+    {
+      "query": "Interstellar",
+      "expected_ids": [
+        "movie_001"
+      ]
+    },
+    {
+      "query": "The Hobbit",
+      "expected_ids": [
+        "book_001"
+      ]
+    },
+    {
+      "query": "Pulp Fiction",
+      "expected_ids": [
+        "movie_ml_296"
+      ]
+    },
+    {
+      "query": "Inception",
+      "expected_ids": [
+        "movie_ml_79132"
+      ]
+    },
+    {
+      "query": "Titanic",
+      "expected_ids": [
+        "movie_ml_1721",
+        "movie_ml_3404"
+      ]
+    },
+    {
+      "query": "Titanic (1997)",
+      "expected_ids": [
+        "movie_ml_1721"
+      ]
+    },
+    {
+      "query": "The Matrix",
+      "expected_ids": [
+        "movie_ml_2571"
+      ]
+    },
+    {
+      "query": "The Godfather",
+      "expected_ids": [
+        "movie_ml_858"
+      ]
+    },
+    {
+      "query": "The Time Machine",
+      "expected_ids": [
+        "book_002",
+        "movie_ml_3959",
+        "movie_ml_5171"
+      ]
+    },
+    {
+      "query": "The Shawshank Redemption",
+      "expected_ids": [
+        "movie_ml_318"
+      ]
+    },
+    {
+      "query": "Look up Interstellar",
+      "expected_ids": [
+        "movie_001"
+      ]
+    },
+    {
+      "query": "Love and Other Drugz",
+      "expected_ids": [
+        "movie_ml_82167"
+      ],
+      "approximate": true
+    },
+    {
+      "query": "Amelie",
+      "expected_ids": [
+        "movie_ml_4973"
+      ]
+    },
+    {
+      "query": "1984",
+      "expected_ids": [
+        "movie_ml_2117"
+      ]
+    },
+    {
+      "query": "Nineteen Eighty-Four",
+      "expected_ids": [
+        "movie_ml_2117"
+      ]
+    }
+  ]
+}

@@ -24,7 +24,19 @@ def prepare():
     destination=ROOT/'data/compact/catalogs.json.gz'
     destination.parent.mkdir(parents=True,exist_ok=True)
     with gzip.open(destination,'wt',encoding='utf-8') as target:json.dump(result,target)
-    summary={'profile':'compact','policy':'deterministic source-backed subset; demo first, then known movie runtimes and source plots; described books then subject mappings; stable SHA-256 tie breaking',
+    # Full title identities remain searchable without expanding the embedding index.
+    fields = {"id", "media_type", "title", "genres", "language", "year", "source", "source_url",
+              "authors", "page_count", "publisher", "director", "runtime_minutes", "search_aliases",
+              "description_source", "description_source_url", "description_provenance", "metadata_provenance"}
+    directory = []
+    for items in catalogs.values():
+        for item in items:
+            record = {key: value for key, value in asdict(item).items() if key in fields and value}
+            record["description"] = item.description[:650] if item.description_provenance or item.source.startswith('demo') else ""
+            directory.append(record)
+    with gzip.open(destination.parent/'titles.json.gz', 'wt', encoding='utf-8') as target:
+        json.dump(directory, target, ensure_ascii=False)
+    summary={'profile' :'compact','policy':'deterministic source-backed subset; demo first, then known movie runtimes and source plots; described books then subject mappings; stable SHA-256 tie breaking',
              'counts':{k:len(v) for k,v in result.items()},'source_counts':{k:len(v) for k,v in catalogs.items()}}
     (destination.parent/'manifest.json').write_text(json.dumps(summary,indent=2))
     print(json.dumps(summary),flush=True)

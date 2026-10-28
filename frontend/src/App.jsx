@@ -267,6 +267,7 @@ export default function App() {
           message: text.trim(),
           state: nextState,
           reference_id: overrides.referenceId || null,
+          lookup_id: overrides.lookupId || null,
           per_domain: 3,
         },
       );
@@ -276,6 +277,7 @@ export default function App() {
         reply: result.reply,
         results: result.results,
         choices: result.choices,
+        title_matches: result.title_matches,
         state: result.state,
         trace: result.trace,
         time: Date.now(),
@@ -685,6 +687,14 @@ export default function App() {
                           ))}
                         </div>
                       )}
+                      {turn.title_matches?.length > 0 && (
+                        <section className="recommendation-group">
+                          <div className="group-header"><h2>Matching titles</h2><span>Catalog lookup · preferences retained</span></div>
+                          <div className="recommendation-grid">
+                            {turn.title_matches.map(rec => <StoryCard key={rec.item.id} rec={rec} saved={savedIds.has(rec.item.id)} onSave={saveStory} onDetails={setDetails} />)}
+                          </div>
+                        </section>
+                      )}
                       {Object.entries(turn.results).map(([domain, recs]) => (
                         <section className="recommendation-group" key={domain}>
                           <div className="group-header">
@@ -892,7 +902,8 @@ export default function App() {
               <h1>Stories with a source.</h1>
               <p className="page-lede">
                 {meta?.counts.book.toLocaleString() || "…"} books and{" "}
-                {meta?.counts.movie.toLocaleString() || "…"} movies.
+                {meta?.counts.movie.toLocaleString() || "…"} movies in the recommendation index.
+                {meta?.title_directory_count > 0 && ` ${meta.title_directory_count.toLocaleString()} source records searchable by title.`}
               </p>
               <div className="info-panel">
                 <h3>Books</h3>
