@@ -20,7 +20,7 @@ No Wikipedia match means no generated summary. The script can be run incremental
 
 `data/source/gutenberg/pg_catalog.csv.gz` is the official compressed machine-readable catalog snapshot. Rebuild the book subset with `python scripts/import_gutenberg_catalog.py`; `--limit 10000` is the default. The importer selects English text records with subject metadata, then uses a stable SHA-256 sample so the first catalog IDs do not dominate. `--refresh` fetches the current feed before rebuilding. The Project Gutenberg catalog page explicitly provides its machine-readable metadata for building databases and derivatives, and its robot-access policy states that catalog data are public domain. See the [offline catalogs](https://www.gutenberg.org/ebooks/offline_catalogs.html), [robot access](https://www.gutenberg.org/policy/robot_access.html), and [terms of use](https://www.gutenberg.org/policy/terms_of_use.html).
 
-The normalized subset includes title, author string, language, source subjects/bookshelves, and a stable landing-page link. Source subjects remain theme metadata with explicit provenance; they are not relabeled as genres. The display description is a metadata-only notice and is excluded from retrieval text. The catalog has no reliable original publication year, plot descriptions, page counts, publishers, or content warnings, so these remain unknown. No ebook text is downloaded or redistributed. Project Gutenberg cautions that works' copyright status can differ outside the United States; users should check local law before accessing works. A missing safety warning does not certify suitability.
+The normalized subset includes title, author string, language, source subjects/bookshelves, and a stable landing-page link. Source subjects remain original theme metadata. Conservative, documented subject-to-genre mappings are stored separately in `subject_genres`; they never overwrite catalog genres. The display description is a metadata-only notice and is excluded from retrieval text. The catalog has no reliable original publication year, plot descriptions, page counts, publishers, or content warnings, so these remain unknown. No ebook text is downloaded or redistributed. Project Gutenberg cautions that works' copyright status can differ outside the United States; users should check local law before accessing works. A missing safety warning does not certify suitability.
 
 `src/data_loader.py` validates required fields, prefixed IDs, duplicate IDs, descriptions, years, lengths, and genre formatting. `scripts/prepare_data.py books.csv movies.csv` validates user-supplied normalized CSVs.
 
@@ -31,3 +31,47 @@ Run `python scripts/acquire_wikidata_catalog.py --limit 1000` to query the publi
 The imported short `description` is Wikidata's English entity description. It is often a concise type or topic label, not a plot synopsis. Genres, author/director, publication year, language, runtime, page count, and cast come only from available Wikidata statements. Missing statements stay unknown. No ratings, content warnings, page counts, runtimes, or summaries are inferred. Wikidata structured data is released under CC0; see [Wikidata licensing](https://www.wikidata.org/wiki/Wikidata:Licensing), [data access](https://www.wikidata.org/wiki/Help:Data_access), and its [listed alternate SPARQL endpoints](https://www.wikidata.org/wiki/Wikidata:SPARQL_query_service/Alternative_endpoints).
 
 Acquisition was attempted for this revision, but the main Wikidata endpoint returned HTTP 429 and both listed QLever addresses returned HTTP 502; Open Library's API request timed out and the Gutendex API returned HTTP 403. The approved Project Gutenberg catalog feed was reachable, so it now supplies a 10,000-record English book subset. Open Library remains a possible future source, but its API documentation asks bulk users to use monthly data dumps rather than treat the search API as a bulk backend. [IMDb's non-commercial terms](https://help.imdb.com/article/imdb/general-information/can-i-use-imdb-data-in-my-software/G5JTRESSHJBBHTGX) prohibit republishing or repurposing that dataset to create a movie database, so it is not used here.
+
+## Local NLP supplements (2026-10-28)
+
+The active catalog still has **10,005 books and 9,744 movies**. New sources
+supplement existing IDs, without inventing records:
+
+- **6,023 movie plots**, joined by exact normalized title and year, excluding
+  ambiguous source-page matches. `data/enriched/movie_plots.csv.gz` stores up to
+  18,000 characters of original plot text plus a short extractive opening excerpt.
+  Only the excerpt is sent to the browser. Full text is indexed locally.
+- The original [Justin Robischon Wikipedia Movie Plots corpus](https://www.kaggle.com/datasets/jrobischon/wikipedia-movie-plots)
+  was acquired through a [pinned public mirror](https://huggingface.co/datasets/vishnupriyavr/wiki-movie-plots-with-summaries/tree/a1feef074ae0580338cf2dd8e98a43ca98637fa6).
+  **Generated summary columns are ignored**. The mirror declares CC BY-SA 4.0;
+  rows retain their original Wikipedia page URLs for attribution/history.
+  Corpus revision and download checksum are in `nlp_sources_manifest.json`.
+- **1,344 supplemental metadata rows** from Wikidata and Wikipedia infoboxes
+  produce **1,322 known movie runtimes** and **1,334 known movie languages** in
+  the active catalog, including existing demo values. Some supplemental rows
+  have language only. Runtime and language coverage are counted independently.
+- Wikidata joins use exact existing IMDb external IDs and explicit duration units;
+  these structured statements are CC0. The endpoint returned repeated HTTP 429,
+  so acquisition continued using exact plot-source Wikipedia pages.
+- The infobox importer accepts a single explicit minutes value and rejects
+  conflicting versions. Language comes only from explicit infobox language fields,
+  never nationality/country inference. Each imported field retains the exact
+  Wikipedia revision URL and CC BY-SA attribution. See the official
+  [MediaWiki revisions API](https://www.mediawiki.org/wiki/API:Revisions).
+- **1,815 books** have a conservative genre mapping from supplied Gutenberg
+  subjects. These are rule-derived mappings with provenance, not classifier labels.
+  Book page counts remain known for only **12 records**; a page limit therefore
+  still yields a small verified book pool.
+
+`src/data_loader.py` keeps source metadata, full source text, subject mappings,
+local classifier predictions, TF-IDF keywords, and semantic mood/theme inference
+in separate fields. Predictions never fill unknown years, lengths, or languages.
+A mood alignment score is an experimental text signal, not a verified emotional
+response or content-safety label. Full plots can contain spoilers; cards use only
+opening excerpts and explanations avoid citing endings.
+
+Scripts: `prepare_nlp_catalog.py --plots-only` rebuilds exact plot matches;
+`enrich_wikipedia_metadata.py --limit 1500` performs bounded, cached infobox
+acquisition. Source snapshots are bundled for immediate use; API availability
+can affect future acquisitions. MovieLens research-use conditions continue to
+apply to the combined catalog.

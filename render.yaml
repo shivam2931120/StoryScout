@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: storyscout
+    runtime: docker
+    repo: https://github.com/shivam2931120/StoryScout
+    branch: main
+    region: singapore
+    plan: 1c-2g
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/ready
+    numInstances: 1
+    autoDeployTrigger: commit
+    envVars:
+      - key: STORYSCOUT_RETRIEVAL_MODE
+        value: hybrid
+      - key: STORYSCOUT_USE_NVIDIA
+        value: "false"

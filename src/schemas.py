@@ -33,16 +33,25 @@ class CatalogItem:
     description_source: str = ""
     description_source_url: str = ""
     description_provenance: str = ""
+    retrieval_text: str = ""
+    text_source: str = ""
+    text_source_url: str = ""
+    metadata_provenance: dict[str, dict[str, str]] = field(default_factory=dict)
+    nlp_keywords: list[str] = field(default_factory=list)
+    inferred_moods: dict[str, float] = field(default_factory=dict)
+    inferred_themes: dict[str, float] = field(default_factory=dict)
+    subject_genres: list[str] = field(default_factory=list)
+    predicted_genres: list[str] = field(default_factory=list)
 
     @property
     def search_text(self) -> str:
         # MovieLens supplies labels, not plot text; its explanatory display
         # placeholder must never become a shared lexical/semantic signal.
         metadata_only_source = self.source.startswith("movielens") or self.source.startswith("project-gutenberg")
-        searchable_description = "" if metadata_only_source and not self.description_provenance else self.description
+        searchable_description = self.retrieval_text or ("" if metadata_only_source and not self.description_provenance else self.description)
         parts = [self.title, searchable_description, " ".join(self.genres),
                  " ".join(self.mood_tags), " ".join(self.theme_tags), " ".join(self.search_aliases)]
-        parts.extend(x for x in [self.authors, self.director, self.language] if x)
+        parts.extend(x for x in [self.authors, self.director, self.language] if x and x.lower() != 'unknown')
         return " ".join(parts)
 
 
@@ -76,6 +85,8 @@ class ConversationState:
     last_recommendations: list[str] = field(default_factory=list)
     retrieval_mode: str = "hybrid"
     pending_title_choices: list[str] = field(default_factory=list)
+    last_content_query: str = ""
+    seen_recommendations: list[str] = field(default_factory=list)
 
 
 @dataclass
@@ -97,6 +108,8 @@ class Recommendation:
     semantic_score: float | None = None
     explanation: str = ""
     filter_notes: list[str] = field(default_factory=list)
+    score_components: dict[str, float] = field(default_factory=dict)
+    matched_terms: list[str] = field(default_factory=list)
 
 
 def item_from_row(row: dict[str, Any], media_type: MediaType) -> CatalogItem:

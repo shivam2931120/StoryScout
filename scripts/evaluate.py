@@ -36,7 +36,7 @@ def compliant(item, constraints: dict) -> bool:
         return False
     if constraints.get("max_year") is not None and item.year > constraints["max_year"]:
         return False
-    if constraints.get("language") and item.language.casefold() != constraints["language"].casefold():
+    if constraints.get("language") and constraints["language"].casefold() not in item.language.casefold().split('|'):
         return False
     if set(constraints.get("excluded_genres", [])) & set(item.genres):
         return False
@@ -177,7 +177,7 @@ def main() -> None:
     (ARTIFACT_DIR / "evaluation_results.json").write_text(json.dumps(results, indent=2), encoding="utf-8")
     if query_details:
         with (ARTIFACT_DIR / "evaluation_query_results.csv").open("w", newline="", encoding="utf-8") as file:
-            writer = csv.DictWriter(file, fieldnames=query_details[0].keys())
+            writer = csv.DictWriter(file, fieldnames=query_details[0].keys(),lineterminator='\n')
             writer.writeheader(); writer.writerows(query_details)
     catalog_summary = ", ".join(f"{domain}: {values['records']:,}" for domain, values in results["active_catalog"].items())
     lines = ["# StoryScout evaluation summary", "", f"Active catalog: {catalog_summary}.", f"Retrieval benchmark: {len(queries)} developer-authored queries. Relevance labels are metadata-based and not independently human-rated.", "", "Mixed-media queries are scored separately for each active domain; book and movie averages are then macro-averaged.", "", "## Retrieval", ""]

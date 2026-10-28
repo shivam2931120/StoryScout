@@ -1,0 +1,97 @@
+{
+  "executed_at_utc": "2026-10-28T09:30:25.238328+00:00",
+  "base_url": "http://127.0.0.1:8001",
+  "catalog_counts": {
+    "book": 10005,
+    "movie": 9744
+  },
+  "active_modes": {
+    "book": "hybrid (TF-IDF + sentence embeddings)",
+    "movie": "hybrid (TF-IDF + sentence embeddings)"
+  },
+  "checks": [
+    {
+      "scenario": "Book recommendation",
+      "status": "passed",
+      "latency_ms": 234.9,
+      "returned_ids": {
+        "book": [
+          "book_011",
+          "book_003",
+          "book_002"
+        ]
+      }
+    },
+    {
+      "scenario": "Movie recommendation",
+      "status": "passed",
+      "latency_ms": 208.7,
+      "returned_ids": {
+        "movie": [
+          "movie_010",
+          "movie_004",
+          "movie_002"
+        ]
+      }
+    },
+    {
+      "scenario": "Mixed recommendation",
+      "status": "passed",
+      "latency_ms": 275.8,
+      "returned_ids": {
+        "book": [
+          "book_009",
+          "book_002",
+          "book_011"
+        ],
+        "movie": [
+          "movie_004",
+          "movie_010",
+          "movie_012"
+        ]
+      }
+    },
+    {
+      "scenario": "Movie to books",
+      "status": "passed",
+      "latency_ms": 359.5,
+      "returned_ids": {
+        "book": [
+          "book_pg_66245",
+          "book_pg_18361",
+          "book_pg_73313"
+        ]
+      }
+    },
+    {
+      "scenario": "Book to movies",
+      "status": "passed",
+      "latency_ms": 240.6,
+      "returned_ids": {
+        "movie": [
+          "movie_006",
+          "movie_ml_98809",
+          "movie_ml_5322"
+        ]
+      }
+    },
+    {
+      "scenario": "Follow-up and reference inheritance",
+      "status": "passed",
+      "latency_ms": 182.1,
+      "returned_ids": {
+        "movie": [
+          "movie_007",
+          "movie_002",
+          "movie_012"
+        ]
+      }
+    },
+    {
+      "scenario": "Reset preferences and reference",
+      "status": "passed",
+      "latency_ms": 13.0,
+      "returned_ids": {}
+    }
+  ]
+}

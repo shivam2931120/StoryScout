@@ -1,0 +1,95 @@
+{
+  "executed_at": "2026-10-28T12:35:35.031350+00:00",
+  "rows": [
+    {
+      "genre": "family",
+      "ids": [
+        "movie_010",
+        "movie_004",
+        "movie_002",
+        "movie_007",
+        "movie_005"
+      ],
+      "titles": [
+        "The Princess Bride",
+        "Paddington 2",
+        "Back to the Future",
+        "Arrival",
+        "The Grand Budapest Hotel"
+      ],
+      "genre_matches": 1
+    },
+    {
+      "genre": "comedy",
+      "ids": [
+        "movie_010",
+        "movie_004",
+        "movie_002",
+        "movie_007",
+        "movie_005"
+      ],
+      "titles": [
+        "The Princess Bride",
+        "Paddington 2",
+        "Back to the Future",
+        "Arrival",
+        "The Grand Budapest Hotel"
+      ],
+      "genre_matches": 4
+    },
+    {
+      "genre": "crime",
+      "ids": [
+        "movie_010",
+        "movie_004",
+        "movie_002",
+        "movie_007",
+        "movie_005"
+      ],
+      "titles": [
+        "The Princess Bride",
+        "Paddington 2",
+        "Back to the Future",
+        "Arrival",
+        "The Grand Budapest Hotel"
+      ],
+      "genre_matches": 0
+    },
+    {
+      "genre": "mystery",
+      "ids": [
+        "movie_010",
+        "movie_004",
+        "movie_002",
+        "movie_007",
+        "movie_005"
+      ],
+      "titles": [
+        "The Princess Bride",
+        "Paddington 2",
+        "Back to the Future",
+        "Arrival",
+        "The Grand Budapest Hotel"
+      ],
+      "genre_matches": 0
+    },
+    {
+      "genre": "science fiction",
+      "ids": [
+        "movie_010",
+        "movie_004",
+        "movie_002",
+        "movie_007",
+        "movie_005"
+      ],
+      "titles": [
+        "The Princess Bride",
+        "Paddington 2",
+        "Back to the Future",
+        "Arrival",
+        "The Grand Budapest Hotel"
+      ],
+      "genre_matches": 2
+    }
+  ]
+}

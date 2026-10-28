@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 from pathlib import Path
+import re
+import json
 import pandas as pd
 from .config import DATA_DIR, DEMO_FILES
 from .preprocessing import normalize_text
@@ -66,7 +68,62 @@ def load_active_catalogs(demo_files: dict | None = None, expanded_dir: str | Pat
                 catalogs[domain].append(item)
                 known.add(identity)
     apply_description_enrichment(catalogs)
+    apply_nlp_sources(catalogs)
     return catalogs
+
+
+def apply_nlp_sources(catalogs: dict[str, list[CatalogItem]], directory: str | Path | None = None) -> None:
+    """Join local factual sources. Predictions never populate source metadata."""
+    directory = Path(directory) if directory else DATA_DIR / 'enriched'
+    by_id = {item.id: item for items in catalogs.values() for item in items}
+    subject_rules={'mystery':r'detective and mystery (?:stories|fiction)|mystery fiction',
+        'science fiction':r'science fiction', 'fantasy':r'fantasy fiction|fantastic fiction|fairy tales',
+        'romance':r'love stories|romance fiction', 'adventure':r'adventure stories|adventure fiction',
+        'history':r'historical fiction', 'horror':r'horror tales|ghost stories|gothic fiction',
+        'comedy':r'humorous stories|humorous fiction|comic fiction', 'family':r"children's stories|children's literature", 'drama':r'\bdrama\b'}
+    for item in catalogs['book']:
+        if not item.genres and item.source.startswith('project-gutenberg'):
+            subjects=' '.join(item.theme_tags).lower()
+            item.subject_genres=[genre for genre,pattern in subject_rules.items() if re.search(pattern,subjects)]
+            if item.subject_genres:
+                item.metadata_provenance['subject_genres']={'source':'Deterministic mapping of supplied Gutenberg subject headings; not model predictions','url':item.source_url}
+    plots = directory / 'movie_plots.csv.gz'
+    if plots.exists():
+        frame = pd.read_csv(plots, dtype=str, keep_default_na=False)
+        if frame['id'].duplicated().any(): raise ValueError('Duplicate plot IDs')
+        for row in frame.to_dict(orient='records'):
+            item = by_id.get(row['id'])
+            if not item: continue
+            item.retrieval_text = row['plot_text']
+            item.text_source, item.text_source_url = row['source'], row['source_url']
+            if not item.director and row.get('director'):
+                item.director = row['director']
+                item.metadata_provenance['director'] = {'source':row['source'],'url':row['source_url']}
+            if item.source.startswith('movielens') and not item.description_provenance:
+                item.description = row['opening_excerpt']
+                item.description_source = row['source']
+                item.description_source_url = row['source_url']
+                item.description_provenance = 'Extractive opening excerpt of the original Wikipedia plot; full text indexed locally; CC BY-SA 4.0'
+    metadata = directory / 'movie_metadata.csv'
+    if metadata.exists():
+        frame = pd.read_csv(metadata, dtype=str, keep_default_na=False)
+        if frame['id'].duplicated().any(): raise ValueError('Duplicate metadata IDs')
+        for row in frame.to_dict(orient='records'):
+            item = by_id.get(row['id'])
+            if not item: continue
+            provenance = {'source':row['source'],'url':row['source_url'],'license':row.get('license','')}
+            if not item.runtime_minutes and row['runtime_minutes']:
+                value = int(row['runtime_minutes'])
+                if not 1 <= value <= 1000: raise ValueError('Invalid sourced runtime')
+                item.runtime_minutes = value
+                item.metadata_provenance['runtime_minutes'] = provenance
+            if item.language.lower() == 'unknown' and row['language']:
+                item.language = row['language']
+                item.metadata_provenance['language'] = provenance
+    predictions=directory/'genre_predictions.json'
+    if predictions.exists():
+        for item_id, genres in json.loads(predictions.read_text()).get('items',{}).items():
+            if item_id in by_id: by_id[item_id].predicted_genres=genres
 
 
 def apply_description_enrichment(catalogs: dict[str, list[CatalogItem]], path: str | Path | None = None) -> int:

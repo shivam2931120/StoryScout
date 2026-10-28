@@ -1,0 +1,164 @@
+{
+  "active_catalog": {
+    "book": {
+      "records": 10005,
+      "source_counts": {
+        "demo": 14,
+        "project-gutenberg-catalog": 9991
+      }
+    },
+    "movie": {
+      "records": 9744,
+      "source_counts": {
+        "demo": 13,
+        "movielens-latest-small": 9731
+      }
+    }
+  },
+  "retrieval_benchmark": {
+    "query_count": 44,
+    "judgment_method": "Developer-authored relevance IDs grounded in catalog metadata; no independent human evaluation.",
+    "mixed_media_aggregation": "Book and movie metrics are calculated independently for each mixed query, then domain-level means are macro-averaged.",
+    "models": {
+      "tfidf": {
+        "status": "measured",
+        "semantic_ran": false,
+        "retrieval_used": "tfidf",
+        "index_preparation_ms": 154.78,
+        "mean_query_latency_ms_after_indexing": 21.004,
+        "by_domain": {
+          "book": {
+            "queries": 27,
+            "precision_at_5": 0.1778,
+            "recall_at_5": 0.5556,
+            "mrr_at_5": 0.4858,
+            "hard_constraint_compliance": 1.0
+          },
+          "movie": {
+            "queries": 27,
+            "precision_at_5": 0.163,
+            "recall_at_5": 0.2932,
+            "mrr_at_5": 0.3204,
+            "hard_constraint_compliance": 1.0
+          }
+        },
+        "macro_average_of_book_and_movie_metrics": {
+          "precision_at_5": 0.1704,
+          "recall_at_5": 0.4244,
+          "mrr_at_5": 0.4031,
+          "hard_constraint_compliance": 1.0
+        }
+      },
+      "semantic": {
+        "status": "measured",
+        "semantic_ran": true,
+        "retrieval_used": "semantic",
+        "index_preparation_ms": 4577.12,
+        "mean_query_latency_ms_after_indexing": 70.628,
+        "by_domain": {
+          "book": {
+            "queries": 27,
+            "precision_at_5": 0.163,
+            "recall_at_5": 0.5062,
+            "mrr_at_5": 0.4488,
+            "hard_constraint_compliance": 1.0
+          },
+          "movie": {
+            "queries": 27,
+            "precision_at_5": 0.1556,
+            "recall_at_5": 0.2685,
+            "mrr_at_5": 0.2932,
+            "hard_constraint_compliance": 1.0
+          }
+        },
+        "macro_average_of_book_and_movie_metrics": {
+          "precision_at_5": 0.1593,
+          "recall_at_5": 0.3873,
+          "mrr_at_5": 0.371,
+          "hard_constraint_compliance": 1.0
+        }
+      },
+      "hybrid": {
+        "status": "measured",
+        "semantic_ran": true,
+        "retrieval_used": "hybrid",
+        "index_preparation_ms": 253.51,
+        "mean_query_latency_ms_after_indexing": 99.954,
+        "by_domain": {
+          "book": {
+            "queries": 27,
+            "precision_at_5": 0.1778,
+            "recall_at_5": 0.537,
+            "mrr_at_5": 0.4858,
+            "hard_constraint_compliance": 1.0
+          },
+          "movie": {
+            "queries": 27,
+            "precision_at_5": 0.1926,
+            "recall_at_5": 0.3611,
+            "mrr_at_5": 0.3642,
+            "hard_constraint_compliance": 1.0
+          }
+        },
+        "macro_average_of_book_and_movie_metrics": {
+          "precision_at_5": 0.1852,
+          "recall_at_5": 0.4491,
+          "mrr_at_5": 0.425,
+          "hard_constraint_compliance": 1.0
+        }
+      }
+    }
+  },
+  "preference_extraction": {
+    "labeled_conversations": 25,
+    "labeled_messages": 33,
+    "relevance_judgments": "developer-authored expected fields; not independent annotation",
+    "field_exact_match": {
+      "desired_mood": {
+        "support": 4,
+        "exact_match": 1.0
+      },
+      "excluded_genres": {
+        "support": 8,
+        "exact_match": 1.0
+      },
+      "language": {
+        "support": 1,
+        "exact_match": 1.0
+      },
+      "max_pages": {
+        "support": 7,
+        "exact_match": 1.0
+      },
+      "max_runtime": {
+        "support": 7,
+        "exact_match": 1.0
+      },
+      "max_year": {
+        "support": 2,
+        "exact_match": 1.0
+      },
+      "media": {
+        "support": 25,
+        "exact_match": 1.0
+      },
+      "min_year": {
+        "support": 2,
+        "exact_match": 1.0
+      },
+      "positive_content": {
+        "support": 3,
+        "exact_match": 1.0
+      },
+      "preferred_genres": {
+        "support": 5,
+        "exact_match": 1.0
+      },
+      "themes": {
+        "support": 3,
+        "exact_match": 1.0
+      }
+    },
+    "overall_labeled_field_exact_match": 1.0
+  }
+}
