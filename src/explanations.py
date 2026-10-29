@@ -29,6 +29,6 @@ def explain(rec: Recommendation, query: str, pref: Preferences) -> str:
 
 def explain_reference(rec: Recommendation, reference: CatalogItem, pref: Preferences) -> str:
     base = explain(rec, f"similar to {reference.title}", pref)
-    if reference.source.startswith(("movielens", "project-gutenberg")) and not reference.description_provenance and not reference.retrieval_text:
+    if reference.source.startswith(("movielens", "project-gutenberg", "wikidata-catalog", "openlibrary-catalog")) and not reference.description_provenance and not reference.retrieval_text:
         return base + f" Reference '{reference.title}' has no sourced synopsis; comparison uses available catalog genres and metadata, so narrative similarity is limited."
     return base + f" This is a description/theme similarity to '{reference.title}', not a verified adaptation claim."

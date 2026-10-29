@@ -1,5 +1,5 @@
 {
-  "executed_at": "2026-10-29T05:14:17.951097+00:00",
+  "executed_at": "2026-10-29T17:04:40.825612+00:00",
   "catalog": {
     "book": 1000,
     "movie": 1500
@@ -29,8 +29,8 @@
               "mode": "disabled"
             }
           },
-          "index_preparation_ms": 742.06,
-          "mean_query_latency_ms_after_indexing": 10.337,
+          "index_preparation_ms": 937.09,
+          "mean_query_latency_ms_after_indexing": 12.274,
           "by_domain": {
             "book": {
               "queries": 27,
@@ -47,22 +47,22 @@
               "queries": 37,
               "precision_at_5": 0.1838,
               "recall_at_5": 0.6104,
-              "mrr_at_5": 0.7252,
+              "mrr_at_5": 0.6982,
               "hard_constraint_compliance": 1.0,
               "answer_rate": 0.973,
-              "precision_when_returned": 0.4671,
-              "slot_fill_rate": 0.5838,
+              "precision_when_returned": 0.4838,
+              "slot_fill_rate": 0.5459,
               "nonempty_compliant_query_rate": 0.973
             }
           },
           "macro_average_of_book_and_movie_metrics": {
             "precision_at_5": 0.2289,
             "recall_at_5": 0.6848,
-            "mrr_at_5": 0.7654,
+            "mrr_at_5": 0.7519,
             "hard_constraint_compliance": 1.0,
             "answer_rate": 0.9865,
-            "precision_when_returned": 0.5169,
-            "slot_fill_rate": 0.6104,
+            "precision_when_returned": 0.5252,
+            "slot_fill_rate": 0.5915,
             "nonempty_compliant_query_rate": 0.9865
           }
         },
@@ -83,11 +83,11 @@
               "queries": 27,
               "precision_at_5": 0.1852,
               "recall_at_5": 0.5031,
-              "mrr_at_5": 0.6852,
+              "mrr_at_5": 0.6481,
               "hard_constraint_compliance": 1.0,
               "answer_rate": 0.963,
-              "precision_when_returned": 0.3712,
-              "slot_fill_rate": 0.6889,
+              "precision_when_returned": 0.3942,
+              "slot_fill_rate": 0.637,
               "nonempty_compliant_query_rate": 0.963
             }
           },
@@ -198,7 +198,7 @@
             "category": "book genre",
             "domain": "book",
             "relevant_ids": "book_006",
-            "returned_ids": "book_pg_56177|book_006|book_pg_17702|book_pg_68833|book_pg_13532",
+            "returned_ids": "book_pg_56177|book_006|book_pg_17702|book_pg_68833|book_pg_78520",
             "hits": 1,
             "precision_at_5": 0.2,
             "recall_at_5": 1.0,
@@ -470,13 +470,13 @@
             "category": "movie mood",
             "domain": "movie",
             "relevant_ids": "movie_009|movie_012",
-            "returned_ids": "movie_ml_476|movie_ml_79139|movie_ml_5764",
+            "returned_ids": "movie_ml_476|movie_ml_79139",
             "hits": 0,
             "precision_at_5": 0.0,
             "recall_at_5": 0.0,
             "mrr_at_5": 0.0,
             "hard_constraint_compliance": 1.0,
-            "returned_count": 3,
+            "returned_count": 2,
             "constraint_violations": 0,
             "nonempty_compliant_query_rate": 1.0
           },
@@ -589,13 +589,13 @@
             "category": "year",
             "domain": "movie",
             "relevant_ids": "movie_007",
-            "returned_ids": "movie_007|movie_ml_160565|movie_ml_175197|movie_ml_168612|movie_ml_176371",
+            "returned_ids": "movie_wd_Q83808444|movie_007",
             "hits": 1,
             "precision_at_5": 0.2,
             "recall_at_5": 1.0,
-            "mrr_at_5": 1.0,
+            "mrr_at_5": 0.5,
             "hard_constraint_compliance": 1.0,
-            "returned_count": 5,
+            "returned_count": 2,
             "constraint_violations": 0,
             "nonempty_compliant_query_rate": 1.0
           },
@@ -691,7 +691,7 @@
             "category": "mixed themes",
             "domain": "book",
             "relevant_ids": "book_001|book_013",
-            "returned_ids": "book_009|book_001|book_012|book_013|book_pg_23599",
+            "returned_ids": "book_009|book_001|book_012|book_pg_23599|book_013",
             "hits": 2,
             "precision_at_5": 0.4,
             "recall_at_5": 1.0,
@@ -776,13 +776,13 @@
             "category": "mixed year",
             "domain": "movie",
             "relevant_ids": "movie_001|movie_003|movie_007",
-            "returned_ids": "movie_007|movie_ml_109187|movie_ml_101076|movie_ml_88744|movie_ml_136800",
+            "returned_ids": "movie_wd_Q83808444|movie_007",
             "hits": 1,
             "precision_at_5": 0.2,
             "recall_at_5": 0.3333333333333333,
-            "mrr_at_5": 1.0,
+            "mrr_at_5": 0.5,
             "hard_constraint_compliance": 1.0,
-            "returned_count": 5,
+            "returned_count": 2,
             "constraint_violations": 0,
             "nonempty_compliant_query_rate": 1.0
           },
@@ -1214,18 +1214,18 @@
               "mode": "disabled"
             }
           },
-          "index_preparation_ms": 1132.96,
-          "mean_query_latency_ms_after_indexing": 16.057,
+          "index_preparation_ms": 1263.62,
+          "mean_query_latency_ms_after_indexing": 19.11,
           "by_domain": {
             "book": {
               "queries": 27,
               "precision_at_5": 0.2963,
               "recall_at_5": 0.8333,
-              "mrr_at_5": 0.8642,
+              "mrr_at_5": 0.8457,
               "hard_constraint_compliance": 1.0,
               "answer_rate": 1,
-              "precision_when_returned": 0.616,
-              "slot_fill_rate": 0.6222,
+              "precision_when_returned": 0.5975,
+              "slot_fill_rate": 0.6296,
               "nonempty_compliant_query_rate": 1.0
             },
             "movie": {
@@ -1234,21 +1234,21 @@
               "recall_at_5": 0.5383,
               "mrr_at_5": 0.6158,
               "hard_constraint_compliance": 1.0,
-              "answer_rate": 0.973,
-              "precision_when_returned": 0.3356,
-              "slot_fill_rate": 0.7351,
-              "nonempty_compliant_query_rate": 0.973
+              "answer_rate": 1,
+              "precision_when_returned": 0.3104,
+              "slot_fill_rate": 0.7514,
+              "nonempty_compliant_query_rate": 1.0
             }
           },
           "macro_average_of_book_and_movie_metrics": {
             "precision_at_5": 0.2374,
             "recall_at_5": 0.6858,
-            "mrr_at_5": 0.74,
+            "mrr_at_5": 0.7308,
             "hard_constraint_compliance": 1.0,
-            "answer_rate": 0.9865,
-            "precision_when_returned": 0.4758,
-            "slot_fill_rate": 0.6786,
-            "nonempty_compliant_query_rate": 0.9865
+            "answer_rate": 1,
+            "precision_when_returned": 0.454,
+            "slot_fill_rate": 0.6905,
+            "nonempty_compliant_query_rate": 1.0
           }
         },
         "by_benchmark": {
@@ -1257,11 +1257,11 @@
               "queries": 27,
               "precision_at_5": 0.2963,
               "recall_at_5": 0.8333,
-              "mrr_at_5": 0.8642,
+              "mrr_at_5": 0.8457,
               "hard_constraint_compliance": 1.0,
               "answer_rate": 1,
-              "precision_when_returned": 0.616,
-              "slot_fill_rate": 0.6222,
+              "precision_when_returned": 0.5975,
+              "slot_fill_rate": 0.6296,
               "nonempty_compliant_query_rate": 1.0
             },
             "movie": {
@@ -1271,8 +1271,8 @@
               "mrr_at_5": 0.6031,
               "hard_constraint_compliance": 1.0,
               "answer_rate": 1,
-              "precision_when_returned": 0.266,
-              "slot_fill_rate": 0.8444,
+              "precision_when_returned": 0.2438,
+              "slot_fill_rate": 0.8593,
               "nonempty_compliant_query_rate": 1.0
             }
           },
@@ -1283,10 +1283,10 @@
               "recall_at_5": 0.7,
               "mrr_at_5": 0.65,
               "hard_constraint_compliance": 1.0,
-              "answer_rate": 0.9,
-              "precision_when_returned": 0.5444,
-              "slot_fill_rate": 0.44,
-              "nonempty_compliant_query_rate": 0.9
+              "answer_rate": 1,
+              "precision_when_returned": 0.49,
+              "slot_fill_rate": 0.46,
+              "nonempty_compliant_query_rate": 1.0
             }
           }
         },
@@ -1774,13 +1774,13 @@
             "category": "year",
             "domain": "movie",
             "relevant_ids": "movie_007",
-            "returned_ids": "movie_007",
+            "returned_ids": "movie_007|movie_wd_Q83808444",
             "hits": 1,
             "precision_at_5": 0.2,
             "recall_at_5": 1.0,
             "mrr_at_5": 1.0,
             "hard_constraint_compliance": 1.0,
-            "returned_count": 1,
+            "returned_count": 2,
             "constraint_violations": 0,
             "nonempty_compliant_query_rate": 1.0
           },
@@ -1842,13 +1842,13 @@
             "category": "mixed mood",
             "domain": "book",
             "relevant_ids": "book_004|book_009",
-            "returned_ids": "book_009",
+            "returned_ids": "book_ol_OL19096402W|book_009",
             "hits": 1,
             "precision_at_5": 0.2,
             "recall_at_5": 0.5,
-            "mrr_at_5": 1.0,
+            "mrr_at_5": 0.5,
             "hard_constraint_compliance": 1.0,
-            "returned_count": 1,
+            "returned_count": 2,
             "constraint_violations": 0,
             "nonempty_compliant_query_rate": 1.0
           },
@@ -1961,13 +1961,13 @@
             "category": "mixed year",
             "domain": "movie",
             "relevant_ids": "movie_001|movie_003|movie_007",
-            "returned_ids": "movie_007|movie_ml_122902|movie_001|movie_ml_120799",
+            "returned_ids": "movie_007|movie_wd_Q83808444|movie_ml_122902|movie_001|movie_ml_120799",
             "hits": 2,
             "precision_at_5": 0.4,
             "recall_at_5": 0.6666666666666666,
             "mrr_at_5": 1.0,
             "hard_constraint_compliance": 1.0,
-            "returned_count": 4,
+            "returned_count": 5,
             "constraint_violations": 0,
             "nonempty_compliant_query_rate": 1.0
           },
@@ -2301,15 +2301,15 @@
             "category": "",
             "domain": "movie",
             "relevant_ids": "movie_ml_1265",
-            "returned_ids": "",
+            "returned_ids": "movie_wd_Q64744044",
             "hits": 0,
             "precision_at_5": 0.0,
             "recall_at_5": 0.0,
             "mrr_at_5": 0.0,
-            "hard_constraint_compliance": null,
-            "returned_count": 0,
+            "hard_constraint_compliance": 1.0,
+            "returned_count": 1,
             "constraint_violations": 0,
-            "nonempty_compliant_query_rate": 0.0
+            "nonempty_compliant_query_rate": 1.0
           },
           {
             "mode": "semantic",
@@ -2399,8 +2399,8 @@
               "mode": "disabled"
             }
           },
-          "index_preparation_ms": 966.14,
-          "mean_query_latency_ms_after_indexing": 16.41,
+          "index_preparation_ms": 1290.43,
+          "mean_query_latency_ms_after_indexing": 19.703,
           "by_domain": {
             "book": {
               "queries": 27,
@@ -2417,23 +2417,23 @@
               "queries": 37,
               "precision_at_5": 0.2108,
               "recall_at_5": 0.6261,
-              "mrr_at_5": 0.7095,
+              "mrr_at_5": 0.6824,
               "hard_constraint_compliance": 1.0,
-              "answer_rate": 0.973,
-              "precision_when_returned": 0.3806,
-              "slot_fill_rate": 0.7135,
-              "nonempty_compliant_query_rate": 0.973
+              "answer_rate": 1,
+              "precision_when_returned": 0.3568,
+              "slot_fill_rate": 0.7243,
+              "nonempty_compliant_query_rate": 1.0
             }
           },
           "macro_average_of_book_and_movie_metrics": {
             "precision_at_5": 0.261,
             "recall_at_5": 0.7451,
-            "mrr_at_5": 0.7869,
+            "mrr_at_5": 0.7733,
             "hard_constraint_compliance": 1.0,
-            "answer_rate": 0.9865,
-            "precision_when_returned": 0.5058,
-            "slot_fill_rate": 0.6679,
-            "nonempty_compliant_query_rate": 0.9865
+            "answer_rate": 1,
+            "precision_when_returned": 0.4939,
+            "slot_fill_rate": 0.6733,
+            "nonempty_compliant_query_rate": 1.0
           }
         },
         "by_benchmark": {
@@ -2453,11 +2453,11 @@
               "queries": 27,
               "precision_at_5": 0.2296,
               "recall_at_5": 0.5617,
-              "mrr_at_5": 0.7006,
+              "mrr_at_5": 0.6636,
               "hard_constraint_compliance": 1.0,
               "answer_rate": 1,
-              "precision_when_returned": 0.3185,
-              "slot_fill_rate": 0.8148,
+              "precision_when_returned": 0.3,
+              "slot_fill_rate": 0.8222,
               "nonempty_compliant_query_rate": 1.0
             }
           },
@@ -2468,10 +2468,10 @@
               "recall_at_5": 0.8,
               "mrr_at_5": 0.7333,
               "hard_constraint_compliance": 1.0,
-              "answer_rate": 0.9,
-              "precision_when_returned": 0.5667,
-              "slot_fill_rate": 0.44,
-              "nonempty_compliant_query_rate": 0.9
+              "answer_rate": 1,
+              "precision_when_returned": 0.51,
+              "slot_fill_rate": 0.46,
+              "nonempty_compliant_query_rate": 1.0
             }
           }
         },
@@ -2959,13 +2959,13 @@
             "category": "year",
             "domain": "movie",
             "relevant_ids": "movie_007",
-            "returned_ids": "movie_007",
+            "returned_ids": "movie_wd_Q83808444|movie_007",
             "hits": 1,
             "precision_at_5": 0.2,
             "recall_at_5": 1.0,
-            "mrr_at_5": 1.0,
+            "mrr_at_5": 0.5,
             "hard_constraint_compliance": 1.0,
-            "returned_count": 1,
+            "returned_count": 2,
             "constraint_violations": 0,
             "nonempty_compliant_query_rate": 1.0
           },
@@ -3146,11 +3146,11 @@
             "category": "mixed year",
             "domain": "movie",
             "relevant_ids": "movie_001|movie_003|movie_007",
-            "returned_ids": "movie_007|movie_ml_122902",
+            "returned_ids": "movie_wd_Q83808444|movie_007",
             "hits": 1,
             "precision_at_5": 0.2,
             "recall_at_5": 0.3333333333333333,
-            "mrr_at_5": 1.0,
+            "mrr_at_5": 0.5,
             "hard_constraint_compliance": 1.0,
             "returned_count": 2,
             "constraint_violations": 0,
@@ -3486,15 +3486,15 @@
             "category": "",
             "domain": "movie",
             "relevant_ids": "movie_ml_1265",
-            "returned_ids": "",
+            "returned_ids": "movie_wd_Q64744044",
             "hits": 0,
             "precision_at_5": 0.0,
             "recall_at_5": 0.0,
             "mrr_at_5": 0.0,
-            "hard_constraint_compliance": null,
-            "returned_count": 0,
+            "hard_constraint_compliance": 1.0,
+            "returned_count": 1,
             "constraint_violations": 0,
-            "nonempty_compliant_query_rate": 0.0
+            "nonempty_compliant_query_rate": 1.0
           },
           {
             "mode": "hybrid",
@@ -3576,18 +3576,18 @@
           "query_cache_policy": "cleared before each mode; shared across domains within that mode",
           "passages": {
             "book": {
-              "count": 93,
+              "count": 113,
               "semantic_ran": false,
               "mode": "TF-IDF passages"
             },
             "movie": {
-              "count": 10367,
+              "count": 10327,
               "semantic_ran": false,
               "mode": "TF-IDF passages"
             }
           },
-          "index_preparation_ms": 898.82,
-          "mean_query_latency_ms_after_indexing": 13.999,
+          "index_preparation_ms": 938.74,
+          "mean_query_latency_ms_after_indexing": 22.079,
           "by_domain": {
             "book": {
               "queries": 27,
@@ -3604,22 +3604,22 @@
               "queries": 37,
               "precision_at_5": 0.1838,
               "recall_at_5": 0.6104,
-              "mrr_at_5": 0.7117,
+              "mrr_at_5": 0.6847,
               "hard_constraint_compliance": 1.0,
               "answer_rate": 0.973,
-              "precision_when_returned": 0.4671,
-              "slot_fill_rate": 0.5946,
+              "precision_when_returned": 0.4838,
+              "slot_fill_rate": 0.5622,
               "nonempty_compliant_query_rate": 0.973
             }
           },
           "macro_average_of_book_and_movie_metrics": {
             "precision_at_5": 0.2289,
             "recall_at_5": 0.6848,
-            "mrr_at_5": 0.7587,
+            "mrr_at_5": 0.7451,
             "hard_constraint_compliance": 1.0,
             "answer_rate": 0.9865,
-            "precision_when_returned": 0.5169,
-            "slot_fill_rate": 0.6158,
+            "precision_when_returned": 0.5252,
+            "slot_fill_rate": 0.5996,
             "nonempty_compliant_query_rate": 0.9865
           }
         },
@@ -3640,11 +3640,11 @@
               "queries": 27,
               "precision_at_5": 0.1852,
               "recall_at_5": 0.5031,
-              "mrr_at_5": 0.642,
+              "mrr_at_5": 0.6049,
               "hard_constraint_compliance": 1.0,
               "answer_rate": 0.963,
-              "precision_when_returned": 0.3712,
-              "slot_fill_rate": 0.7037,
+              "precision_when_returned": 0.3942,
+              "slot_fill_rate": 0.6593,
               "nonempty_compliant_query_rate": 0.963
             }
           },
@@ -3755,7 +3755,7 @@
             "category": "book genre",
             "domain": "book",
             "relevant_ids": "book_006",
-            "returned_ids": "book_pg_56177|book_006|book_pg_17702|book_pg_68833|book_pg_13532",
+            "returned_ids": "book_pg_56177|book_006|book_pg_17702|book_pg_68833|book_pg_78520",
             "hits": 1,
             "precision_at_5": 0.2,
             "recall_at_5": 1.0,
@@ -4027,7 +4027,7 @@
             "category": "movie mood",
             "domain": "movie",
             "relevant_ids": "movie_009|movie_012",
-            "returned_ids": "movie_ml_79139|movie_ml_5764|movie_ml_3391|movie_ml_2202|movie_ml_476",
+            "returned_ids": "movie_ml_79139|movie_ml_3391|movie_ml_2202|movie_ml_112911|movie_ml_476",
             "hits": 0,
             "precision_at_5": 0.0,
             "recall_at_5": 0.0,
@@ -4146,13 +4146,13 @@
             "category": "year",
             "domain": "movie",
             "relevant_ids": "movie_007",
-            "returned_ids": "movie_007|movie_ml_160565|movie_ml_175197|movie_ml_168612|movie_ml_176371",
+            "returned_ids": "movie_wd_Q83808444|movie_007",
             "hits": 1,
             "precision_at_5": 0.2,
             "recall_at_5": 1.0,
-            "mrr_at_5": 1.0,
+            "mrr_at_5": 0.5,
             "hard_constraint_compliance": 1.0,
-            "returned_count": 5,
+            "returned_count": 2,
             "constraint_violations": 0,
             "nonempty_compliant_query_rate": 1.0
           },
@@ -4248,7 +4248,7 @@
             "category": "mixed themes",
             "domain": "book",
             "relevant_ids": "book_001|book_013",
-            "returned_ids": "book_009|book_001|book_012|book_013|book_pg_23599",
+            "returned_ids": "book_009|book_001|book_012|book_pg_23599|book_013",
             "hits": 2,
             "precision_at_5": 0.4,
             "recall_at_5": 1.0,
@@ -4333,13 +4333,13 @@
             "category": "mixed year",
             "domain": "movie",
             "relevant_ids": "movie_001|movie_003|movie_007",
-            "returned_ids": "movie_007|movie_ml_109187|movie_ml_101076|movie_ml_88744|movie_ml_136800",
+            "returned_ids": "movie_wd_Q83808444|movie_007",
             "hits": 1,
             "precision_at_5": 0.2,
             "recall_at_5": 0.3333333333333333,
-            "mrr_at_5": 1.0,
+            "mrr_at_5": 0.5,
             "hard_constraint_compliance": 1.0,
-            "returned_count": 5,
+            "returned_count": 2,
             "constraint_violations": 0,
             "nonempty_compliant_query_rate": 1.0
           },
@@ -4761,28 +4761,28 @@
           "query_cache_policy": "cleared before each mode; shared across domains within that mode",
           "passages": {
             "book": {
-              "count": 93,
+              "count": 113,
               "semantic_ran": true,
               "mode": "TF-IDF + semantic passages"
             },
             "movie": {
-              "count": 10367,
+              "count": 10327,
               "semantic_ran": true,
               "mode": "TF-IDF + semantic passages"
             }
           },
-          "index_preparation_ms": 1497.0,
-          "mean_query_latency_ms_after_indexing": 35.492,
+          "index_preparation_ms": 1447.59,
+          "mean_query_latency_ms_after_indexing": 27.342,
           "by_domain": {
             "book": {
               "queries": 27,
               "precision_at_5": 0.2963,
               "recall_at_5": 0.8333,
-              "mrr_at_5": 0.8704,
+              "mrr_at_5": 0.8519,
               "hard_constraint_compliance": 1.0,
               "answer_rate": 1,
-              "precision_when_returned": 0.621,
-              "slot_fill_rate": 0.6074,
+              "precision_when_returned": 0.6025,
+              "slot_fill_rate": 0.6148,
               "nonempty_compliant_query_rate": 1.0
             },
             "movie": {
@@ -4791,21 +4791,21 @@
               "recall_at_5": 0.5653,
               "mrr_at_5": 0.6167,
               "hard_constraint_compliance": 1.0,
-              "answer_rate": 0.973,
-              "precision_when_returned": 0.3273,
-              "slot_fill_rate": 0.7405,
-              "nonempty_compliant_query_rate": 0.973
+              "answer_rate": 1,
+              "precision_when_returned": 0.3023,
+              "slot_fill_rate": 0.7568,
+              "nonempty_compliant_query_rate": 1.0
             }
           },
           "macro_average_of_book_and_movie_metrics": {
             "precision_at_5": 0.24,
             "recall_at_5": 0.6993,
-            "mrr_at_5": 0.7435,
+            "mrr_at_5": 0.7343,
             "hard_constraint_compliance": 1.0,
-            "answer_rate": 0.9865,
-            "precision_when_returned": 0.4741,
-            "slot_fill_rate": 0.674,
-            "nonempty_compliant_query_rate": 0.9865
+            "answer_rate": 1,
+            "precision_when_returned": 0.4524,
+            "slot_fill_rate": 0.6858,
+            "nonempty_compliant_query_rate": 1.0
           }
         },
         "by_benchmark": {
@@ -4814,11 +4814,11 @@
               "queries": 27,
               "precision_at_5": 0.2963,
               "recall_at_5": 0.8333,
-              "mrr_at_5": 0.8704,
+              "mrr_at_5": 0.8519,
               "hard_constraint_compliance": 1.0,
               "answer_rate": 1,
-              "precision_when_returned": 0.621,
-              "slot_fill_rate": 0.6074,
+              "precision_when_returned": 0.6025,
+              "slot_fill_rate": 0.6148,
               "nonempty_compliant_query_rate": 1.0
             },
             "movie": {
@@ -4828,8 +4828,8 @@
               "mrr_at_5": 0.6031,
               "hard_constraint_compliance": 1.0,
               "answer_rate": 1,
-              "precision_when_returned": 0.266,
-              "slot_fill_rate": 0.8444,
+              "precision_when_returned": 0.2438,
+              "slot_fill_rate": 0.8593,
               "nonempty_compliant_query_rate": 1.0
             }
           },
@@ -4840,10 +4840,10 @@
               "recall_at_5": 0.8,
               "mrr_at_5": 0.6533,
               "hard_constraint_compliance": 1.0,
-              "answer_rate": 0.9,
-              "precision_when_returned": 0.5111,
-              "slot_fill_rate": 0.46,
-              "nonempty_compliant_query_rate": 0.9
+              "answer_rate": 1,
+              "precision_when_returned": 0.46,
+              "slot_fill_rate": 0.48,
+              "nonempty_compliant_query_rate": 1.0
             }
           }
         },
@@ -5331,13 +5331,13 @@
             "category": "year",
             "domain": "movie",
             "relevant_ids": "movie_007",
-            "returned_ids": "movie_007",
+            "returned_ids": "movie_007|movie_wd_Q83808444",
             "hits": 1,
             "precision_at_5": 0.2,
             "recall_at_5": 1.0,
             "mrr_at_5": 1.0,
             "hard_constraint_compliance": 1.0,
-            "returned_count": 1,
+            "returned_count": 2,
             "constraint_violations": 0,
             "nonempty_compliant_query_rate": 1.0
           },
@@ -5399,13 +5399,13 @@
             "category": "mixed mood",
             "domain": "book",
             "relevant_ids": "book_004|book_009",
-            "returned_ids": "book_009",
+            "returned_ids": "book_ol_OL19096402W|book_009",
             "hits": 1,
             "precision_at_5": 0.2,
             "recall_at_5": 0.5,
-            "mrr_at_5": 1.0,
+            "mrr_at_5": 0.5,
             "hard_constraint_compliance": 1.0,
-            "returned_count": 1,
+            "returned_count": 2,
             "constraint_violations": 0,
             "nonempty_compliant_query_rate": 1.0
           },
@@ -5518,13 +5518,13 @@
             "category": "mixed year",
             "domain": "movie",
             "relevant_ids": "movie_001|movie_003|movie_007",
-            "returned_ids": "movie_007|movie_ml_122902|movie_001|movie_ml_120799",
+            "returned_ids": "movie_007|movie_wd_Q83808444|movie_ml_122902|movie_001|movie_ml_120799",
             "hits": 2,
             "precision_at_5": 0.4,
             "recall_at_5": 0.6666666666666666,
             "mrr_at_5": 1.0,
             "hard_constraint_compliance": 1.0,
-            "returned_count": 4,
+            "returned_count": 5,
             "constraint_violations": 0,
             "nonempty_compliant_query_rate": 1.0
           },
@@ -5858,15 +5858,15 @@
             "category": "",
             "domain": "movie",
             "relevant_ids": "movie_ml_1265",
-            "returned_ids": "",
+            "returned_ids": "movie_wd_Q64744044",
             "hits": 0,
             "precision_at_5": 0.0,
             "recall_at_5": 0.0,
             "mrr_at_5": 0.0,
-            "hard_constraint_compliance": null,
-            "returned_count": 0,
+            "hard_constraint_compliance": 1.0,
+            "returned_count": 1,
             "constraint_violations": 0,
-            "nonempty_compliant_query_rate": 0.0
+            "nonempty_compliant_query_rate": 1.0
           },
           {
             "mode": "semantic",
@@ -5946,18 +5946,18 @@
           "query_cache_policy": "cleared before each mode; shared across domains within that mode",
           "passages": {
             "book": {
-              "count": 93,
+              "count": 113,
               "semantic_ran": true,
               "mode": "TF-IDF + semantic passages"
             },
             "movie": {
-              "count": 10367,
+              "count": 10327,
               "semantic_ran": true,
               "mode": "TF-IDF + semantic passages"
             }
           },
-          "index_preparation_ms": 1874.15,
-          "mean_query_latency_ms_after_indexing": 33.908,
+          "index_preparation_ms": 1675.12,
+          "mean_query_latency_ms_after_indexing": 24.69,
           "by_domain": {
             "book": {
               "queries": 27,
@@ -5974,22 +5974,22 @@
               "queries": 37,
               "precision_at_5": 0.2108,
               "recall_at_5": 0.6261,
-              "mrr_at_5": 0.7275,
+              "mrr_at_5": 0.7005,
               "hard_constraint_compliance": 1.0,
               "answer_rate": 1,
-              "precision_when_returned": 0.3477,
-              "slot_fill_rate": 0.7351,
+              "precision_when_returned": 0.3342,
+              "slot_fill_rate": 0.7405,
               "nonempty_compliant_query_rate": 1.0
             }
           },
           "macro_average_of_book_and_movie_metrics": {
             "precision_at_5": 0.2572,
             "recall_at_5": 0.7359,
-            "mrr_at_5": 0.799,
+            "mrr_at_5": 0.7854,
             "hard_constraint_compliance": 1.0,
             "answer_rate": 1,
-            "precision_when_returned": 0.4865,
-            "slot_fill_rate": 0.6749,
+            "precision_when_returned": 0.4798,
+            "slot_fill_rate": 0.6777,
             "nonempty_compliant_query_rate": 1.0
           }
         },
@@ -6010,11 +6010,11 @@
               "queries": 27,
               "precision_at_5": 0.2296,
               "recall_at_5": 0.5617,
-              "mrr_at_5": 0.7006,
+              "mrr_at_5": 0.6636,
               "hard_constraint_compliance": 1.0,
               "answer_rate": 1,
-              "precision_when_returned": 0.3123,
-              "slot_fill_rate": 0.8222,
+              "precision_when_returned": 0.2938,
+              "slot_fill_rate": 0.8296,
               "nonempty_compliant_query_rate": 1.0
             }
           },
@@ -6516,13 +6516,13 @@
             "category": "year",
             "domain": "movie",
             "relevant_ids": "movie_007",
-            "returned_ids": "movie_007",
+            "returned_ids": "movie_wd_Q83808444|movie_007",
             "hits": 1,
             "precision_at_5": 0.2,
             "recall_at_5": 1.0,
-            "mrr_at_5": 1.0,
+            "mrr_at_5": 0.5,
             "hard_constraint_compliance": 1.0,
-            "returned_count": 1,
+            "returned_count": 2,
             "constraint_violations": 0,
             "nonempty_compliant_query_rate": 1.0
           },
@@ -6703,11 +6703,11 @@
             "category": "mixed year",
             "domain": "movie",
             "relevant_ids": "movie_001|movie_003|movie_007",
-            "returned_ids": "movie_007|movie_ml_122902",
+            "returned_ids": "movie_wd_Q83808444|movie_007",
             "hits": 1,
             "precision_at_5": 0.2,
             "recall_at_5": 0.3333333333333333,
-            "mrr_at_5": 1.0,
+            "mrr_at_5": 0.5,
             "hard_constraint_compliance": 1.0,
             "returned_count": 2,
             "constraint_violations": 0,
@@ -7043,7 +7043,7 @@
             "category": "",
             "domain": "movie",
             "relevant_ids": "movie_ml_1265",
-            "returned_ids": "movie_ml_104374",
+            "returned_ids": "movie_wd_Q64744044",
             "hits": 0,
             "precision_at_5": 0.0,
             "recall_at_5": 0.0,

@@ -1,5 +1,8 @@
 # Passage-level narrative matching
 
+This document records the previous passage rollout and its resource measurements.
+For current catalog counts and rerun results, see [ENTITY_SEARCH.md](ENTITY_SEARCH.md).
+
 StoryScout now searches overlapping parts of the available description or plot,
 so a specific detail can influence retrieval even when it is diluted in a
 whole-document vector. This is local NLP, using the existing TF-IDF vocabulary
@@ -56,8 +59,8 @@ retrieval remains available and is labeled accordingly. Set
 The within-run ablation uses identical catalog data, encoder and filters, with
 query caches cleared between modes. Only passage matching changes. Results for
 all three modes and both benchmarks are in
-[the comparison](../artifacts/passages/summary.md) and
-[full JSON](../artifacts/passages/comparison.json).
+[the comparison](../artifacts/passages/previous_revision/summary.md) and
+[full JSON](../artifacts/passages/previous_revision/comparison.json).
 
 | Hybrid benchmark | Document only MRR@5 | With passages MRR@5 | Recall@5 before / after |
 |---|---:|---:|---:|

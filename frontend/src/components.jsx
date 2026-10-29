@@ -102,6 +102,7 @@ export function StoryCard({ rec, saved, onSave, onDetails, compact = false }) {
         <Cover item={item} />
       </button>
       <div className="story-body">
+        {rec.match_type === "title_lookup" && <span className="provenance">{rec.title_match_kind === "suggestion" ? "Spelling suggestion" : rec.title_match_kind === "partial" ? "Partial title · choose a match" : "Exact title"}</span>}
         <div className="card-overline">
           <span>
             {(item.genres?.length ? item.genres : item.theme_tags || [])

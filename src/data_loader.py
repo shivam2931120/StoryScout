@@ -73,6 +73,16 @@ def load_active_catalogs(demo_files: dict | None = None, expanded_dir: str | Pat
             if identity not in known:
                 catalogs[domain].append(item)
                 known.add(identity)
+    supplemental=DATA_DIR/'enriched/supplemental_catalog.json'
+    if supplemental.exists():
+        for row in json.loads(supplemental.read_text()).get('records',[]):
+            item=CatalogItem(**row)
+            if item.media_type not in catalogs:raise ValueError('Invalid supplemental media type')
+            if not item.source_url.startswith('https://'):raise ValueError('Supplemental record requires source URL')
+            known={catalog_identity(x) for x in catalogs[item.media_type]}
+            if catalog_identity(item) not in known:
+                catalogs[item.media_type].append(item)
+        for items in catalogs.values():validate_catalog(items)
     apply_description_enrichment(catalogs)
     apply_nlp_sources(catalogs)
     return catalogs

@@ -1,0 +1,1078 @@
+{
+  "executed_at": "2026-10-29T17:03:39.172268+00:00",
+  "base_url": "https://storyscout-eaw7.onrender.com",
+  "judgment_method": "Developer-authored identity/route expectations, grounded in local source titles. Includes conversational wording and missing-title negatives. Not independent human relevance ratings.",
+  "limitations": "Targeted regression set, not universal coverage or recommendation accuracy. Fresh and inherited-context cases are scored separately.",
+  "cases": 90,
+  "passed": 24,
+  "by_kind": {
+    "discovery": {
+      "cases": 8,
+      "passed": 8
+    },
+    "exact": {
+      "cases": 58,
+      "passed": 8
+    },
+    "missing": {
+      "cases": 10,
+      "passed": 6
+    },
+    "missing_reference": {
+      "cases": 2,
+      "passed": 0
+    },
+    "partial": {
+      "cases": 6,
+      "passed": 0
+    },
+    "reference_suggestion": {
+      "cases": 2,
+      "passed": 0
+    },
+    "suggestion": {
+      "cases": 4,
+      "passed": 2
+    }
+  },
+  "rows": [
+    {
+      "query": "Inception",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_ml_79132"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 5544.41,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Inception",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_ml_79132"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 209.32,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Find Inception",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 998.62,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Find Inception",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 591.56,
+      "reply": "Some titles pass your filters, but none match the topic strongly enough. Try a broader topic or another reference title. Your filters have been retained."
+    },
+    {
+      "query": "Show me Inception",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 813.03,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Show me Inception",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 609.33,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Tell me about Inception",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 1024.05,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Tell me about Inception",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 560.34,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Can you find Inception?",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 1081.45,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Can you find Inception?",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 608.69,
+      "reply": "Some titles pass your filters, but none match the topic strongly enough. Try a broader topic or another reference title. Your filters have been retained."
+    },
+    {
+      "query": "Interstellar",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_001"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 210.1,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Interstellar",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_001"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 307.31,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Find Interstellar",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 922.07,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Find Interstellar",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 507.16,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Show me Interstellar",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 1125.3,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Show me Interstellar",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 614.49,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Tell me about Interstellar",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 1125.63,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Tell me about Interstellar",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 516.52,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Can you find Interstellar?",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 923.67,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Can you find Interstellar?",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 506.51,
+      "reply": "Some titles pass your filters, but none match the topic strongly enough. Try a broader topic or another reference title. Your filters have been retained."
+    },
+    {
+      "query": "The Dark Knight",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_ml_58559"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 205.12,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "The Dark Knight",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_ml_58559"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 311.55,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Find The Dark Knight",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 931.98,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Find The Dark Knight",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 603.57,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Show me The Dark Knight",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 918.28,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Show me The Dark Knight",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 570.61,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Tell me about The Dark Knight",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 966.24,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Tell me about The Dark Knight",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 615.11,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Can you find The Dark Knight?",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 1023.13,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Can you find The Dark Knight?",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 510.59,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "The Hobbit",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "book_001"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 309.4,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "The Hobbit",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "book_001"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 207.0,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Find The Hobbit",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 781.62,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Find The Hobbit",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 553.45,
+      "reply": "Some titles pass your filters, but none match the topic strongly enough. Try a broader topic or another reference title. Your filters have been retained."
+    },
+    {
+      "query": "Show me The Hobbit",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 813.6,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Show me The Hobbit",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 613.17,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Tell me about The Hobbit",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 950.56,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Tell me about The Hobbit",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 691.42,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Can you find The Hobbit?",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 1020.5,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Can you find The Hobbit?",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 624.55,
+      "reply": "Some titles pass your filters, but none match the topic strongly enough. Try a broader topic or another reference title. Your filters have been retained."
+    },
+    {
+      "query": "I want to watch Inception",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 819.39,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "I want to watch Inception",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 506.94,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "I would like to read The Hobbit",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 611.98,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "I would like to read The Hobbit",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 624.32,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Harry Potter",
+      "expected_kind": "partial",
+      "inherited_context": false,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 909.7,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Harry Potter",
+      "expected_kind": "partial",
+      "inherited_context": true,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 455.06,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Harry Potter movies",
+      "expected_kind": "partial",
+      "inherited_context": false,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 841.14,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Harry Potter movies",
+      "expected_kind": "partial",
+      "inherited_context": true,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 651.66,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Harry Potter books",
+      "expected_kind": "partial",
+      "inherited_context": false,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 507.47,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Harry Potter books",
+      "expected_kind": "partial",
+      "inherited_context": true,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 620.06,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "intersteler",
+      "expected_kind": "suggestion",
+      "inherited_context": false,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 818.35,
+      "reply": "Some titles pass your filters, but none match the topic strongly enough. Try a broader topic or another reference title. Your filters have been retained."
+    },
+    {
+      "query": "intersteler",
+      "expected_kind": "suggestion",
+      "inherited_context": true,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 510.2,
+      "reply": "Some titles pass your filters, but none match the topic strongly enough. Try a broader topic or another reference title. Your filters have been retained."
+    },
+    {
+      "query": "Incepton",
+      "expected_kind": "suggestion",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_ml_79132"
+      ],
+      "actual_kinds": [
+        "suggestion"
+      ],
+      "latency_ms": 311.65,
+      "reply": "Did you mean one of these titles?"
+    },
+    {
+      "query": "Incepton",
+      "expected_kind": "suggestion",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_ml_79132"
+      ],
+      "actual_kinds": [
+        "suggestion"
+      ],
+      "latency_ms": 305.32,
+      "reply": "Did you mean one of these titles?"
+    },
+    {
+      "query": "I want to read Atomic Habits",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 504.71,
+      "reply": "Some titles pass your filters, but none match the topic strongly enough. Try a broader topic or another reference title. Your filters have been retained."
+    },
+    {
+      "query": "I want to read Atomic Habits",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 423.87,
+      "reply": "Some titles pass your filters, but none match the topic strongly enough. Try a broader topic or another reference title. Your filters have been retained."
+    },
+    {
+      "query": "Atomic Habits by James Clear",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 806.72,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Atomic Habits by James Clear",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 539.34,
+      "reply": "Some titles pass your filters, but none match the topic strongly enough. Try a broader topic or another reference title. Your filters have been retained."
+    },
+    {
+      "query": "1984 by George Orwell",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 1201.88,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "1984 by George Orwell",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 722.02,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "I want to read 1984",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 510.72,
+      "reply": "Some titles pass your filters, but none match the topic strongly enough. Try a broader topic or another reference title. Your filters have been retained."
+    },
+    {
+      "query": "I want to read 1984",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 609.95,
+      "reply": "Some titles pass your filters, but none match the topic strongly enough. Try a broader topic or another reference title. Your filters have been retained."
+    },
+    {
+      "query": "Harry Potter and the Philosopher's Stone",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_ml_4896"
+      ],
+      "actual_kinds": [
+        "suggestion"
+      ],
+      "latency_ms": 311.48,
+      "reply": "Did you mean one of these titles?"
+    },
+    {
+      "query": "Harry Potter and the Philosopher's Stone",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_ml_4896"
+      ],
+      "actual_kinds": [
+        "suggestion"
+      ],
+      "latency_ms": 411.87,
+      "reply": "Did you mean one of these titles?"
+    },
+    {
+      "query": "Find a movie called Inception (2011)",
+      "expected_kind": "missing",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 197.04,
+      "reply": "That title is not in the local title directory. Try another spelling or a topic search."
+    },
+    {
+      "query": "Find a movie called Inception (2011)",
+      "expected_kind": "missing",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 208.12,
+      "reply": "That title is not in the local title directory. Try another spelling or a topic search."
+    },
+    {
+      "query": "Find a book called Inception",
+      "expected_kind": "missing",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 213.39,
+      "reply": "That title is not in the local title directory. Try another spelling or a topic search."
+    },
+    {
+      "query": "Find a book called Inception",
+      "expected_kind": "missing",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 197.51,
+      "reply": "That title is not in the local title directory. Try another spelling or a topic search."
+    },
+    {
+      "query": "Find a movie called Unlisted Zzxw Film",
+      "expected_kind": "missing",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 369.79,
+      "reply": "That title is not in the local title directory. Try another spelling or a topic search."
+    },
+    {
+      "query": "Find a movie called Unlisted Zzxw Film",
+      "expected_kind": "missing",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 396.75,
+      "reply": "That title is not in the local title directory. Try another spelling or a topic search."
+    },
+    {
+      "query": "Unlisted Zzxw Title",
+      "expected_kind": "missing",
+      "inherited_context": false,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 921.36,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Unlisted Zzxw Title",
+      "expected_kind": "missing",
+      "inherited_context": true,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 582.3,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "I want to read Unlisted Zzxw Novel",
+      "expected_kind": "missing",
+      "inherited_context": false,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 506.67,
+      "reply": "Some titles pass your filters, but none match the topic strongly enough. Try a broader topic or another reference title. Your filters have been retained."
+    },
+    {
+      "query": "I want to read Unlisted Zzxw Novel",
+      "expected_kind": "missing",
+      "inherited_context": true,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 596.16,
+      "reply": "Some titles pass your filters, but none match the topic strongly enough. Try a broader topic or another reference title. Your filters have been retained."
+    },
+    {
+      "query": "Recommend books similar to Unlisted Zzxw Reference",
+      "expected_kind": "missing_reference",
+      "inherited_context": false,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 2255.34,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Recommend books similar to Unlisted Zzxw Reference",
+      "expected_kind": "missing_reference",
+      "inherited_context": true,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 2460.76,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Recommend books similar to intersteler",
+      "expected_kind": "reference_suggestion",
+      "inherited_context": false,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 1745.68,
+      "reply": "I found multiple possible reference titles: Interstellar, The Soul Stealer, Eraser, Cinderella, My Sister's Keeper. Please name one."
+    },
+    {
+      "query": "Recommend books similar to intersteler",
+      "expected_kind": "reference_suggestion",
+      "inherited_context": true,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 1632.03,
+      "reply": "I found multiple possible reference titles: Interstellar, The Soul Stealer, Eraser, Cinderella, My Sister's Keeper. Please name one."
+    },
+    {
+      "query": "Recommend uplifting movies under two hours",
+      "expected_kind": "discovery",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 511.35,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Recommend uplifting movies under two hours",
+      "expected_kind": "discovery",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 511.35,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Find a mystery book under 300 pages",
+      "expected_kind": "discovery",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 482.05,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Find a mystery book under 300 pages",
+      "expected_kind": "discovery",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 438.92,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Movies about space exploration",
+      "expected_kind": "discovery",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 927.58,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Movies about space exploration",
+      "expected_kind": "discovery",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 609.25,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Frodo Baggins",
+      "expected_kind": "discovery",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 928.78,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Frodo Baggins",
+      "expected_kind": "discovery",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 506.98,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Oppenheimer",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 713.92,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Oppenheimer",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 514.62,
+      "reply": "Some titles pass your filters, but none match the topic strongly enough. Try a broader topic or another reference title. Your filters have been retained."
+    },
+    {
+      "query": "Find Dune: Part Two",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 920.19,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Find Dune: Part Two",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": false,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 614.22,
+      "reply": "Here are stories to explore, selected for your request."
+    }
+  ]
+}

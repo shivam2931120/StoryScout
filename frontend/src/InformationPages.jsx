@@ -130,6 +130,12 @@ export function EvaluationPage() {
             </div>
           </div>
           <p>Precision@5 counts all five slots, including deliberately unfilled ones. Precision among returned items and answer rate are reported separately. Missing judgments can undercount relevant new catalog records.</p>
+          {data.entity_search?.local && <section className="info-panel">
+            <h2>Title recognition and search routing</h2>
+            <p>Conversational titles, source aliases, spelling suggestions, franchises, missing titles, and inherited filters are checked separately from narrative relevance.</p>
+            <p>{data.entity_search.before?.passed ?? "—"}/{data.entity_search.before?.cases ?? "—"} checks passed before; {data.entity_search.local.passed}/{data.entity_search.local.cases} passed in the current executed local run.</p>
+            <p>Developer-authored regression checks, not universal search accuracy. The catalog and routing changed together; this does not measure model training gains.</p>
+          </section>}
           {data.passage_evaluation && <section className="info-panel">
             <h2>Passage matching: focal-detail queries</h2>
             <p>{data.passage_evaluation.focal_query_count} developer-authored movie queries checked against source plots. This is a small diagnostic set, not independent human evaluation.</p>

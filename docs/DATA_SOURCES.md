@@ -101,3 +101,33 @@ displays that provenance and does not treat prose as verified length/year/genre
 metadata. URLs point to the source ebook and API record. Request timeouts limited
 acquisition to 12 cached catalog pages. See `book_summaries_manifest.json` and
 [the current relevance report](NLP_RELEVANCE_UPDATE.md) for reproduction/limitations.
+
+## Supplemental title coverage (29 October 2026)
+
+`data/enriched/supplemental_catalog.json` has 20 source-backed books and 25 films;
+`data/enriched/supplemental_manifest.json` records acquisition, source failures
+and checksum. The catalog deduplicates existing identities. Reproduce with
+`scripts/expand_title_coverage.py`; its source requests and reviewed short original
+synopses are in `data/catalog/`.
+
+- [Open Library Search API](https://openlibrary.org/dev/docs/api/search) and
+  [developer usage policy](https://openlibrary.org/developers/api): bounded,
+  credential-free exact-title/author lookups, with local response caching.
+  Source identifiers, author strings, and work descriptions are attributed to
+  each linked work page. Description excerpts are capped at 50 words. Metadata
+  and contributed description text can have different rights; underlying book/
+  publisher descriptions are not asserted to be public domain or CC0.
+- [Wikidata licensing](https://www.wikidata.org/wiki/Wikidata:Licensing): structured
+  film statements are CC0, acquired through [QLever](https://qlever.dev/wikidata).
+  Earliest supplied release year is used. Unqueried or ambiguous facts are unknown.
+  The mirror can lag or lack statements; it is not comprehensive.
+- Distributor pages (Universal, A24, Warner Bros., Disney/Pixar, DreamWorks,
+  Paramount) remain copyrighted. This project stores short original paraphrases
+  of eight verified premises, with source URLs, rather than long copied synopses.
+  Explicit factual fields cite the corresponding distributor details separately.
+
+Open Library's aggregated first_publish_year is retained only as an unverified
+reported provenance value, not the record year. Page counts and original language
+were not inferred from edition lists or description text. No new warnings,
+ratings, adaptations or missing plot details were generated. API failures remain
+in the manifest even where a separately verified distributor entry fills coverage.

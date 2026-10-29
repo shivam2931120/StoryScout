@@ -16,6 +16,7 @@ class StoryScoutEngine:
         self.title_directory = title_directory or TitleDirectory()
         self.last_title_matches = []
         self.last_title_lookup = False
+        self.last_title_match_kind = "none"
         self.last_context_action = "auto"
 
     def get_item(self, item_id):
@@ -42,6 +43,7 @@ class StoryScoutEngine:
         self.last_diagnostics={}
         self.last_title_matches = []
         self.last_title_lookup = False
+        self.last_title_match_kind = "none"
         command = re.match(r"^(?:start (?:a )?new search|new search|start fresh)\s*[:;,.!-]?\s*", text, re.I)
         if command:
             search_action = 'new'
@@ -55,31 +57,42 @@ class StoryScoutEngine:
         # Resolve the complete title before interpreting words such as dark, no,
         # short or romance as instructions. Similarity requests keep the NLP path.
         controls = {"reset", "reset my preferences", "help", "show preferences", "why did you recommend this"}
-        if not reference_id and parsed.intent not in {"reset", "help", "show_preferences", "explain", "more"} and text.strip().lower().rstrip("?.!") not in controls and not parsed.reference_query:
+        if not reference_id and parsed.intent not in {"reset", "help", "show_preferences", "explain", "more"} and text.strip().lower().rstrip("?.!") not in controls:
             matches, approximate, explicit = self.title_directory.lookup(text, [x for group in self.catalogs.values() for x in group], state.media_selection)
             if lookup_id:
                 selected = self.get_item(lookup_id)
                 matches, approximate, explicit = ([selected] if selected else []), False, True
             if matches or explicit:
                 self.last_title_lookup = True
+                self.last_title_match_kind = self.title_directory.last_match_kind
                 state.pending_title_choices.clear()
-                requested = re.match(r"^(?:find|show|search(?: for)?|look up)\s+(?:(?:the|a)\s+)?(movie|film|book)\b", text, re.I)
-                if requested:
-                    state.media_selection = "books" if requested[1].lower() == "book" else "movies"
+                requested_media = self.title_directory.last_requested_media
+                if requested_media:
+                    state.media_selection = "books" if requested_media == "book" else "movies"
                     state.has_explicit_media = True
+                if self.title_directory.last_constraint_text:
+                    suffix=parse_preferences(self.title_directory.last_constraint_text)
+                    state.preferences=merge_preferences(state.preferences,suffix.preferences,self.title_directory.last_constraint_text,suffix.explicit_fields)
                 state.messages.append({"role": "user", "content": text})
                 for item in matches:
                     _, conflicts = self.indexes[item.media_type]._hard_filter(item, state.preferences)
                     if state.preferences.language and item.language.lower() == "unknown":
                         conflicts = ["language is unknown; cannot verify " + state.preferences.language if note.startswith("language is not ") else note for note in conflicts]
-                    explanation = "Possible title spelling match." if approximate else "Matched the catalog title directly."
+                    explanation = "Possible title spelling match; choose the intended title." if approximate else ("Matched part of a catalog title; choose the intended title." if self.last_title_match_kind == "partial" else "Matched the catalog title directly.")
                     if conflicts:
                         explanation += " Current recommendation filters: " + "; ".join(conflicts) + ". This is a title lookup, not a verified filtered recommendation."
                     if state.preferences.negative_content and not item.verified_warnings:
                         explanation += " Content suitability is unknown; no verified warning labels are available."
                     self.last_title_matches.append((item, explanation))
-                reply = ("Did you mean one of these titles?" if approximate else "Found the title in the catalog." if len(matches) == 1 else "Several titles match. Open the one you meant.") if matches else "That title is not in the local title directory. Try another spelling or a topic search."
-                state.selected_reference_id = matches[0].id if len(matches) == 1 and not approximate else None
+                if not matches:
+                    reply = f"That title is not in the local title directory under ‘{self.title_directory.last_entity}’. It may be missing or spelled differently. Try the full title, release year, or author. For a topic search, say ‘stories about …’. I have not substituted unrelated titles."
+                elif approximate:
+                    reply = "Did you mean one of these titles? Choose the intended match."
+                elif self.last_title_match_kind == "partial":
+                    reply = "These catalog titles contain that name. Choose the one you meant."
+                else:
+                    reply = "Found the title in the catalog." if len(matches) == 1 else "Several titles match. Open the one you meant."
+                state.selected_reference_id = matches[0].id if len(matches) == 1 and self.last_title_match_kind == "exact" and not approximate else None
                 return reply, {}
         search_query = text
         nemotron_failed = False
@@ -139,11 +152,16 @@ class StoryScoutEngine:
                 state.pending_title_choices.clear()
         elif parsed.reference_query:
             exact, approximate, _ = self.title_directory.lookup(parsed.reference_query, all_items)
-            if exact and not approximate:
-                reference, choices = (exact[0] if len(exact) == 1 else None), exact
-            else:
-                reference, choices = resolve_title(parsed.reference_query, all_items)
+            if approximate:
+                state.selected_reference_id=None
+                state.pending_title_choices=[x.id for x in exact]
+                return "Did you mean one of these reference titles? Choose the intended title before I compare its story.", {}
+            reference, choices = (exact[0] if len(exact) == 1 and self.title_directory.last_match_kind == 'exact' else None), exact
+            if not choices:
+                state.selected_reference_id=None
+                return f"I could not identify the reference title ‘{parsed.reference_query}’. Try its full title, author, or release year. I have not substituted another story.", {}
             if reference is None and choices:
+                state.selected_reference_id=None
                 state.pending_title_choices = [x.id for x in choices]
                 return "I found multiple possible reference titles: " + ", ".join(x.title for x in choices) + ". Please name one.", {}
             if reference:
@@ -157,7 +175,7 @@ class StoryScoutEngine:
             state.selected_reference_id = None
             state.preferences.referenced_title = None
             state.pending_title_choices.clear()
-        if reference and reference.source.startswith(("movielens", "project-gutenberg")) and not (reference.retrieval_text or reference.description_provenance or reference.genres or reference.theme_tags):
+        if reference and reference.source.startswith(("movielens", "project-gutenberg", "wikidata-catalog", "openlibrary-catalog")) and not (reference.retrieval_text or reference.description_provenance or reference.genres or reference.theme_tags):
             return f"I found '{reference.title}', but its source has no synopsis or genre metadata for meaningful content comparison. Choose a described reference or search for themes directly.", {}
         followup = search_action == 'refine' or parsed.intent in {'refine','more'} or 'replace_genres' in parsed.explicit_fields or bool(re.match(r'^(also|only|make|what about|show me|more|shorter)\b',text.lower().strip()))
         effective, topic = build_search_query(search_query,state.preferences,state.last_content_query,followup)

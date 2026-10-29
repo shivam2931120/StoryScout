@@ -29,7 +29,7 @@ def test_mood_cannot_rescue_a_nonmatching_topic(tmp_path):
 def test_unrelated_request_returns_nothing_despite_active_genre_and_mood(engine):
     state = ConversationState(media_selection='movies')
     state.preferences = Preferences(preferred_genres=['romance'], desired_mood='dark')
-    reply, result = engine.handle('Volcanic octopus diplomacy', state)
+    reply, result = engine.handle('Movies about volcanic octopus diplomacy', state)
     assert not any(result.values())
     assert 'none match the topic strongly enough' in reply
     assert state.preferences.preferred_genres == ['romance']

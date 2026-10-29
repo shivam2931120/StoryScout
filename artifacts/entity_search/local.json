@@ -1,0 +1,1388 @@
+{
+  "executed_at": "2026-10-29T17:08:06.601353+00:00",
+  "base_url": "http://127.0.0.1:8000",
+  "judgment_method": "Developer-authored identity/route expectations, grounded in local source titles. Includes conversational wording and missing-title negatives. Not independent human relevance ratings.",
+  "limitations": "Targeted regression set, not universal coverage or recommendation accuracy. Fresh and inherited-context cases are scored separately.",
+  "cases": 90,
+  "passed": 90,
+  "by_kind": {
+    "discovery": {
+      "cases": 8,
+      "passed": 8
+    },
+    "exact": {
+      "cases": 58,
+      "passed": 58
+    },
+    "missing": {
+      "cases": 10,
+      "passed": 10
+    },
+    "missing_reference": {
+      "cases": 2,
+      "passed": 2
+    },
+    "partial": {
+      "cases": 6,
+      "passed": 6
+    },
+    "reference_suggestion": {
+      "cases": 2,
+      "passed": 2
+    },
+    "suggestion": {
+      "cases": 4,
+      "passed": 4
+    }
+  },
+  "rows": [
+    {
+      "query": "Inception",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_ml_79132"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 57.34,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Inception",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_ml_79132"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 45.23,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Find Inception",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_ml_79132"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 34.25,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Find Inception",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_ml_79132"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 28.65,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Show me Inception",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_ml_79132"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 56.42,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Show me Inception",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_ml_79132"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 77.67,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Tell me about Inception",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_ml_79132"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 34.1,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Tell me about Inception",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_ml_79132"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 28.69,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Can you find Inception?",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_ml_79132"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 50.38,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Can you find Inception?",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_ml_79132"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 32.53,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Interstellar",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_001"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 87.39,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Interstellar",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_001"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 31.51,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Find Interstellar",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_001"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 46.57,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Find Interstellar",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_001"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 27.91,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Show me Interstellar",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_001"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 32.24,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Show me Interstellar",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_001"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 30.5,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Tell me about Interstellar",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_001"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 27.21,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Tell me about Interstellar",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_001"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 43.15,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Can you find Interstellar?",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_001"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 46.04,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Can you find Interstellar?",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_001"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 27.68,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "The Dark Knight",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_ml_58559"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 26.77,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "The Dark Knight",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_ml_58559"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 29.14,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Find The Dark Knight",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_ml_58559"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 26.84,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Find The Dark Knight",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_ml_58559"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 26.7,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Show me The Dark Knight",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_ml_58559"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 28.63,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Show me The Dark Knight",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_ml_58559"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 26.79,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Tell me about The Dark Knight",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_ml_58559"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 26.62,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Tell me about The Dark Knight",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_ml_58559"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 27.0,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Can you find The Dark Knight?",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_ml_58559"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 29.15,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Can you find The Dark Knight?",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_ml_58559"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 27.04,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "The Hobbit",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "book_001"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 27.18,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "The Hobbit",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "book_001"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 27.75,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Find The Hobbit",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "book_001"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 27.21,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Find The Hobbit",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "book_001"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 27.15,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Show me The Hobbit",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "book_001"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 33.77,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Show me The Hobbit",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "book_001"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 29.36,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Tell me about The Hobbit",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "book_001"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 27.54,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Tell me about The Hobbit",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "book_001"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 27.35,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Can you find The Hobbit?",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "book_001"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 27.88,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Can you find The Hobbit?",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "book_001"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 32.69,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "I want to watch Inception",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_ml_79132"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 32.63,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "I want to watch Inception",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_ml_79132"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 27.34,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "I would like to read The Hobbit",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "book_001"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 29.31,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "I would like to read The Hobbit",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "book_001"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 27.67,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Harry Potter",
+      "expected_kind": "partial",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "book_ol_OL82536W",
+        "book_ol_OL82537W",
+        "book_ol_OL82548W",
+        "book_ol_OL82560W",
+        "book_ol_OL82563W",
+        "book_ol_OL82565W",
+        "book_ol_OL82586W",
+        "movie_ml_40815",
+        "movie_ml_4896",
+        "movie_ml_54001"
+      ],
+      "actual_kinds": [
+        "partial",
+        "partial",
+        "partial",
+        "partial",
+        "partial",
+        "partial",
+        "partial",
+        "partial",
+        "partial",
+        "partial"
+      ],
+      "latency_ms": 36.5,
+      "reply": "These catalog titles contain that name. Choose the one you meant."
+    },
+    {
+      "query": "Harry Potter",
+      "expected_kind": "partial",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_ml_40815",
+        "movie_ml_4896",
+        "movie_ml_54001",
+        "movie_ml_5816",
+        "movie_ml_69844",
+        "movie_ml_81834",
+        "movie_ml_8368",
+        "movie_ml_88125"
+      ],
+      "actual_kinds": [
+        "partial",
+        "partial",
+        "partial",
+        "partial",
+        "partial",
+        "partial",
+        "partial",
+        "partial"
+      ],
+      "latency_ms": 35.74,
+      "reply": "These catalog titles contain that name. Choose the one you meant."
+    },
+    {
+      "query": "Harry Potter movies",
+      "expected_kind": "partial",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_ml_40815",
+        "movie_ml_4896",
+        "movie_ml_54001",
+        "movie_ml_5816",
+        "movie_ml_69844",
+        "movie_ml_81834",
+        "movie_ml_8368",
+        "movie_ml_88125"
+      ],
+      "actual_kinds": [
+        "partial",
+        "partial",
+        "partial",
+        "partial",
+        "partial",
+        "partial",
+        "partial",
+        "partial"
+      ],
+      "latency_ms": 35.8,
+      "reply": "These catalog titles contain that name. Choose the one you meant."
+    },
+    {
+      "query": "Harry Potter movies",
+      "expected_kind": "partial",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_ml_40815",
+        "movie_ml_4896",
+        "movie_ml_54001",
+        "movie_ml_5816",
+        "movie_ml_69844",
+        "movie_ml_81834",
+        "movie_ml_8368",
+        "movie_ml_88125"
+      ],
+      "actual_kinds": [
+        "partial",
+        "partial",
+        "partial",
+        "partial",
+        "partial",
+        "partial",
+        "partial",
+        "partial"
+      ],
+      "latency_ms": 35.74,
+      "reply": "These catalog titles contain that name. Choose the one you meant."
+    },
+    {
+      "query": "Harry Potter books",
+      "expected_kind": "partial",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "book_ol_OL82536W",
+        "book_ol_OL82537W",
+        "book_ol_OL82548W",
+        "book_ol_OL82560W",
+        "book_ol_OL82563W",
+        "book_ol_OL82565W",
+        "book_ol_OL82586W"
+      ],
+      "actual_kinds": [
+        "partial",
+        "partial",
+        "partial",
+        "partial",
+        "partial",
+        "partial",
+        "partial"
+      ],
+      "latency_ms": 35.74,
+      "reply": "These catalog titles contain that name. Choose the one you meant."
+    },
+    {
+      "query": "Harry Potter books",
+      "expected_kind": "partial",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "book_ol_OL82536W",
+        "book_ol_OL82537W",
+        "book_ol_OL82548W",
+        "book_ol_OL82560W",
+        "book_ol_OL82563W",
+        "book_ol_OL82565W",
+        "book_ol_OL82586W"
+      ],
+      "actual_kinds": [
+        "partial",
+        "partial",
+        "partial",
+        "partial",
+        "partial",
+        "partial",
+        "partial"
+      ],
+      "latency_ms": 35.62,
+      "reply": "These catalog titles contain that name. Choose the one you meant."
+    },
+    {
+      "query": "intersteler",
+      "expected_kind": "suggestion",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_001"
+      ],
+      "actual_kinds": [
+        "suggestion"
+      ],
+      "latency_ms": 49.31,
+      "reply": "Did you mean one of these titles? Choose the intended match."
+    },
+    {
+      "query": "intersteler",
+      "expected_kind": "suggestion",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_001"
+      ],
+      "actual_kinds": [
+        "suggestion"
+      ],
+      "latency_ms": 49.54,
+      "reply": "Did you mean one of these titles? Choose the intended match."
+    },
+    {
+      "query": "Incepton",
+      "expected_kind": "suggestion",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_ml_79132"
+      ],
+      "actual_kinds": [
+        "suggestion"
+      ],
+      "latency_ms": 42.61,
+      "reply": "Did you mean one of these titles? Choose the intended match."
+    },
+    {
+      "query": "Incepton",
+      "expected_kind": "suggestion",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_ml_79132"
+      ],
+      "actual_kinds": [
+        "suggestion"
+      ],
+      "latency_ms": 48.14,
+      "reply": "Did you mean one of these titles? Choose the intended match."
+    },
+    {
+      "query": "I want to read Atomic Habits",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "book_ol_OL17930368W"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 28.36,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "I want to read Atomic Habits",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "book_ol_OL17930368W"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 32.61,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Atomic Habits by James Clear",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "book_ol_OL17930368W"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 32.63,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Atomic Habits by James Clear",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "book_ol_OL17930368W"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 35.11,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "1984 by George Orwell",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "book_ol_OL1168083W"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 30.51,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "1984 by George Orwell",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "book_ol_OL1168083W"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 32.54,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "I want to read 1984",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "book_ol_OL1168083W"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 28.96,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "I want to read 1984",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "book_ol_OL1168083W"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 30.22,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Harry Potter and the Philosopher's Stone",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "book_ol_OL82563W",
+        "movie_ml_4896"
+      ],
+      "actual_kinds": [
+        "exact",
+        "exact"
+      ],
+      "latency_ms": 37.56,
+      "reply": "Several titles match. Open the one you meant."
+    },
+    {
+      "query": "Harry Potter and the Philosopher's Stone",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_ml_4896"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 33.94,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Find a movie called Inception (2011)",
+      "expected_kind": "missing",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 37.18,
+      "reply": "That title is not in the local title directory under \u2018Inception\u2019. It may be missing or spelled differently. Try the full title, release year, or author. For a topic search, say \u2018stories about \u2026\u2019. I have not substituted unrelated titles."
+    },
+    {
+      "query": "Find a movie called Inception (2011)",
+      "expected_kind": "missing",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 31.9,
+      "reply": "That title is not in the local title directory under \u2018Inception\u2019. It may be missing or spelled differently. Try the full title, release year, or author. For a topic search, say \u2018stories about \u2026\u2019. I have not substituted unrelated titles."
+    },
+    {
+      "query": "Find a book called Inception",
+      "expected_kind": "missing",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 27.47,
+      "reply": "That title is not in the local title directory under \u2018Inception\u2019. It may be missing or spelled differently. Try the full title, release year, or author. For a topic search, say \u2018stories about \u2026\u2019. I have not substituted unrelated titles."
+    },
+    {
+      "query": "Find a book called Inception",
+      "expected_kind": "missing",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 27.88,
+      "reply": "That title is not in the local title directory under \u2018Inception\u2019. It may be missing or spelled differently. Try the full title, release year, or author. For a topic search, say \u2018stories about \u2026\u2019. I have not substituted unrelated titles."
+    },
+    {
+      "query": "Find a movie called Unlisted Zzxw Film",
+      "expected_kind": "missing",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 72.15,
+      "reply": "That title is not in the local title directory under \u2018Unlisted Zzxw Film\u2019. It may be missing or spelled differently. Try the full title, release year, or author. For a topic search, say \u2018stories about \u2026\u2019. I have not substituted unrelated titles."
+    },
+    {
+      "query": "Find a movie called Unlisted Zzxw Film",
+      "expected_kind": "missing",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 81.11,
+      "reply": "That title is not in the local title directory under \u2018Unlisted Zzxw Film\u2019. It may be missing or spelled differently. Try the full title, release year, or author. For a topic search, say \u2018stories about \u2026\u2019. I have not substituted unrelated titles."
+    },
+    {
+      "query": "Unlisted Zzxw Title",
+      "expected_kind": "missing",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 71.25,
+      "reply": "That title is not in the local title directory under \u2018Unlisted Zzxw Title\u2019. It may be missing or spelled differently. Try the full title, release year, or author. For a topic search, say \u2018stories about \u2026\u2019. I have not substituted unrelated titles."
+    },
+    {
+      "query": "Unlisted Zzxw Title",
+      "expected_kind": "missing",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 78.31,
+      "reply": "That title is not in the local title directory under \u2018Unlisted Zzxw Title\u2019. It may be missing or spelled differently. Try the full title, release year, or author. For a topic search, say \u2018stories about \u2026\u2019. I have not substituted unrelated titles."
+    },
+    {
+      "query": "I want to read Unlisted Zzxw Novel",
+      "expected_kind": "missing",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 66.18,
+      "reply": "That title is not in the local title directory under \u2018Unlisted Zzxw Novel\u2019. It may be missing or spelled differently. Try the full title, release year, or author. For a topic search, say \u2018stories about \u2026\u2019. I have not substituted unrelated titles."
+    },
+    {
+      "query": "I want to read Unlisted Zzxw Novel",
+      "expected_kind": "missing",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 72.34,
+      "reply": "That title is not in the local title directory under \u2018Unlisted Zzxw Novel\u2019. It may be missing or spelled differently. Try the full title, release year, or author. For a topic search, say \u2018stories about \u2026\u2019. I have not substituted unrelated titles."
+    },
+    {
+      "query": "Recommend books similar to Unlisted Zzxw Reference",
+      "expected_kind": "missing_reference",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 115.62,
+      "reply": "I could not identify the reference title \u2018Unlisted Zzxw Reference\u2019. Try its full title, author, or release year. I have not substituted another story."
+    },
+    {
+      "query": "Recommend books similar to Unlisted Zzxw Reference",
+      "expected_kind": "missing_reference",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 118.15,
+      "reply": "I could not identify the reference title \u2018Unlisted Zzxw Reference\u2019. Try its full title, author, or release year. I have not substituted another story."
+    },
+    {
+      "query": "Recommend books similar to intersteler",
+      "expected_kind": "reference_suggestion",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 101.66,
+      "reply": "Did you mean one of these reference titles? Choose the intended title before I compare its story."
+    },
+    {
+      "query": "Recommend books similar to intersteler",
+      "expected_kind": "reference_suggestion",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 103.83,
+      "reply": "Did you mean one of these reference titles? Choose the intended title before I compare its story."
+    },
+    {
+      "query": "Recommend uplifting movies under two hours",
+      "expected_kind": "discovery",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 63.78,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Recommend uplifting movies under two hours",
+      "expected_kind": "discovery",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 66.25,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Find a mystery book under 300 pages",
+      "expected_kind": "discovery",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 50.58,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Find a mystery book under 300 pages",
+      "expected_kind": "discovery",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 55.3,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Movies about space exploration",
+      "expected_kind": "discovery",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 144.79,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Movies about space exploration",
+      "expected_kind": "discovery",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 74.93,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Frodo Baggins",
+      "expected_kind": "discovery",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 122.11,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Frodo Baggins",
+      "expected_kind": "discovery",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [],
+      "actual_kinds": [],
+      "latency_ms": 76.0,
+      "reply": "Here are stories to explore, selected for your request."
+    },
+    {
+      "query": "Oppenheimer",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_wd_Q108839994"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 34.02,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Oppenheimer",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_wd_Q108839994"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 29.54,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Find Dune: Part Two",
+      "expected_kind": "exact",
+      "inherited_context": false,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_wd_Q109228991"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 29.96,
+      "reply": "Found the title in the catalog."
+    },
+    {
+      "query": "Find Dune: Part Two",
+      "expected_kind": "exact",
+      "inherited_context": true,
+      "passed": true,
+      "retained_preferences": true,
+      "matched_ids": [
+        "movie_wd_Q109228991"
+      ],
+      "actual_kinds": [
+        "exact"
+      ],
+      "latency_ms": 31.32,
+      "reply": "Found the title in the catalog."
+    }
+  ]
+}

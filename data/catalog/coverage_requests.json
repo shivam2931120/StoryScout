@@ -1,0 +1,13 @@
+{
+  "books": [
+    ["Atomic Habits", "James Clear"], ["Harry Potter and the Philosopher's Stone", "J. K. Rowling"],
+    ["Harry Potter and the Chamber of Secrets", "J. K. Rowling"], ["Harry Potter and the Prisoner of Azkaban", "J. K. Rowling"],
+    ["Harry Potter and the Goblet of Fire", "J. K. Rowling"], ["Harry Potter and the Order of the Phoenix", "J. K. Rowling"],
+    ["Harry Potter and the Half-Blood Prince", "J. K. Rowling"], ["Harry Potter and the Deathly Hallows", "J. K. Rowling"],
+    ["Nineteen Eighty-Four", "George Orwell"], ["Animal Farm", "George Orwell"], ["Dune", "Frank Herbert"],
+    ["The Hunger Games", "Suzanne Collins"], ["The Da Vinci Code", "Dan Brown"], ["The Silent Patient", "Alex Michaelides"],
+    ["The Psychology of Money", "Morgan Housel"], ["The Midnight Library", "Matt Haig"], ["Project Hail Mary", "Andy Weir"],
+    ["The Kite Runner", "Khaled Hosseini"], ["The Book Thief", "Markus Zusak"], ["Sapiens", "Yuval Noah Harari"]
+  ],
+  "movies": ["Oppenheimer", "Dune", "Dune: Part Two", "Barbie", "Everything Everywhere All at Once", "Past Lives", "Parasite", "Knives Out", "The Batman", "Poor Things", "The Holdovers", "The Menu", "The Banshees of Inisherin", "The Boy and the Heron", "Top Gun: Maverick", "Spider-Man: Across the Spider-Verse", "Spider-Man: No Way Home", "Avengers: Endgame", "Joker", "Soul", "Inside Out 2", "The Wild Robot", "Anora", "The Substance"]
+}

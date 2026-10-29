@@ -1,0 +1,22 @@
+{
+  "acquired_at": "2026-10-29T17:03:24.783656+00:00",
+  "counts": {
+    "book": 20,
+    "movie": 25
+  },
+  "failures": [],
+  "source_import_failures": [
+    {
+      "title": "Top Gun: Maverick",
+      "domain": "movie",
+      "error": "No matching post-2018 film source record"
+    }
+  ],
+  "sources": [
+    "https://openlibrary.org/dev/docs/api/search",
+    "https://openlibrary.org/developers/api",
+    "https://qlever.dev/wikidata",
+    "https://www.wikidata.org/wiki/Wikidata:Licensing"
+  ],
+  "sha256": "ae6b344dea31022a53cabb3727b5a89a67bcb37a9b0abc308656d0724149a810"
+}

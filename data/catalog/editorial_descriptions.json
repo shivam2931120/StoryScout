@@ -1,0 +1,74 @@
+{
+  "reviewed_at": "2026-10-29",
+  "policy": "Original short developer paraphrases of the linked distributor synopsis. Facts are explicitly sourced; no generated plot continuation or ending. Unlisted metadata remains unknown.",
+  "movies": {
+    "Oppenheimer": {
+      "description": "Physicist J. Robert Oppenheimer leads atomic-bomb research for the Manhattan Project.",
+      "source": "Universal Pictures official film synopsis and home-video details",
+      "source_url": "https://www.universalpicturesathome.com/movies/oppenheimer",
+      "runtime_minutes": 181,
+      "genres": [
+        "thriller",
+        "drama",
+        "war"
+      ]
+    },
+    "Past Lives": {
+      "description": "Childhood lovers meet again after many years apart and consider how their lives have changed.",
+      "source": "A24 official film synopsis and details",
+      "source_url": "https://a24films.com/films/past-lives",
+      "runtime_minutes": 105,
+      "genres": [
+        "romance"
+      ]
+    },
+    "Everything Everywhere All at Once": {
+      "description": "An overworked Chinese American woman struggling with her taxes becomes the center of a science-fiction action adventure.",
+      "source": "A24 official film synopsis",
+      "source_url": "https://a24films.com/films/everything-everywhere-all-at-once",
+      "genres": [
+        "science fiction",
+        "action",
+        "adventure"
+      ]
+    },
+    "Dune: Part Two": {
+      "description": "Paul Atreides joins Chani and the Fremen on a desert world while pursuing revenge against his family's enemies.",
+      "source": "Warner Bros. Pictures and Legendary Pictures official production announcement synopsis",
+      "source_url": "https://press.wbd.com/gb/media-release/warner-bros-pictures/warner-bros-pictures-and-legendary-pictures-return-arrakis-denis-villeneuves-dune"
+    },
+    "Barbie": {
+      "description": "Life in an apparently perfect Barbie Land is disrupted by an existential crisis.",
+      "source": "Warner Bros. official movie synopsis",
+      "source_url": "https://www.barbie-themovie.com/synopsis/"
+    },
+    "Soul": {
+      "description": "A New York music teacher hoping to perform jazz enters a realm where souls prepare for life on Earth.",
+      "source": "Disney and Pixar official synopsis and film details",
+      "source_url": "https://movies.disney.com/soul",
+      "runtime_minutes": 100,
+      "genres": [
+        "animation",
+        "comedy",
+        "family",
+        "fantasy",
+        "musical"
+      ]
+    },
+    "The Wild Robot": {
+      "description": "A robot stranded on an island learns to live with its wildlife and cares for a young goose.",
+      "source": "DreamWorks official film synopsis",
+      "source_url": "https://www.dreamworks.com/movies/the-wild-robot"
+    },
+    "Top Gun: Maverick": {
+      "description": "An experienced Navy test pilot prepares a group of aviators for a demanding mission and confronts ties to his past.",
+      "source": "Paramount official distributor synopsis and premiere date",
+      "source_url": "https://paramountglobalcontent.com/title/top-gun-maverick",
+      "year": 2022,
+      "genres": [
+        "action",
+        "adventure"
+      ]
+    }
+  }
+}

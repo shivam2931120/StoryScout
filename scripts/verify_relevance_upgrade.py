@@ -34,7 +34,7 @@ def verify(base_url):
         record('New search clears prior criteria and topic',fresh['state']['preferences']['desired_mood'] is None and fresh['state']['preferences']['max_runtime'] is None and 'spacecraft' not in fresh['state']['last_content_query'] and len(fresh['state']['messages'])==3)
         fewer=chat('Mystery books under 300 pages')
         record('Return fewer matches rather than fill slots',0<len(fewer['results']['book'])<3)
-        weak=chat('xqzvpr blorfzzz',{'media_selection':'movies','preferences':{'desired_mood':'dark'}})
+        weak=chat('Movies about xqzvpr blorfzzz',{'media_selection':'movies','preferences':{'desired_mood':'dark'}})
         record('No matches for an unsupported topic',not any(weak['results'].values()) and 'topic strongly enough' in weak['reply'])
         lookup=chat('Love & Other Drugs',refined['state'])
         record('Exact title lookup survives relevance changes',lookup['title_matches'][0]['item']['id']=='movie_ml_82167')

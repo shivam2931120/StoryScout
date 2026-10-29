@@ -58,71 +58,152 @@ def title_key(text: str) -> str:
     text = re.sub(r",\s*(the|an|a)$", lambda m: "", text)
     text = re.sub(r"[^\w\s]", " ", text)
     text = re.sub(r"\s+", " ", text).strip()
+    text=re.sub(r"\bpart\s+(one|two|three|i|ii|iii)\b",lambda m:"part "+{'one':'1','two':'2','three':'3','i':'1','ii':'2','iii':'3'}[m[1]],text)
     return re.sub(r"^(the|an|a)\s+", "", text)
 
 
 def title_names(title):
-    """Source titles sometimes include an alternate title in parentheses."""
+    """Source identity aliases only; characters/themes are not title aliases."""
     names = [title]
     match = re.fullmatch(r"(.+?)\s+\((.+)\)", title)
     if match:
-        names.extend([match[1], match[2]])
-    return names
+        names.extend([match[1], re.sub(r"^(?:a\.?k\.?a\.?|also known as)\s+", "", match[2], flags=re.I)])
+    return list(dict.fromkeys(names))
+
+
+def title_request(text):
+    """Extract the entity span without sending conversational prose to search.
+
+    Wrappers express lookup only if their remainder is not a descriptive request.
+    Bare ambiguous short phrases are clarified rather than silently substituted.
+    """
+    text=re.sub(r"^(?:(?:can|could|would) you\s+)?(?:please\s+)?", "", text.strip(), flags=re.I)
+    patterns=[
+        r"^(?:can you |could you |please )?(?:tell me about|what is|what's|details (?:of|about)|look up|search for (?:the )?title)\s+",
+        r"^(?:i (?:want|would like|wish) to|i'd like to|let me)\s+(?:watch|read)\s+",
+        r"^(?:i(?: am|'m)? looking for|looking for|do you have|have you got|i want|i would like|i'd like)\s+",
+        r"^(?:show|give) me (?:details|information) (?:of|about|on)\s+",
+        r"^(?:find|show|give|search(?: for)?|look up|recommend|suggest)(?:\s+me)?\s+(?:(?:the|a)\s+)?(?:(?:movie|film|book|novel|title)\s+(?:(?:called|named|titled)\s+)?)?",
+        r"^(?:watch|read)\s+",
+        r"^(?:the\s+)?(?:movie|film|book|novel)\s+",
+    ]
+    query=text; wrapped=False
+    for pattern in patterns:
+        match=re.match(pattern,text,re.I)
+        if match:
+            query=text[match.end():];wrapped=True;break
+    requested='book' if re.search(r"\b(?:book|novel|read)\b",text[:len(text)-len(query)],re.I) else ('movie' if re.search(r"\b(?:movie|film|watch)\b",text[:len(text)-len(query)],re.I) else None)
+    leading=re.match(r"^(?:(?:the|a)\s+)?(movie|film|book|novel)\s+(?:(?:called|named|titled)\s+)?",query,re.I) if wrapped else None
+    if leading:
+        requested='book' if leading[1].lower() in {'book','novel'} else 'movie'
+        query=query[leading.end():]
+    trailing=re.search(r"\s+(movies|films|books|novels)$",query,re.I)
+    if trailing:
+        requested="book" if trailing[1].lower() in {"books","novels"} else "movie"
+        query=query[:trailing.start()];wrapped=True
+    query=re.sub(r"\s+please[.!?]*$","",query,flags=re.I).strip(" \"'?!.")
+    return query,wrapped,requested
+
+
+def descriptive_request(text, active_items=()):
+    from .preferences import GENRES, GENRE_ALIASES, MOODS, THEMES
+    words=title_key(text)
+    if not words:return True
+    # Preserve discovery, constraints, reference similarity and follow-up commands.
+    if re.search(r"\b(?:about|like|similar|with|without|under|over|after|before|between|shorter|longer|only|now|no|not|recommend|suggest|enjoyed|liked|loved|something|anything|stories|movies|books|films|novels|minutes|pages|reset|help|preferences|include|exclude|instead|more|less|feel|feeling)\b",words):return True
+    signals=GENRES+MOODS+THEMES+[x for aliases in GENRE_ALIASES.values() for x in aliases]+['erotica','spacecraft','oxygen','exploration','robots','aliens','astronaut','detective','love','sad','stress','stressed','happy','gentle','warm','mind bending','twist','ending','pen pals','run away','historical','english','hindi','french','spanish','german']
+    if any(re.search(rf"\b{re.escape(signal)}\b",words) for signal in signals):return True
+    aliases={title_key(alias) for item in active_items for alias in item.search_aliases if len(alias)>=5}
+    if words in aliases or get_close_matches(words,aliases,n=1,cutoff=.85):return True
+    return len(words.split())>7
 
 
 class TitleDirectory:
-    """Small source metadata directory; no model vectors or full plot copies."""
+    """Local title identity index. Narrative similarity never establishes identity."""
     def __init__(self, records=()):
         self.records = {record["id"]: record for record in records}
         self.keys = {}
         for record in self.records.values():
-            for name in title_names(record["title"]):
-                self.keys.setdefault(title_key(name), set()).add(record["id"])
+            for name in title_names(record["title"])+record.get('title_aliases',[]):
+                key=title_key(name)
+                if key:self.keys.setdefault(key,set()).add(record['id'])
+        self.last_match_kind='none'
+        self.last_requested_media=None
+        self.last_entity=''
+        self.last_constraint_text=''
 
     @classmethod
     def load(cls, path: Path):
-        if not path.exists():
-            return cls()
-        with gzip.open(path, "rt", encoding="utf-8") as stream:
-            return cls(json.load(stream))
+        if not path.exists():return cls()
+        with gzip.open(path, "rt", encoding="utf-8") as stream:return cls(json.load(stream))
 
     def get(self, item_id):
         record = self.records.get(item_id)
         return CatalogItem(**record) if record else None
 
     def lookup(self, text, active_items, selection="both"):
-        explicit = bool(re.match(r"^(?:look up|search for (?:the )?title|(?:find|show|search for) (?:(?:the|a) )?(?:movie|film|book|title) (?:called|named))\s+", text, re.I))
-        query = re.sub(r"^(?:find|show|search(?: for)?|look up)\s+(?:(?:the|a)\s+)?(?:movie|film|book|title)(?:\s+(?:called|named))?\s+", "", text.strip(), flags=re.I)
-        query = re.sub(r"^look up\s+", "", query, flags=re.I).strip(" \"'?!.")
-        year_match = re.search(r"\s*\(?((?:18|19|20)\d{2})\)?\s*$", query)
-        if year_match and not query[:year_match.start()].strip():
-            year_match = None
-        year = int(year_match[1]) if year_match else None
-        if year_match:
-            query = query[:year_match.start()]
-        key = title_key(query)
-        active = {item.id: item for item in active_items}
-        ids = set(self.keys.get(key, ()))
-        ids.update(item.id for item in active_items if key in {title_key(a) for a in title_names(item.title)})
-        # Typo matches are suggestions, never an automatic exact-title claim.
-        approximate = False
-        if not ids and len(key) >= 8:
-            near = get_close_matches(key, self.keys, n=3, cutoff=0.92)
-            for candidate in near:
-                ids.update(self.keys[candidate])
-            approximate = bool(ids)
-        items = [active.get(item_id) or self.get(item_id) for item_id in sorted(ids)]
-        items = [item for item in items if item and (year is None or item.year == year)]
-        requested = "movie" if re.match(r"^(?:find|show|search(?: for)?|look up)\s+(?:(?:the|a)\s+)?(?:movie|film)\b", text, re.I) else ("book" if re.match(r"^(?:find|show|search(?: for)?|look up)\s+(?:(?:the|a)\s+)?book\b", text, re.I) else None)
-        # An inherited format narrows ambiguity only if a match exists in it.
-        preferred = requested or {"books": "book", "movies": "movie"}.get(selection)
-        narrowed = [item for item in items if item.media_type == preferred]
-        if requested or narrowed:
-            items = narrowed
-        unique = {}
+        query,wrapped,requested=title_request(text)
+        self.last_requested_media=requested
+        self.last_constraint_text=''
+        # A title containing words such as "like" or "before" is still exact.
+        candidates=[text.strip(" \"'?!."),query]
+        active={item.id:item for item in active_items}
+        local_keys={}
+        for item in active_items:
+            for name in title_names(item.title)+item.title_aliases:
+                local_keys.setdefault(title_key(name),set()).add(item.id)
+        def identities(key):return set(self.keys.get(key,()))|set(local_keys.get(key,()))
+        ids=set();year=None;key='';author=None
+        for candidate in candidates:
+            exact=identities(title_key(candidate))
+            if exact:
+                ids=exact;key=title_key(candidate);query=candidate;break
+        if not ids:
+            suffix=re.search(r'\s+(?:under|below|after|before|between)\s+(?:\d+|one\b|two\b|three\b)',query,re.I)
+            if suffix:
+                candidate=query[:suffix.start()].strip()
+                if identities(title_key(candidate)):
+                    self.last_constraint_text=query[suffix.start():].strip();query=candidate
+            author_match=re.search(r'\s+by\s+(.+)$',query,re.I)
+            if author_match:
+                author=author_match[1].strip();query=query[:author_match.start()].strip()
+            year_match=re.search(r"\s*\(?((?:18|19|20)\d{2})\)?\s*$",query)
+            if year_match and query[:year_match.start()].strip():
+                year=int(year_match[1]);query=query[:year_match.start()].strip()
+            key=title_key(query);ids=identities(key)
+        self.last_entity=query
+        kind='exact' if ids else 'none'
+        descriptive=descriptive_request(query,active_items)
+        # Only contiguous title-token phrases (not shared individual words) can
+        # establish a franchise/partial-title candidate list.
+        if not ids and len(key.split())>=2 and not descriptive:
+            for candidate in set(self.keys)|set(local_keys):
+                if (' '+key+' ') in (' '+candidate+' '):ids.update(identities(candidate))
+            if ids:kind='partial'
+        approximate=False
+        explicit_discovery=bool(re.search(r'\b(?:about|similar|under|over|after|before|between|without|shorter|preferences|recommend|suggest|enjoyed|liked|loved)\b',query,re.I))
+        if not ids and len(key)>=5 and not explicit_discovery:
+            cutoff=.92 if descriptive else (.80 if len(key)>=8 else .86)
+            near=get_close_matches(key,set(self.keys)|set(local_keys),n=6,cutoff=cutoff)
+            if near:
+                best=SequenceMatcher(None,key,near[0]).ratio()
+                for candidate in near:
+                    if SequenceMatcher(None,key,candidate).ratio()>=best-.035:ids.update(identities(candidate))
+                approximate=bool(ids)
+                if ids:kind='suggestion'
+        items=[active.get(item_id) or self.get(item_id) for item_id in sorted(ids)]
+        items=[item for item in items if item and (year is None or item.year==year) and (not author or title_key(author) in title_key(item.authors or item.director or ''))]
+        preferred=requested or {'books':'book','movies':'movie'}.get(selection)
+        narrowed=[item for item in items if item.media_type==preferred]
+        if requested or narrowed:items=narrowed
+        unique={}
         for item in items:
-            identity = (item.media_type, title_key(item.title), item.year)
-            previous = unique.get(identity)
-            if previous is None or (item.id in active and previous.id not in active) or item.source.startswith('demo'):
-                unique[identity] = item
-        return list(unique.values())[:10], approximate, explicit
+            identity=(item.media_type,title_key(item.title),item.year,title_key(item.authors or '') if item.media_type=='book' else '')
+            previous=unique.get(identity)
+            if previous is None or (item.id in active and previous.id not in active) or item.source.startswith('demo'):unique[identity]=item
+        self.last_match_kind=kind if items else 'missing'
+        # Unrecognized concise entity phrases require clarification instead of
+        # weak narrative substitutes. Descriptive topic requests keep local NLP.
+        named_lookup=bool(re.search(r'\b(?:called|named|titled)\s+|^look up\s+',text,re.I))
+        explicit=named_lookup or (wrapped and not descriptive) or (not descriptive and bool(key))
+        return list(unique.values())[:10],approximate,explicit

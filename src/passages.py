@@ -22,7 +22,7 @@ PASSAGE_WEIGHT = .45
 def narrative_text(item):
     if item.retrieval_text:
         return item.retrieval_text
-    if item.description_provenance or not item.source.startswith(('movielens','project-gutenberg')):
+    if item.description_provenance or not item.source.startswith(('movielens','project-gutenberg','wikidata-catalog','openlibrary-catalog')):
         return item.description if item.description.strip().lower() not in {'unknown','n/a','none'} else ''
     return ''
 

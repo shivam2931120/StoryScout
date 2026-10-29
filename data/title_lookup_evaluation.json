@@ -123,13 +123,15 @@
     {
       "query": "1984",
       "expected_ids": [
-        "movie_ml_2117"
+        "movie_ml_2117",
+        "book_ol_OL1168083W"
       ]
     },
     {
       "query": "Nineteen Eighty-Four",
       "expected_ids": [
-        "movie_ml_2117"
+        "movie_ml_2117",
+        "book_ol_OL1168083W"
       ]
     }
   ]

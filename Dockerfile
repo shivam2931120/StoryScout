@@ -37,6 +37,7 @@ COPY artifacts/evaluation_results.json artifacts/evaluation_summary.md artifacts
 COPY artifacts/search_tuning/ ./artifacts/search_tuning/
 COPY artifacts/compact/ ./artifacts/compact/
 COPY artifacts/passages/ ./artifacts/passages/
+COPY artifacts/entity_search/ ./artifacts/entity_search/
 COPY --from=frontend /web/dist ./frontend/dist/
 USER scout
 EXPOSE 8000

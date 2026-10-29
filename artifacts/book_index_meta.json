@@ -1,9 +1,9 @@
 {
   "records": 1000,
   "active_mode": "hybrid (TF-IDF + sentence embeddings)",
-  "preparation_seconds": 3.5782756650005467,
+  "preparation_seconds": 0.42332916200007276,
   "model": "sentence-transformers/all-MiniLM-L6-v2",
   "embeddings_cached": true,
-  "passages": 93,
+  "passages": 113,
   "passage_embeddings_cached": true
 }

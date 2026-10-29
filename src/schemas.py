@@ -22,6 +22,7 @@ class CatalogItem:
     mood_tags: list[str] = field(default_factory=list)
     theme_tags: list[str] = field(default_factory=list)
     search_aliases: list[str] = field(default_factory=list)
+    title_aliases: list[str] = field(default_factory=list)
     tag_provenance: str = "catalog metadata"
     authors: str | None = None
     page_count: int | None = None
@@ -47,7 +48,7 @@ class CatalogItem:
     def search_text(self) -> str:
         # MovieLens supplies labels, not plot text; its explanatory display
         # placeholder must never become a shared lexical/semantic signal.
-        metadata_only_source = self.source.startswith("movielens") or self.source.startswith("project-gutenberg")
+        metadata_only_source = self.source.startswith(("movielens", "project-gutenberg", "wikidata-catalog", "openlibrary-catalog"))
         searchable_description = self.retrieval_text or ("" if metadata_only_source and not self.description_provenance else self.description)
         parts = [self.title, searchable_description, " ".join(self.genres),
                  " ".join(self.mood_tags), " ".join(self.theme_tags), " ".join(self.search_aliases)]
@@ -135,6 +136,7 @@ def item_from_row(row: dict[str, Any], media_type: MediaType) -> CatalogItem:
         source=str(row.get("source") or "unknown"), source_url=str(row.get("source_url") or ""),
         mood_tags=split(row.get("mood_tags")), theme_tags=split(row.get("theme_tags")),
         search_aliases=split(row.get("search_aliases")),
+        title_aliases=[x.strip() for x in str(row.get("title_aliases") or "").split("|") if x.strip()],
         tag_provenance=str(row.get("tag_provenance") or "unknown"), authors=row.get("authors") or None,
         page_count=optional_int(row.get("page_count")), publisher=row.get("publisher") or None,
         director=row.get("director") or None, runtime_minutes=optional_int(row.get("runtime_minutes")),

@@ -47,12 +47,15 @@ def make_engine() -> StoryScoutEngine:
 def item_payload(item):
     payload = asdict(item)
     payload.pop('retrieval_text',None)  # Full plots stay local; display excerpts avoid revealing endings.
-    metadata_only = item.source.startswith(("movielens", "project-gutenberg"))
+    metadata_only = item.source.startswith(("movielens", "project-gutenberg", "wikidata-catalog", "openlibrary-catalog"))
     if metadata_only and not item.description_provenance:
         payload["description"] = None
-    payload["description_status"] = ('sourced_excerpt' if item.retrieval_text and not item.description_provenance.startswith('AI') else 'sourced_ai') if item.description_provenance else ("unavailable" if metadata_only else "original_demo")
-    if 'source-generated' in item.description_provenance.lower():
-        payload['description_status'] = 'source_generated'
+    provenance=item.description_provenance
+    if 'source-generated' in provenance.lower():payload['description_status']='source_generated'
+    elif provenance.startswith('AI'):payload['description_status']='sourced_ai'
+    elif provenance.startswith('Original short developer paraphrase'):payload['description_status']='sourced_paraphrase'
+    elif provenance:payload['description_status']='sourced_excerpt'
+    else:payload['description_status']='unavailable' if metadata_only else 'original_demo'
     return payload
 
 
@@ -105,7 +108,7 @@ def create_app(engine: StoryScoutEngine | None = None) -> FastAPI:
         all_items = [x for items in current.catalogs.values() for x in items]
         starters = [next((x for x in all_items if x.title == title and x.source.startswith("demo")), None) for title in titles]
         return {"counts": {k: len(v) for k, v in current.catalogs.items()}, "status": catalog_status(all_items),
-                "title_directory_count":len(current.title_directory.records),
+                "title_directory_count":len(current.title_directory.records),"search_version":"3.0-entity-routing-source-coverage",
                 "catalog_profile":os.getenv('STORYSCOUT_CATALOG_PROFILE','full'),"embedding_backend":os.getenv('STORYSCOUT_EMBEDDING_BACKEND','torch'),
                 "genres": GENRES, "moods": MOODS, "modes": modes(current), "model": MODEL_NAME,
                 "coverage":{domain:{'plot_text':sum(bool(x.retrieval_text) for x in items),'descriptions':sum(bool(x.retrieval_text or x.description_provenance or x.source=='demo') for x in items),
@@ -152,7 +155,7 @@ def create_app(engine: StoryScoutEngine | None = None) -> FastAPI:
                 reference = current.get_item(state.selected_reference_id)
                 results = current.recommend(state.last_content_query, state, reference)
                 reply = "Your preferences are applied. Here are the matching stories." if any(results.values()) else current.empty_message(state)
-            title_matches = [{"item": item_payload(item), "explanation": explanation, "match_type": "title_lookup"} for item, explanation in current.last_title_matches]
+            title_matches = [{"item": item_payload(item), "explanation": explanation, "match_type": "title_lookup", "title_match_kind":current.last_title_match_kind} for item, explanation in current.last_title_matches]
             title_lookup = current.last_title_lookup
             context_action = current.last_context_action if parse else "refine"
             diagnostics={k:dict(v) for k,v in current.last_diagnostics.items()}
@@ -191,7 +194,12 @@ def create_app(engine: StoryScoutEngine | None = None) -> FastAPI:
             measured=json.loads(passage_path.read_text())
             passage_evaluation={key:measured[key] for key in ['executed_at','method','judgment_method','limitations','broad_query_count','focal_query_count']}
             passage_evaluation['results']={name:{mode:values['by_benchmark'] for mode,values in modes.items()} for name,modes in measured['results'].items()}
-        return {"passage_evaluation":passage_evaluation,"results": json.loads(path.read_text()) if path.exists() else None,
+        entity_evaluation={}
+        for name in ["before","local"]:
+            entity_path=ROOT/f"artifacts/entity_search/{name}.json"
+            if entity_path.exists():
+                entity_evaluation[name]={key:value for key,value in json.loads(entity_path.read_text()).items() if key!="rows"}
+        return {"entity_search":entity_evaluation,"passage_evaluation":passage_evaluation,"results": json.loads(path.read_text()) if path.exists() else None,
                 "summary": (directory / "evaluation_summary.md").read_text() if (directory / "evaluation_summary.md").exists() else "Not evaluated yet.",
                 "genre_classifier": json.loads((ROOT / "artifacts/genre_classifier_results.json").read_text()) if (ROOT / "artifacts/genre_classifier_results.json").exists() else None,
                 "genre_text_classifier": json.loads((ROOT/'artifacts/genre_text_results.json').read_text()) if (ROOT/'artifacts/genre_text_results.json').exists() else None,

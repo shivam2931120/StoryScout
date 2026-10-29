@@ -26,18 +26,18 @@ The lexical baseline uses word and bigram TF-IDF with cosine similarity. `senten
 
 The retrieval benchmark contains 44 developer-authored queries, including both domains, mixed requests, cross-media and same-media references, and constraints. Because relevance judgments are incomplete and hand-authored, metrics indicate performance only against those labels; unjudged catalog records may be relevant. Mixed requests are scored independently by domain, then book and movie metrics are macro-averaged.
 
-On the currently hosted compact subset (1,000 books and 1,500 movies), quantized ONNX MiniLM actually ran. The full 10,005-book/9,744-movie sources remain available for offline preparation. Current measured results:
+On the currently hosted compact subset (1,000 books and 1,500 movies), quantized ONNX MiniLM actually ran. The full 10,025-book/9,768-movie sources remain available for offline preparation. Current measured results:
 
 | Method | P@5 | Recall@5 | MRR@5 | Returned precision | Hard compliance | Mean ms |
 |---|---:|---:|---:|---:|---:|---:|
-| tfidf | 0.2297 | 0.6312 | 0.7238 | 0.4689 | 1.0000 | 12.9 |
-| semantic | 0.2445 | 0.6559 | 0.7368 | 0.4435 | 1.0000 | 19.6 |
-| hybrid | 0.2666 | 0.7037 | 0.7855 | 0.4688 | 1.0000 | 19.1 |
+| tfidf | 0.2297 | 0.6312 | 0.7052 | 0.4804 | 1.0000 | 18.6 |
+| semantic | 0.2445 | 0.6559 | 0.7275 | 0.4232 | 1.0000 | 17.7 |
+| hybrid | 0.2666 | 0.7037 | 0.7670 | 0.4596 | 1.0000 | 21.1 |
 
 Overlapping narrative passages now supplement whole-document retrieval. The
 controlled ablation increases focal-detail hybrid MRR@5 from 0.7333 to 0.8000
-on 10 developer-authored movie queries, and broad macro MRR@5 from 0.7824 to
-0.7855. Broad P@5 and recall decrease. This does not establish universal accuracy
+on 10 developer-authored movie queries, and broad macro MRR@5 from 0.7639 to
+0.7670. Broad P@5 and recall decrease. This does not establish universal accuracy
 improvements; two focal target movies still fail. Hard compliance remains 1.0.
 The implementation, source limitations, full comparison, and constrained-memory
 verification are in [PASSAGE_MATCHING.md](PASSAGE_MATCHING.md).
@@ -90,3 +90,18 @@ candidate-pool experiment; it is not a controlled quantization improvement claim
 Candidate container checks passed under 512 MB / 0.1 CPU, with observed memory
 around 304 MiB and seven successful HTTP scenarios. Current results, resource
 checks and deployment status are recorded in FREE_HOSTING.md and artifacts/compact/.
+
+## Exact title search revision
+
+The current source directory contains 19,793 identities (10,025 books and 9,768
+movies); the free semantic subset remains 1,000/1,500. A supplemental snapshot
+adds 20 books and 25 films before deduplication. Conversational entity extraction,
+author/year qualifiers, source title aliases, partial franchise choices and
+conservative spelling suggestions precede narrative retrieval. Missing named
+entities cannot silently turn into unrelated recommendations. Identity cards
+retain visible filter conflicts; discovery results still enforce hard filters.
+The 45-query, two-context regression passed 24/90 on the prior deployed app and
+90/90 on the updated local app. This is developer-authored behavior evaluation,
+not universal accuracy. Current validation is 165 Python tests plus four frontend
+checks. See ENTITY_SEARCH.md for implementation, source terms, executed outputs,
+and the recommendation benchmark's mixed results after catalog changes.

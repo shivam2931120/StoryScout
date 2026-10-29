@@ -169,3 +169,9 @@ before/after metrics and suggested NLP experiments: [NLP relevance update](docs/
 Overlapping narrative passages now supplement whole-document retrieval, with one
 card per title and source-grounded passage evidence. See [implementation, actual
 ablation results, caching, and validation](docs/PASSAGE_MATCHING.md).
+
+## Conversational title search revision
+
+Exact title extraction, source aliases, franchise choices, spelling suggestions,
+missing-title handling, and source-backed modern coverage are implemented. See
+[the current policy, executed checks, and limitations](docs/ENTITY_SEARCH.md).

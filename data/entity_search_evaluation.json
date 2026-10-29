@@ -1,0 +1,229 @@
+{
+  "judgment_method": "Developer-authored identity/route expectations, grounded in local source titles. Includes conversational wording and missing-title negatives. Not independent human relevance ratings.",
+  "limitations": "Targeted regression set, not universal coverage or recommendation accuracy. Fresh and inherited-context cases are scored separately.",
+  "queries": [
+    {
+      "query": "Inception",
+      "kind": "exact",
+      "title_contains": "Inception"
+    },
+    {
+      "query": "Find Inception",
+      "kind": "exact",
+      "title_contains": "Inception"
+    },
+    {
+      "query": "Show me Inception",
+      "kind": "exact",
+      "title_contains": "Inception"
+    },
+    {
+      "query": "Tell me about Inception",
+      "kind": "exact",
+      "title_contains": "Inception"
+    },
+    {
+      "query": "Can you find Inception?",
+      "kind": "exact",
+      "title_contains": "Inception"
+    },
+    {
+      "query": "Interstellar",
+      "kind": "exact",
+      "title_contains": "Interstellar"
+    },
+    {
+      "query": "Find Interstellar",
+      "kind": "exact",
+      "title_contains": "Interstellar"
+    },
+    {
+      "query": "Show me Interstellar",
+      "kind": "exact",
+      "title_contains": "Interstellar"
+    },
+    {
+      "query": "Tell me about Interstellar",
+      "kind": "exact",
+      "title_contains": "Interstellar"
+    },
+    {
+      "query": "Can you find Interstellar?",
+      "kind": "exact",
+      "title_contains": "Interstellar"
+    },
+    {
+      "query": "The Dark Knight",
+      "kind": "exact",
+      "title_contains": "The Dark Knight"
+    },
+    {
+      "query": "Find The Dark Knight",
+      "kind": "exact",
+      "title_contains": "The Dark Knight"
+    },
+    {
+      "query": "Show me The Dark Knight",
+      "kind": "exact",
+      "title_contains": "The Dark Knight"
+    },
+    {
+      "query": "Tell me about The Dark Knight",
+      "kind": "exact",
+      "title_contains": "The Dark Knight"
+    },
+    {
+      "query": "Can you find The Dark Knight?",
+      "kind": "exact",
+      "title_contains": "The Dark Knight"
+    },
+    {
+      "query": "The Hobbit",
+      "kind": "exact",
+      "title_contains": "The Hobbit"
+    },
+    {
+      "query": "Find The Hobbit",
+      "kind": "exact",
+      "title_contains": "The Hobbit"
+    },
+    {
+      "query": "Show me The Hobbit",
+      "kind": "exact",
+      "title_contains": "The Hobbit"
+    },
+    {
+      "query": "Tell me about The Hobbit",
+      "kind": "exact",
+      "title_contains": "The Hobbit"
+    },
+    {
+      "query": "Can you find The Hobbit?",
+      "kind": "exact",
+      "title_contains": "The Hobbit"
+    },
+    {
+      "query": "I want to watch Inception",
+      "kind": "exact",
+      "title_contains": "Inception"
+    },
+    {
+      "query": "I would like to read The Hobbit",
+      "kind": "exact",
+      "title_contains": "The Hobbit",
+      "media": "book"
+    },
+    {
+      "query": "Harry Potter",
+      "kind": "partial",
+      "title_contains": "Harry Potter"
+    },
+    {
+      "query": "Harry Potter movies",
+      "kind": "partial",
+      "title_contains": "Harry Potter",
+      "media": "movie"
+    },
+    {
+      "query": "Harry Potter books",
+      "kind": "partial",
+      "title_contains": "Harry Potter",
+      "media": "book"
+    },
+    {
+      "query": "intersteler",
+      "kind": "suggestion",
+      "title_contains": "Interstellar"
+    },
+    {
+      "query": "Incepton",
+      "kind": "suggestion",
+      "title_contains": "Inception"
+    },
+    {
+      "query": "I want to read Atomic Habits",
+      "kind": "exact",
+      "title_contains": "Atomic Habits",
+      "media": "book"
+    },
+    {
+      "query": "Atomic Habits by James Clear",
+      "kind": "exact",
+      "title_contains": "Atomic Habits",
+      "media": "book"
+    },
+    {
+      "query": "1984 by George Orwell",
+      "kind": "exact",
+      "title_contains": "Nineteen Eighty-Four",
+      "media": "book"
+    },
+    {
+      "query": "I want to read 1984",
+      "kind": "exact",
+      "title_contains": "Nineteen Eighty-Four",
+      "media": "book"
+    },
+    {
+      "query": "Harry Potter and the Philosopher's Stone",
+      "kind": "exact",
+      "title_contains": "Harry Potter"
+    },
+    {
+      "query": "Find a movie called Inception (2011)",
+      "kind": "missing"
+    },
+    {
+      "query": "Find a book called Inception",
+      "kind": "missing"
+    },
+    {
+      "query": "Find a movie called Unlisted Zzxw Film",
+      "kind": "missing"
+    },
+    {
+      "query": "Unlisted Zzxw Title",
+      "kind": "missing"
+    },
+    {
+      "query": "I want to read Unlisted Zzxw Novel",
+      "kind": "missing"
+    },
+    {
+      "query": "Recommend books similar to Unlisted Zzxw Reference",
+      "kind": "missing_reference"
+    },
+    {
+      "query": "Recommend books similar to intersteler",
+      "kind": "reference_suggestion"
+    },
+    {
+      "query": "Recommend uplifting movies under two hours",
+      "kind": "discovery"
+    },
+    {
+      "query": "Find a mystery book under 300 pages",
+      "kind": "discovery"
+    },
+    {
+      "query": "Movies about space exploration",
+      "kind": "discovery"
+    },
+    {
+      "query": "Frodo Baggins",
+      "kind": "discovery"
+    },
+    {
+      "query": "Oppenheimer",
+      "kind": "exact",
+      "title_contains": "Oppenheimer",
+      "media": "movie"
+    },
+    {
+      "query": "Find Dune: Part Two",
+      "kind": "exact",
+      "title_contains": "Dune: Part Two",
+      "media": "movie"
+    }
+  ]
+}

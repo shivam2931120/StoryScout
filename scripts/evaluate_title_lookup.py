@@ -32,6 +32,8 @@ def main():
                 # Selection disambiguates mixed book/movie names, without changing identity.
                 if constrained and case['query'] == 'The Time Machine':
                     expected = ['movie_ml_3959', 'movie_ml_5171']
+                if constrained and case['query'] in {'1984','Nineteen Eighty-Four'}:
+                    expected=[x for x in expected if x.startswith('movie_')]
                 prefs_retained = not constrained or all(body['state']['preferences'][k] == v for k, v in state['preferences'].items())
                 suggestion_labeled = not case.get('approximate') or 'Did you mean' in body['reply']
                 passed = set(ids) == set(expected) and not body['results'] and prefs_retained and suggestion_labeled and body['trace']['intent'] == 'title_lookup'

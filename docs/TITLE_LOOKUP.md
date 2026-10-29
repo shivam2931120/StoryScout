@@ -57,3 +57,9 @@ refinement and reset. The React production build succeeded.
 The last unambiguous exact title is retained as reference context for pronouns
 such as “books like it”. An explicit similarity action discards an unrelated
 prior topic while keeping visible filters; New search clears prior criteria.
+
+## Conversational title search revision
+
+Exact title extraction, source aliases, franchise choices, spelling suggestions,
+missing-title handling, and source-backed modern coverage are implemented. See
+[the current policy, executed checks, and limitations](ENTITY_SEARCH.md).
