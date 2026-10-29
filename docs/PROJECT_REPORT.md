@@ -30,11 +30,11 @@ On the currently hosted compact subset (1,000 books and 1,500 movies), quantized
 
 | Method | P@5 | Recall@5 | MRR@5 | Returned precision | Hard compliance | Mean ms |
 |---|---:|---:|---:|---:|---:|---:|
-| tfidf | 0.2297 | 0.6312 | 0.7454 | 0.4689 | 1.0000 | 10.2 |
-| semantic | 0.2445 | 0.6559 | 0.7429 | 0.4405 | 1.0000 | 25.8 |
-| hybrid | 0.2741 | 0.7222 | 0.7917 | 0.4660 | 1.0000 | 19.5 |
+| tfidf | 0.2297 | 0.6312 | 0.7454 | 0.4689 | 1.0000 | 11.4 |
+| semantic | 0.2445 | 0.6559 | 0.7336 | 0.4410 | 1.0000 | 20.0 |
+| hybrid | 0.2703 | 0.7129 | 0.7824 | 0.4747 | 1.0000 | 17.8 |
 
-The prior compact hybrid measured MRR@5 0.7639, P@5 0.2926 and Recall@5 0.7500. The current hybrid improves first-hit rank and precision among returned recommendations, while P@5 and recall decrease because weak matches are withheld and the source catalog changed. This is not an isolated ablation or a universal accuracy guarantee. All query-domain cases are answered by the hybrid; slot fill is 0.7259. Hard compliance measures returned records, with answer coverage reported separately. The complete comparison, source limitations and pipeline defaults are in `NLP_RELEVANCE_UPDATE.md`.
+The prior compact hybrid measured MRR@5 0.7639, P@5 0.2926 and Recall@5 0.7500. The current hybrid improves first-hit rank and precision among returned recommendations, while P@5 and recall decrease because weak matches are withheld and the source catalog changed. This is not an isolated ablation or a universal accuracy guarantee. All query-domain cases are answered by the hybrid; slot fill is 0.7185. Hard compliance measures returned records, with answer coverage reported separately. The complete comparison, source limitations and pipeline defaults are in `NLP_RELEVANCE_UPDATE.md`.
 
 Preference extraction reached 1.000 field exact match over 25 developer-authored conversation examples (33 messages). Some fields have low support, as recorded in the JSON. No human relevance ratings have been submitted. The Evaluation page now exports candidate results for human annotation and separately summarizes uploaded ratings.
 

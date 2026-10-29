@@ -42,7 +42,9 @@ lexical cosine ≥0.045 for books / ≥0.035 for movies, or raw semantic cosine
 ≥0.30 / ≥0.32 respectively. Subsequent score floors are 0.045 / 0.055 and at
 least half the best passing base score. These cutoffs are not probabilities,
 independent calibration results or a universally optimal policy. An exact title
-lookup uses identity matching separately. Source-generated summaries receive a
+lookup uses identity matching separately. Query vectors are encoded one at a time to bound attention memory; a 128-entry
+in-memory cache reuses them across media and follow-up limits, without caching
+conversation state. Source-generated summaries receive a
 0.85 text-quality factor; undescribed metadata records receive 0.65.
 
 When only genres are requested, verified genre matches remain eligible even
@@ -52,9 +54,13 @@ Unknown metadata still cannot satisfy an explicit factual constraint.
 
 ## Executed results
 
-All 107 pytest checks pass. The real HTTP server passed 11 new topic/context/
+All 108 pytest checks pass. The real HTTP server passed 11 new topic/context/
 source-disclosure checks, seven original conversation flows and 42 title cases.
-The React build and four JavaScript topic/chip checks pass. Quantized semantic
+The React build and four JavaScript topic/chip checks pass. The final runtime
+passed these HTTP checks at 0.1 CPU and 512 MiB with external model access
+disabled; measured peak memory was 477,966,336 bytes (about 456 MiB), with
+no out-of-memory kill. Query-vector batching was reduced to bound attention
+workspace and repeated vectors are cached in memory. Quantized semantic
 inference actually ran locally; fallback remains tested separately.
 
 The existing 44-query benchmark uses incomplete developer-authored identities.
@@ -63,15 +69,15 @@ releases with both data and ranking changes; it does not isolate causal effects:
 
 | Hybrid metric | Before | After |
 |---|---:|---:|
-| MRR@5 | 0.7639 | 0.7917 |
-| Precision among returned items | 0.3963 | 0.4660 |
-| Precision@5 (empty slots count) | 0.2926 | 0.2741 |
-| Recall@5 | 0.7500 | 0.7222 |
+| MRR@5 | 0.7639 | 0.7824 |
+| Precision among returned items | 0.3963 | 0.4747 |
+| Precision@5 (empty slots count) | 0.2926 | 0.2703 |
+| Recall@5 | 0.7500 | 0.7129 |
 | Returned-record hard compliance | 1.0000 | 1.0000 |
 
 First-hit ranking and judged precision among returned recommendations improve;
 P@5 and recall decrease. The new hybrid answers every query-domain case but fills
-0.7259 of available slots. Do not call this universal accuracy
+0.7185 of available slots. Do not call this universal accuracy
 improvement. New valid source records may be absent from the relevance labels.
 `answer_rate`, slot fill and the old nonempty-compliant-query metric are retained
 separately; empty answers are not disguised as returned-record violations or as

@@ -37,21 +37,21 @@
     "semantic": {
       "precision_at_5": 0.2445,
       "recall_at_5": 0.6559,
-      "mrr_at_5": 0.7429,
+      "mrr_at_5": 0.7336,
       "hard_constraint_compliance": 1.0,
       "answer_rate": 1,
-      "precision_when_returned": 0.4405,
-      "slot_fill_rate": 0.7408,
+      "precision_when_returned": 0.441,
+      "slot_fill_rate": 0.7333,
       "nonempty_compliant_query_rate": 1.0
     },
     "hybrid": {
-      "precision_at_5": 0.2741,
-      "recall_at_5": 0.7222,
-      "mrr_at_5": 0.7917,
+      "precision_at_5": 0.2703,
+      "recall_at_5": 0.7129,
+      "mrr_at_5": 0.7824,
       "hard_constraint_compliance": 1.0,
       "answer_rate": 1,
-      "precision_when_returned": 0.466,
-      "slot_fill_rate": 0.7259,
+      "precision_when_returned": 0.4747,
+      "slot_fill_rate": 0.7185,
       "nonempty_compliant_query_rate": 1.0
     }
   }

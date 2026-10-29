@@ -41,3 +41,8 @@ The React/FastAPI public deployment is live on Render free tier. Docker and Rend
 - [x] Seven HTTP scenarios under hard 512 MB RAM and 0.1 CPU limits.
 - [x] Render free service created with no paid compute plan.
 - [x] Public readiness, seven HTTP scenarios, preference regression, and desktop/mobile browser checks passed.
+
+Current relevance update: 108 pytest tests, four frontend context checks, seven
+HTTP conversation flows, 11 source/context/relevance checks and 42 title cases
+passed. Updated retrieval and classifier outputs are executed artifacts. See
+[NLP relevance update](NLP_RELEVANCE_UPDATE.md) for measured trade-offs and limits.

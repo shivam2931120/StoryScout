@@ -13,7 +13,7 @@ import os
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from src.config import ARTIFACT_DIR
 from src.data_loader import load_active_catalogs
-from src.retrieval import RetrievalIndex
+from src.retrieval import RetrievalIndex, _query_vector
 from src.cross_media import reference_context
 from src.preferences import parse_preferences, merge_preferences
 from src.schemas import Preferences
@@ -77,6 +77,7 @@ def evaluate_mode(mode: str, catalogs: dict, queries: list[dict]) -> tuple[dict,
     if mode == "semantic" and not semantic_ran:
         return {"status": "not run: sentence embedding model unavailable", "semantic_ran": False, "index_preparation_ms": round(preparation_ms, 2)}, []
 
+    _query_vector.cache_clear()  # Each mode starts with the same query-cache state.
     by_domain: dict[str, list[dict]] = defaultdict(list)
     details = []
     latencies = []
@@ -124,6 +125,7 @@ def evaluate_mode(mode: str, catalogs: dict, queries: list[dict]) -> tuple[dict,
         "status": "measured" if not used_fallback else "measured with TF-IDF fallback; semantic component unavailable",
         "semantic_ran": semantic_ran,
         "retrieval_used": "TF-IDF fallback" if used_fallback else mode,
+        "query_cache_policy":"cleared before each mode; shared across domains within that mode",
         "index_preparation_ms": round(preparation_ms, 2),
         "mean_query_latency_ms_after_indexing": round(statistics.mean(latencies), 3) if latencies else None,
         "by_domain": domain_metrics,
