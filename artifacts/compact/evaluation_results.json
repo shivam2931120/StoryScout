@@ -1,4 +1,11 @@
 {
+  "metric_definitions": {
+    "hard_constraint_compliance": "fraction of returned records satisfying all explicit constraints; null when no records returned",
+    "answer_rate": "fraction of query-domain cases with any result",
+    "precision_when_returned": "mean judged hits / returned count over answered cases only",
+    "precision_at_5": "judged hits / 5, including intentionally unfilled slots",
+    "nonempty_compliant_query_rate": "legacy metric: fraction of query-domain cases both answered and fully compliant"
+  },
   "active_catalog": {
     "book": {
       "records": 1000,
@@ -24,87 +31,123 @@
         "status": "measured",
         "semantic_ran": false,
         "retrieval_used": "tfidf",
-        "index_preparation_ms": 866.0,
-        "mean_query_latency_ms_after_indexing": 11.982,
+        "index_preparation_ms": 850.49,
+        "mean_query_latency_ms_after_indexing": 10.223,
         "by_domain": {
           "book": {
             "queries": 27,
-            "precision_at_5": 0.2963,
-            "recall_at_5": 0.8333,
-            "mrr_at_5": 0.8519,
-            "hard_constraint_compliance": 1.0
+            "precision_at_5": 0.2741,
+            "recall_at_5": 0.7593,
+            "mrr_at_5": 0.8056,
+            "hard_constraint_compliance": 1.0,
+            "answer_rate": 1,
+            "precision_when_returned": 0.5667,
+            "slot_fill_rate": 0.637,
+            "nonempty_compliant_query_rate": 1.0
           },
           "movie": {
             "queries": 27,
-            "precision_at_5": 0.2074,
-            "recall_at_5": 0.5,
-            "mrr_at_5": 0.5704,
-            "hard_constraint_compliance": 1.0
+            "precision_at_5": 0.1852,
+            "recall_at_5": 0.5031,
+            "mrr_at_5": 0.6852,
+            "hard_constraint_compliance": 1.0,
+            "answer_rate": 0.963,
+            "precision_when_returned": 0.3712,
+            "slot_fill_rate": 0.6889,
+            "nonempty_compliant_query_rate": 0.963
           }
         },
         "macro_average_of_book_and_movie_metrics": {
-          "precision_at_5": 0.2519,
-          "recall_at_5": 0.6666,
-          "mrr_at_5": 0.7111,
-          "hard_constraint_compliance": 1.0
+          "precision_at_5": 0.2297,
+          "recall_at_5": 0.6312,
+          "mrr_at_5": 0.7454,
+          "hard_constraint_compliance": 1.0,
+          "answer_rate": 0.9815,
+          "precision_when_returned": 0.4689,
+          "slot_fill_rate": 0.6629,
+          "nonempty_compliant_query_rate": 0.9815
         }
       },
       "semantic": {
         "status": "measured",
         "semantic_ran": true,
         "retrieval_used": "semantic",
-        "index_preparation_ms": 1311.82,
-        "mean_query_latency_ms_after_indexing": 17.356,
+        "index_preparation_ms": 1737.01,
+        "mean_query_latency_ms_after_indexing": 25.804,
         "by_domain": {
           "book": {
             "queries": 27,
-            "precision_at_5": 0.3333,
-            "recall_at_5": 0.9259,
-            "mrr_at_5": 0.9383,
-            "hard_constraint_compliance": 1.0
+            "precision_at_5": 0.2889,
+            "recall_at_5": 0.8148,
+            "mrr_at_5": 0.8457,
+            "hard_constraint_compliance": 1.0,
+            "answer_rate": 1,
+            "precision_when_returned": 0.6056,
+            "slot_fill_rate": 0.6296,
+            "nonempty_compliant_query_rate": 1.0
           },
           "movie": {
             "queries": 27,
-            "precision_at_5": 0.2444,
-            "recall_at_5": 0.5432,
-            "mrr_at_5": 0.5648,
-            "hard_constraint_compliance": 1.0
+            "precision_at_5": 0.2,
+            "recall_at_5": 0.4969,
+            "mrr_at_5": 0.6401,
+            "hard_constraint_compliance": 1.0,
+            "answer_rate": 1,
+            "precision_when_returned": 0.2753,
+            "slot_fill_rate": 0.8519,
+            "nonempty_compliant_query_rate": 1.0
           }
         },
         "macro_average_of_book_and_movie_metrics": {
-          "precision_at_5": 0.2888,
-          "recall_at_5": 0.7346,
-          "mrr_at_5": 0.7515,
-          "hard_constraint_compliance": 1.0
+          "precision_at_5": 0.2445,
+          "recall_at_5": 0.6559,
+          "mrr_at_5": 0.7429,
+          "hard_constraint_compliance": 1.0,
+          "answer_rate": 1,
+          "precision_when_returned": 0.4405,
+          "slot_fill_rate": 0.7408,
+          "nonempty_compliant_query_rate": 1.0
         }
       },
       "hybrid": {
         "status": "measured",
         "semantic_ran": true,
         "retrieval_used": "hybrid",
-        "index_preparation_ms": 1225.69,
-        "mean_query_latency_ms_after_indexing": 17.716,
+        "index_preparation_ms": 1217.63,
+        "mean_query_latency_ms_after_indexing": 19.476,
         "by_domain": {
           "book": {
             "queries": 27,
-            "precision_at_5": 0.3333,
-            "recall_at_5": 0.9259,
-            "mrr_at_5": 0.9259,
-            "hard_constraint_compliance": 1.0
+            "precision_at_5": 0.3111,
+            "recall_at_5": 0.8642,
+            "mrr_at_5": 0.8457,
+            "hard_constraint_compliance": 1.0,
+            "answer_rate": 1,
+            "precision_when_returned": 0.6062,
+            "slot_fill_rate": 0.637,
+            "nonempty_compliant_query_rate": 1.0
           },
           "movie": {
             "queries": 27,
-            "precision_at_5": 0.2519,
-            "recall_at_5": 0.5741,
-            "mrr_at_5": 0.6019,
-            "hard_constraint_compliance": 1.0
+            "precision_at_5": 0.237,
+            "recall_at_5": 0.5802,
+            "mrr_at_5": 0.7377,
+            "hard_constraint_compliance": 1.0,
+            "answer_rate": 1,
+            "precision_when_returned": 0.3259,
+            "slot_fill_rate": 0.8148,
+            "nonempty_compliant_query_rate": 1.0
           }
         },
         "macro_average_of_book_and_movie_metrics": {
-          "precision_at_5": 0.2926,
-          "recall_at_5": 0.75,
-          "mrr_at_5": 0.7639,
-          "hard_constraint_compliance": 1.0
+          "precision_at_5": 0.2741,
+          "recall_at_5": 0.7222,
+          "mrr_at_5": 0.7917,
+          "hard_constraint_compliance": 1.0,
+          "answer_rate": 1,
+          "precision_when_returned": 0.466,
+          "slot_fill_rate": 0.7259,
+          "nonempty_compliant_query_rate": 1.0
         }
       }
     }

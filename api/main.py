@@ -51,6 +51,8 @@ def item_payload(item):
     if metadata_only and not item.description_provenance:
         payload["description"] = None
     payload["description_status"] = ('sourced_excerpt' if item.retrieval_text and not item.description_provenance.startswith('AI') else 'sourced_ai') if item.description_provenance else ("unavailable" if metadata_only else "original_demo")
+    if 'source-generated' in item.description_provenance.lower():
+        payload['description_status'] = 'source_generated'
     return payload
 
 
@@ -107,7 +109,7 @@ def create_app(engine: StoryScoutEngine | None = None) -> FastAPI:
                 "catalog_profile":os.getenv('STORYSCOUT_CATALOG_PROFILE','full'),"embedding_backend":os.getenv('STORYSCOUT_EMBEDDING_BACKEND','torch'),
                 "genres": GENRES, "moods": MOODS, "modes": modes(current), "model": MODEL_NAME,
                 "coverage":{domain:{'plot_text':sum(bool(x.retrieval_text) for x in items),'descriptions':sum(bool(x.retrieval_text or x.description_provenance or x.source=='demo') for x in items),
-                    'known_runtime':sum(x.runtime_minutes is not None for x in items),'known_pages':sum(x.page_count is not None for x in items),'source_languages':sum(x.language.lower()!='unknown' for x in items),
+                    'source_generated_summaries':sum('source-generated' in x.description_provenance.lower() for x in items),'known_runtime':sum(x.runtime_minutes is not None for x in items),'known_pages':sum(x.page_count is not None for x in items),'source_languages':sum(x.language.lower()!='unknown' for x in items),
                     'subject_genre_mappings':sum(bool(x.subject_genres) for x in items)} for domain,items in current.catalogs.items()},
                 "nlp_profiles":"Corpus TF-IDF keyphrases, chunk-pooled MiniLM vectors, semantic mood/theme prototypes, locally trained plot genre classifier, MMR selection",
                 "optional_interpreter": current.query_interpreter is not None,
@@ -118,6 +120,7 @@ def create_app(engine: StoryScoutEngine | None = None) -> FastAPI:
             raise HTTPException(422, "Write a title, topic, or request first.")
         current = ready_engine()
         state = request.state.to_domain()
+        before_preferences = asdict(state.preferences)
         prior_seen=list(state.seen_recommendations)
         state.messages = state.messages[-60:]
         state.retrieval_mode = current.retrieval_mode
@@ -141,22 +144,24 @@ def create_app(engine: StoryScoutEngine | None = None) -> FastAPI:
             current.last_title_matches=[]
             current.last_title_lookup=False
             if parse:
-                reply, results = current.handle(request.message, state, reference_id=request.reference_id, lookup_id=request.lookup_id)
+                reply, results = current.handle(request.message, state, reference_id=request.reference_id, lookup_id=request.lookup_id, search_action=request.search_action)
             elif pref.contradiction_messages:
                 reply, results = "Please resolve these preferences: " + " ".join(pref.contradiction_messages), {}
             else:
                 reference = current.get_item(state.selected_reference_id)
-                results = current.recommend(request.message, state, reference)
+                results = current.recommend(state.last_content_query, state, reference)
                 reply = "Your preferences are applied. Here are the matching stories." if any(results.values()) else current.empty_message(state)
             title_matches = [{"item": item_payload(item), "explanation": explanation, "match_type": "title_lookup"} for item, explanation in current.last_title_matches]
             title_lookup = current.last_title_lookup
+            context_action = current.last_context_action if parse else "refine"
             diagnostics={k:dict(v) for k,v in current.last_diagnostics.items()}
         results = {domain: group[:request.per_domain] for domain, group in results.items()}
         state.last_recommendations = [rec.item.id for group in results.values() for rec in group]
-        state.seen_recommendations=[] if parse and parse_preferences(request.message).intent=='reset' else list(dict.fromkeys(prior_seen+state.last_recommendations))[-300:]
+        state.seen_recommendations=[] if parse and parse_preferences(request.message).intent=='reset' else list(dict.fromkeys(([] if context_action == 'new' else prior_seen)+state.last_recommendations))[-300:]
         state.messages = state.messages[-60:]
         parsed = parse_preferences(request.message)
-        trace = {"intent": "title_lookup" if title_lookup else (parsed.intent if parse else "preference_edit"), "method": "rule baseline" + (" + optional NVIDIA interpretation" if current.query_interpreter else ""),
+        retained_fields = [key for key, value in asdict(state.preferences).items() if value and key != 'contradiction_messages' and before_preferences.get(key) == value and context_action != 'new']
+        trace = {"context_action":context_action, "retained_preferences":retained_fields, "intent": "title_lookup" if title_lookup else (parsed.intent if parse else "preference_edit"), "method": "rule baseline" + (" + optional NVIDIA interpretation" if current.query_interpreter else ""),
                  "extracted_fields": sorted(parsed.explicit_fields) if parse and not title_lookup else [], "active_modes": modes(current),
                  "retrieval":diagnostics,"content_query":state.last_content_query,
                  "latency_ms": round((time.perf_counter() - start) * 1000, 1)}
@@ -180,7 +185,7 @@ def create_app(engine: StoryScoutEngine | None = None) -> FastAPI:
         path = directory / "evaluation_results.json"
         preference_path=directory/'preference_v2_results.json' if directory.name=='compact' else ROOT/'artifacts/search_tuning/preference_v2_results.json'
         return {"results": json.loads(path.read_text()) if path.exists() else None,
-                "summary": (ROOT / "artifacts/evaluation_summary.md").read_text() if (ROOT / "artifacts/evaluation_summary.md").exists() else "Not evaluated yet.",
+                "summary": (directory / "evaluation_summary.md").read_text() if (directory / "evaluation_summary.md").exists() else "Not evaluated yet.",
                 "genre_classifier": json.loads((ROOT / "artifacts/genre_classifier_results.json").read_text()) if (ROOT / "artifacts/genre_classifier_results.json").exists() else None,
                 "genre_text_classifier": json.loads((ROOT/'artifacts/genre_text_results.json').read_text()) if (ROOT/'artifacts/genre_text_results.json').exists() else None,
                 "preference_search": json.loads(preference_path.read_text()) if preference_path.exists() else None,

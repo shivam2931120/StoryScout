@@ -8,7 +8,7 @@ export function PipelinePage({ meta }) {
     [
       "01",
       "Understand the request",
-      "Rules identify recommendations, refinements, explanations, resets, and references to existing titles.",
+      "Title identity is resolved first. Rules then identify recommendations, refinements, explanations, resets, and reference titles. New search explicitly clears prior criteria while keeping the chat history.",
     ],
     [
       "02",
@@ -23,12 +23,12 @@ export function PipelinePage({ meta }) {
     [
       "04",
       "Compare language and meaning",
-      "Corpus TF-IDF learns keyphrases from local text. MiniLM encodes beginning, middle, and end chunks of full plot text into a shared book/movie space. A local supervised classifier learns genres from plot descriptions.",
+      "Separate topic and preference queries prevent mood words from replacing your subject. Corpus TF-IDF learns keyphrases from local text, with a separate title/entity field. MiniLM encodes beginning, middle, and end chunks of full plot text into a shared book/movie space. A local supervised classifier learns genres from plot descriptions.",
     ],
     [
       "05",
       "Rank and explain",
-      "Lexical/semantic similarity is reranked with active genre, mood, theme, and learned text-genre signals. Maximal marginal relevance reduces redundant narratives. Different picks excludes already shown IDs while preserving every hard filter.",
+      "A minimum topic match is required before bounded genre, mood, theme and learned genre boosts. A quality cutoff allows fewer results instead of filling slots with weak matches. Maximal marginal relevance reduces redundant narratives. Different picks excludes already shown IDs while preserving every hard filter.",
     ],
   ];
   return (
@@ -128,12 +128,15 @@ export function EvaluationPage() {
               <span>Labeled messages</span>
             </div>
           </div>
+          <p>Precision@5 counts all five slots, including deliberately unfilled ones. Precision among returned items and answer rate are reported separately. Missing judgments can undercount relevant new catalog records.</p>
           <div className="table-scroll">
             <table>
               <thead>
                 <tr>
                   <th>Method</th>
                   <th>Precision@5</th>
+                  <th>Precision among returned</th>
+                  <th>Answer rate</th>
                   <th>Recall@5</th>
                   <th>MRR@5</th>
                   <th>Constraint compliance</th>
@@ -148,6 +151,8 @@ export function EvaluationPage() {
                       {m ? (
                         [
                           "precision_at_5",
+                          "precision_when_returned",
+                          "answer_rate",
                           "recall_at_5",
                           "mrr_at_5",
                           "hard_constraint_compliance",
@@ -155,7 +160,7 @@ export function EvaluationPage() {
                           <td key={field}>{m[field]?.toFixed(3)}</td>
                         ))
                       ) : (
-                        <td colSpan="4">Not measured</td>
+                        <td colSpan="6">Not measured</td>
                       )}
                     </tr>
                   );

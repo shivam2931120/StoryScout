@@ -30,6 +30,7 @@ import { PipelinePage, EvaluationPage } from "./InformationPages.jsx";
 import {
   request,
   emptyPreferences,
+  removeTopicTerm,
   emptyState,
   newConversation,
   label,
@@ -97,6 +98,7 @@ export default function App() {
   const [startup, setStartup] = useState("Connecting to the story collection…");
   const [busy, setBusy] = useState(false);
   const [input, setInput] = useState("");
+  const [searchAction, setSearchAction] = useState("auto");
   const [error, setError] = useState("");
   const [details, setDetails] = useState(null);
   const [preferencesOpen, setPreferencesOpen] = useState(false);
@@ -268,6 +270,7 @@ export default function App() {
           state: nextState,
           reference_id: overrides.referenceId || null,
           lookup_id: overrides.lookupId || null,
+          search_action: overrides.action || searchAction,
           per_domain: 3,
         },
       );
@@ -282,6 +285,7 @@ export default function App() {
         trace: result.trace,
         time: Date.now(),
       };
+      setSearchAction("auto");
       updateConversation(id, {
         title: current.turns.length ? current.title : text.slice(0, 65),
         turns: [...current.turns, turn].slice(-20),
@@ -321,12 +325,17 @@ export default function App() {
     send(`Find ${media} with themes similar to ${item.title}.`, {
       state,
       referenceId: item.id,
+      action: "similar",
     });
   }
   function removeChip(chip) {
     if (busy) return;
     const state = structuredClone(current.state);
-    if (chip.field === "media") state.media_selection = "both";
+    if (chip.field === "reference") {
+      state.selected_reference_id = null;
+      state.preferences.referenced_title = null;
+      state.last_content_query = "";
+    } else if (chip.field === "media") state.media_selection = "both";
     else if (chip.field === "years") {
       state.preferences.min_year = null;
       state.preferences.max_year = null;
@@ -335,6 +344,9 @@ export default function App() {
         (x) => x !== chip.value,
       );
     else state.preferences[chip.field] = null;
+    if (chip.field === "themes" && chip.value) {
+      state.last_content_query = removeTopicTerm(state.last_content_query, chip.value);
+    }
     applyPreferences(state);
   }
   const chips = preferenceChips(current.state);
@@ -712,6 +724,7 @@ export default function App() {
                             <span>{turn.trace.retrieval?.[domain]?.eligible_count?.toLocaleString() ?? '—'} eligible · diversified by NLP</span>
                           </div>
                           {recs.length ? (
+                            <div>
                             <div className="recommendation-grid">
                               {recs.map((rec) => (
                                 <StoryCard
@@ -723,11 +736,11 @@ export default function App() {
                                 />
                               ))}
                             </div>
+                            {recs.length < 3 && turn.trace.retrieval?.[domain]?.quality_rejections > 0 && <p className="quality-note">{recs.length} strong {recs.length === 1 ? "match" : "matches"}. Weaker matches were left out.</p>}
+                            </div>
                           ) : (
                             <div className="empty-domain">
-                              No verified{" "}
-                              {domain === "book" ? "books" : "movies"} match
-                              these filters. Choose a preference to change.
+                              {turn.trace.retrieval?.[domain]?.eligible_count > 0 ? "Titles pass your filters, but none match the topic strongly enough. Try another topic or reference." : "No verified titles satisfy these filters. Choose a preference to change."}
                             </div>
                           )}
                         </section>
@@ -742,6 +755,7 @@ export default function App() {
                         </p>
                           {turn.trace.content_query && <p>Retained topic: {turn.trace.content_query}</p>}
                           {Object.entries(turn.trace.retrieval || {}).map(([domain,info])=><p key={domain}>{label(domain)}: {info.catalog_size.toLocaleString()} catalog entries → {info.eligible_count.toLocaleString()} eligible after hard filters; {info.plot_text_candidates.toLocaleString()} with full plot text. {info.diversification}. {Object.entries(info.filter_rejections).map(([reason,count])=>`${reason}: ${count.toLocaleString()}`).join(' · ')}</p>)}
+                        <p>Context: {turn.trace.context_action || "auto"}. Retained preferences: {turn.trace.retained_preferences?.join(", ") || "none"}.</p>
                         <p>
                           Extracted fields:{" "}
                           {turn.trace.extracted_fields.join(", ") ||
@@ -767,6 +781,13 @@ export default function App() {
               )}
               {hasTurns && (
                 <div className="conversation-dock">
+                  <div className="search-context-controls">
+                    <div role="group" aria-label="Search context">
+                      <button type="button" disabled={busy} aria-pressed={searchAction !== "new"} onClick={() => setSearchAction("refine")}>Follow-up</button>
+                      <button type="button" disabled={busy} aria-pressed={searchAction === "new"} onClick={() => setSearchAction("new")}>New search</button>
+                    </div>
+                    {searchAction === "new" ? <span>Clears filters and topic; keeps this chat.</span> : current.state.last_content_query ? <span className="retained-topic">Topic: {current.state.last_content_query}<button type="button" aria-label="Clear search topic" disabled={busy} onClick={() => applyPreferences({...current.state, last_content_query:"", selected_reference_id:null, preferences:{...current.state.preferences, referenced_title:null}})}><X size={12}/></button></span> : <span>Visible preferences stay active.</span>}
+                  </div>
                   <div className="active-preferences">
                     <SlidersHorizontal size={12} />
                     {chips.map((chip, i) => (

@@ -37,7 +37,7 @@ Acquisition was attempted for this revision, but the main Wikidata endpoint retu
 The active catalog still has **10,005 books and 9,744 movies**. New sources
 supplement existing IDs, without inventing records:
 
-- **6,023 movie plots**, joined by exact normalized title and year, excluding
+- **6,382 movie plots**, joined by exact normalized title and year, excluding
   ambiguous source-page matches. `data/enriched/movie_plots.csv.gz` stores up to
   18,000 characters of original plot text plus a short extractive opening excerpt.
   Only the excerpt is sent to the browser. Full text is indexed locally.
@@ -81,7 +81,7 @@ apply to the combined catalog.
 
 `data/compact/catalogs.json.gz` is a deterministic subset of the same sourced
 records: 1,000 books and 1,500 movies, including all 1,322 known movie runtimes,
-1,451 movie plots and all demo/reference titles. No metadata is generated to
+1,455 movie plots and all demo/reference titles. No metadata is generated to
 fill gaps. `scripts/prepare_compact_catalog.py` prioritizes demo titles, known
 movie runtimes and source plots; books prioritize descriptions and documented
 subject mappings, with stable SHA-256 tie breaking. The manifest records counts
@@ -91,3 +91,13 @@ expanded catalogs. Both full source datasets and reproducible scripts remain
 in the repository. The model is the official Apache-2.0 quantized ONNX export
 of all-MiniLM-L6-v2 at revision `1110a243fdf4706b3f48f1d95db1a4f5529b4d41`;
 weights and model checksums stay in the ignored artifact cache/container image.
+
+## Source-generated Gutenberg summaries
+
+`book_summaries.csv.gz` stores 47 source-provided summaries from Gutendex, joined
+by exact Gutenberg ebook ID and normalized title. English and copyright=false
+are required. The source labels summaries as automatically generated; StoryScout
+displays that provenance and does not treat prose as verified length/year/genre
+metadata. URLs point to the source ebook and API record. Request timeouts limited
+acquisition to 12 cached catalog pages. See `book_summaries_manifest.json` and
+[the current relevance report](NLP_RELEVANCE_UPDATE.md) for reproduction/limitations.

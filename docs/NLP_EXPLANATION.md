@@ -58,3 +58,13 @@ filters, mood/theme signals, classifier predictions and MMR remain local Python.
 The compact source subset contains 1,000 books and 1,500 movies. Its model cache
 keys include the ONNX backend to prevent mixing quantized and original vectors.
 The full local profile continues to use Sentence Transformers when configured.
+
+## Topic relevance and context controls
+
+The current pipeline keeps topic text separate from mood/genre expansions. It
+requires a topic match before multiplying by small preference bonuses, then
+removes weak candidates before selecting diverse results. These are transparent
+rules, not trained confidence scores. New search clears old criteria; follow-ups
+retain a removable topic and visible filters. Source-provided automatic summaries
+are labeled and never populate factual metadata. See [the executed comparison
+and further NLP experiments](NLP_RELEVANCE_UPDATE.md).

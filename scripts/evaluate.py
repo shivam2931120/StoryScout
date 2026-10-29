@@ -61,7 +61,11 @@ def aggregate_rows(rows: list[dict]) -> dict:
         "precision_at_5": round(statistics.mean(row["precision_at_5"] for row in rows), 4),
         "recall_at_5": round(statistics.mean(row["recall_at_5"] for row in rows), 4),
         "mrr_at_5": round(statistics.mean(row["mrr_at_5"] for row in rows), 4),
-        "hard_constraint_compliance": round(statistics.mean(row["hard_constraint_compliance"] for row in rows), 4),
+        "hard_constraint_compliance": round(1-sum(row['constraint_violations'] for row in rows)/sum(row['returned_count'] for row in rows),4) if sum(row['returned_count'] for row in rows) else None,
+        "answer_rate": round(statistics.mean(bool(row['returned_count']) for row in rows),4),
+        "precision_when_returned": round(statistics.mean(row['hits']/row['returned_count'] for row in rows if row['returned_count']),4) if any(row['returned_count'] for row in rows) else None,
+        "slot_fill_rate": round(sum(row['returned_count'] for row in rows)/(5*len(rows)),4),
+        "nonempty_compliant_query_rate": round(statistics.mean(row['nonempty_compliant_query_rate'] for row in rows),4),
     }
 
 
@@ -100,7 +104,10 @@ def evaluate_mode(mode: str, catalogs: dict, queries: list[dict]) -> tuple[dict,
                 "precision_at_5": hits / 5,
                 "recall_at_5": hits / len(relevant) if relevant else 0.0,
                 "mrr_at_5": next((1 / rank for rank, item_id in enumerate(returned_ids, 1) if item_id in relevant), 0.0),
-                "hard_constraint_compliance": float(bool(returned) and all(compliant(rec.item, row.get("constraints", {})) for rec in returned)),
+                "hard_constraint_compliance": float(all(compliant(rec.item, row.get("constraints", {})) for rec in returned)) if returned else None,
+                "returned_count": len(returned), "hits": hits,
+                "constraint_violations":sum(not compliant(rec.item,row.get('constraints',{})) for rec in returned),
+                "nonempty_compliant_query_rate":float(bool(returned) and all(compliant(rec.item, row.get('constraints', {})) for rec in returned)),
             }
             by_domain[domain].append(row_metrics)
             details.append({
@@ -110,8 +117,8 @@ def evaluate_mode(mode: str, catalogs: dict, queries: list[dict]) -> tuple[dict,
             })
     domain_metrics = {domain: aggregate_rows(by_domain[domain]) for domain in ("book", "movie")}
     active = [metrics for metrics in domain_metrics.values() if metrics["queries"]]
-    metric_keys = ("precision_at_5", "recall_at_5", "mrr_at_5", "hard_constraint_compliance")
-    macro = {key: round(statistics.mean(metrics[key] for metrics in active), 4) for key in metric_keys} if active else {}
+    metric_keys = ("precision_at_5", "recall_at_5", "mrr_at_5", "hard_constraint_compliance", "answer_rate", "precision_when_returned", "slot_fill_rate", "nonempty_compliant_query_rate")
+    macro = {key: round(statistics.mean(metrics[key] for metrics in active if metrics[key] is not None), 4) if any(metrics[key] is not None for metrics in active) else None for key in metric_keys} if active else {}
     used_fallback = mode == "hybrid" and not semantic_ran
     return {
         "status": "measured" if not used_fallback else "measured with TF-IDF fallback; semantic component unavailable",
@@ -165,6 +172,7 @@ def main() -> None:
     catalogs = load_active_catalogs()
 
     results = {
+        "metric_definitions":{"hard_constraint_compliance":"fraction of returned records satisfying all explicit constraints; null when no records returned", "answer_rate":"fraction of query-domain cases with any result", "precision_when_returned":"mean judged hits / returned count over answered cases only", "precision_at_5":"judged hits / 5, including intentionally unfilled slots", "nonempty_compliant_query_rate":"legacy metric: fraction of query-domain cases both answered and fully compliant"},
         "active_catalog": {domain: {"records": len(items), "source_counts": {source: sum(item.source == source for item in items) for source in sorted({item.source for item in items})}} for domain, items in catalogs.items()},
         "retrieval_benchmark": {"query_count": len(queries), "judgment_method": "Developer-authored relevance IDs grounded in catalog metadata; no independent human evaluation.", "mixed_media_aggregation": "Book and movie metrics are calculated independently for each mixed query, then domain-level means are macro-averaged.", "models": {}},
         "preference_extraction": evaluate_preferences(preference_examples),

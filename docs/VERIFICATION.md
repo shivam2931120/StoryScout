@@ -1,5 +1,6 @@
 # Full-catalog verification snapshot — 2026-10-28
 
+Historical baseline snapshot. Current ranking/data/results: [NLP relevance update](NLP_RELEVANCE_UPDATE.md).
 For the current free-tier image and deployment, see [FREE_HOSTING.md](FREE_HOSTING.md). The following records the earlier full-catalog revision.
 
 - `python -m pytest -q`: **71 passed**. Tests cover source constraints, state,

@@ -1,0 +1,80 @@
+{
+  "executed_at": "2026-10-29T04:28:23.897975+00:00",
+  "base_url": "http://127.0.0.1:8000",
+  "method": "Developer-authored HTTP behavior checks; not independent human relevance evaluation",
+  "checks": [
+    {
+      "scenario": "Topic matching precedes mood bonuses",
+      "passed": true
+    },
+    {
+      "scenario": "Mood prototype excluded from topic query",
+      "passed": true
+    },
+    {
+      "scenario": "Follow-up retains topic and enforces runtime",
+      "passed": true
+    },
+    {
+      "scenario": "New search clears prior criteria and topic",
+      "passed": true
+    },
+    {
+      "scenario": "Return fewer matches rather than fill slots",
+      "passed": true
+    },
+    {
+      "scenario": "No matches for an unsupported topic",
+      "passed": true
+    },
+    {
+      "scenario": "Exact title lookup survives relevance changes",
+      "passed": true
+    },
+    {
+      "scenario": "Recovered film plot appears in title details",
+      "passed": true
+    },
+    {
+      "scenario": "Explicit language adjective is a filter",
+      "passed": true
+    },
+    {
+      "scenario": "Book synopsis coverage increased",
+      "passed": true
+    },
+    {
+      "scenario": "Source-generated summaries disclosed independently of factual metadata",
+      "passed": true
+    }
+  ],
+  "passed": 11,
+  "meta": {
+    "counts": {
+      "book": 1000,
+      "movie": 1500
+    },
+    "coverage": {
+      "book": {
+        "plot_text": 46,
+        "descriptions": 66,
+        "known_runtime": 0,
+        "known_pages": 12,
+        "source_languages": 1000,
+        "subject_genre_mappings": 955
+      },
+      "movie": {
+        "plot_text": 1455,
+        "descriptions": 1464,
+        "known_runtime": 1322,
+        "known_pages": 0,
+        "source_languages": 1302,
+        "subject_genre_mappings": 0
+      }
+    },
+    "modes": {
+      "book": "hybrid (TF-IDF + sentence embeddings)",
+      "movie": "hybrid (TF-IDF + sentence embeddings)"
+    }
+  }
+}

@@ -1,0 +1,222 @@
+{
+  "executed_at": "2026-10-29T04:17:57.970681+00:00",
+  "requested_pages": 64,
+  "catalog_book_records": 10000,
+  "stored_summaries": 47,
+  "cache_only": true,
+  "cached_pages": 12,
+  "failed_batches": [
+    {
+      "page": 12,
+      "error": "NotCached"
+    },
+    {
+      "page": 13,
+      "error": "NotCached"
+    },
+    {
+      "page": 14,
+      "error": "NotCached"
+    },
+    {
+      "page": 15,
+      "error": "NotCached"
+    },
+    {
+      "page": 16,
+      "error": "NotCached"
+    },
+    {
+      "page": 17,
+      "error": "NotCached"
+    },
+    {
+      "page": 18,
+      "error": "NotCached"
+    },
+    {
+      "page": 19,
+      "error": "NotCached"
+    },
+    {
+      "page": 20,
+      "error": "NotCached"
+    },
+    {
+      "page": 21,
+      "error": "NotCached"
+    },
+    {
+      "page": 22,
+      "error": "NotCached"
+    },
+    {
+      "page": 23,
+      "error": "NotCached"
+    },
+    {
+      "page": 25,
+      "error": "NotCached"
+    },
+    {
+      "page": 26,
+      "error": "NotCached"
+    },
+    {
+      "page": 27,
+      "error": "NotCached"
+    },
+    {
+      "page": 28,
+      "error": "NotCached"
+    },
+    {
+      "page": 29,
+      "error": "NotCached"
+    },
+    {
+      "page": 30,
+      "error": "NotCached"
+    },
+    {
+      "page": 31,
+      "error": "NotCached"
+    },
+    {
+      "page": 32,
+      "error": "NotCached"
+    },
+    {
+      "page": 33,
+      "error": "NotCached"
+    },
+    {
+      "page": 34,
+      "error": "NotCached"
+    },
+    {
+      "page": 35,
+      "error": "NotCached"
+    },
+    {
+      "page": 36,
+      "error": "NotCached"
+    },
+    {
+      "page": 37,
+      "error": "NotCached"
+    },
+    {
+      "page": 38,
+      "error": "NotCached"
+    },
+    {
+      "page": 39,
+      "error": "NotCached"
+    },
+    {
+      "page": 40,
+      "error": "NotCached"
+    },
+    {
+      "page": 41,
+      "error": "NotCached"
+    },
+    {
+      "page": 42,
+      "error": "NotCached"
+    },
+    {
+      "page": 44,
+      "error": "NotCached"
+    },
+    {
+      "page": 45,
+      "error": "NotCached"
+    },
+    {
+      "page": 46,
+      "error": "NotCached"
+    },
+    {
+      "page": 43,
+      "error": "NotCached"
+    },
+    {
+      "page": 48,
+      "error": "NotCached"
+    },
+    {
+      "page": 47,
+      "error": "NotCached"
+    },
+    {
+      "page": 50,
+      "error": "NotCached"
+    },
+    {
+      "page": 51,
+      "error": "NotCached"
+    },
+    {
+      "page": 52,
+      "error": "NotCached"
+    },
+    {
+      "page": 53,
+      "error": "NotCached"
+    },
+    {
+      "page": 54,
+      "error": "NotCached"
+    },
+    {
+      "page": 55,
+      "error": "NotCached"
+    },
+    {
+      "page": 56,
+      "error": "NotCached"
+    },
+    {
+      "page": 57,
+      "error": "NotCached"
+    },
+    {
+      "page": 58,
+      "error": "NotCached"
+    },
+    {
+      "page": 49,
+      "error": "NotCached"
+    },
+    {
+      "page": 60,
+      "error": "NotCached"
+    },
+    {
+      "page": 59,
+      "error": "NotCached"
+    },
+    {
+      "page": 61,
+      "error": "NotCached"
+    },
+    {
+      "page": 63,
+      "error": "NotCached"
+    },
+    {
+      "page": 62,
+      "error": "NotCached"
+    },
+    {
+      "page": 64,
+      "error": "NotCached"
+    }
+  ],
+  "identity_join": "exact Gutenberg ebook ID and normalized source title; English and copyright=false",
+  "generation": "Source-provided automatic summaries, not independent plot verification or StoryScout generation",
+  "source": "https://gutendex.com/",
+  "runtime_network_calls": false
+}

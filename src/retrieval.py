@@ -10,8 +10,9 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from .config import ARTIFACT_DIR, MODEL_NAME, MODEL_CONFIG_VERSION
 from .preprocessing import build_query_text
+from .relevance import topic_gate, quality_gate, preference_boost, POLICIES
 from .schemas import CatalogItem, Preferences, Recommendation
-from .query_understanding import MOOD_PROTOTYPES, THEME_PROTOTYPES, meaningful_query, content_chunks
+from .query_understanding import MOOD_PROTOTYPES, THEME_PROTOTYPES, meaningful_query, content_chunks, build_search_query
 
 @lru_cache(maxsize=1)
 def _sentence_model():
@@ -77,6 +78,9 @@ class RetrievalIndex:
             with lexical_file.open("wb") as cache:
                 pickle.dump((self.vectorizer, self.matrix), cache, protocol=pickle.HIGHEST_PROTOCOL)
         self.feature_names=self.vectorizer.get_feature_names_out()
+        # Reuse the corpus vocabulary; title/entity matching is a separate small
+        # sparse field, so names are not drowned out by long plot descriptions.
+        self.title_matrix = self.vectorizer.transform([' '.join([item.title, *item.search_aliases]) for item in self.items])
         if self.mode in {"semantic", "hybrid"}:
             try:
                 self.model = _sentence_model()
@@ -166,7 +170,7 @@ class RetrievalIndex:
         if "graphic violence" in pref.negative_content and "graphic violence" in item.verified_warnings: notes.append("verified graphic violence")
         return not notes, notes
 
-    def search(self, query: str, pref: Preferences, top_k: int = 5, exclude_ids: set[str] | None = None, seen_ids: set[str] | None = None) -> list[Recommendation]:
+    def search(self, query: str, pref: Preferences, top_k: int = 5, exclude_ids: set[str] | None = None, seen_ids: set[str] | None = None, topic_query: str | None = None) -> list[Recommendation]:
         exclude_ids = exclude_ids or set()
         eligible, eligible_indices, notes = [], [], {}
         rejected = Counter()
@@ -182,21 +186,39 @@ class RetrievalIndex:
             'selected_genre_policy':'match any selected source genre or documented source-subject mapping (OR)','diversification':'maximal marginal relevance, lambda=0.84',
             'ranking':'text similarity + active genre/mood/theme alignment + bounded novelty penalty'}
         if not eligible: return []
+        original_query = query
+        topic = build_search_query(original_query, pref)[1] if topic_query is None else topic_query
         query = meaningful_query(query)
         attributes = bool(pref.preferred_genres or pref.desired_mood or pref.themes)
-        filter_only = not query and not attributes
+        filter_only = not topic.strip() and not attributes
         qvector = self.vectorizer.transform([build_query_text(query)])
         lexical = cosine_similarity(self.matrix[eligible_indices], qvector).ravel() if query else np.zeros(len(eligible))
-        semantic = None
-        if self.semantic_available and query:
-            qemb = self.model.encode([build_query_text(query)], normalize_embeddings=True, show_progress_bar=False)
-            semantic = cosine_similarity(qemb, self.embeddings[eligible_indices]).ravel()
-        if semantic is not None and self.mode == "semantic": scores = calibrate_semantic_scores(semantic)
-        elif semantic is not None and self.mode == "hybrid": scores = combine_hybrid_scores(lexical, semantic)
-        else: scores = lexical
-        text_scores=scores.copy()
+        topic_vector = self.vectorizer.transform([build_query_text(topic)])
+        topic_lexical = cosine_similarity(self.matrix[eligible_indices], topic_vector).ravel() if topic.strip() else np.zeros(len(eligible))
+        entity_lexical = cosine_similarity(self.title_matrix[eligible_indices], topic_vector).ravel() if topic.strip() else np.zeros(len(eligible))
+        topic_lexical = np.maximum(topic_lexical, .30*entity_lexical)
+        semantic = topic_semantic = None
+        if self.semantic_available and query and not filter_only:
+            texts = [build_query_text(query)] + ([build_query_text(topic)] if topic.strip() else [])
+            encoded = self.model.encode(texts, normalize_embeddings=True, show_progress_bar=False)
+            semantic = cosine_similarity(encoded[:1], self.embeddings[eligible_indices]).ravel()
+            if topic.strip():
+                topic_semantic = cosine_similarity(encoded[1:2], self.embeddings[eligible_indices]).ravel()
+        def text_similarity(lexical_values, semantic_values):
+            if semantic_values is not None and self.mode == "semantic":
+                return calibrate_semantic_scores(semantic_values)
+            if semantic_values is not None and self.mode == "hybrid":
+                return combine_hybrid_scores(lexical_values, semantic_values)
+            return lexical_values
+        general_scores = text_similarity(lexical, semantic)
+        topic_scores = text_similarity(topic_lexical, topic_semantic) if topic.strip() else general_scores
+        scores = .80*topic_scores + .20*general_scores if topic.strip() else general_scores
+        text_scores = scores.copy()
         rich_text=np.array([bool(x.retrieval_text or x.description_provenance or x.source=='demo') for x in eligible])
-        scores=scores*np.where(rich_text,1.0,.65)
+        source_generated=np.array(['source-generated' in x.description_provenance.lower() for x in eligible])
+        scores=scores*np.where(rich_text,np.where(source_generated,.85,1.0),.65)
+        domain = self.items[0].media_type
+        allowed = topic_gate(domain, topic_lexical, topic_semantic) if topic.strip() else np.ones(len(eligible), dtype=bool)
         genre=np.array([len(set(x.genres+x.subject_genres)&set(pref.preferred_genres))/max(len(pref.preferred_genres),1) for x in eligible])
         learned=np.array([len(set(x.predicted_genres)&set(pref.preferred_genres))/max(len(pref.preferred_genres),1) for x in eligible])
         mood=np.zeros(len(eligible)); theme=np.zeros(len(eligible))
@@ -212,18 +234,28 @@ class RetrievalIndex:
                     if name in item.theme_tags: values[i]=1
                 parts.append(values)
             theme=np.mean(parts,axis=0)
-        weights={'text':.55 if query else 0,'genre':.25 if pref.preferred_genres else 0,'mood':.20 if pref.desired_mood else 0,'theme':.25 if pref.themes else 0,'learned_genre':.10 if pref.preferred_genres and any(x.predicted_genres for x in eligible) else 0}
-        total=sum(weights.values())
-        if total:
-            scores=(weights['text']*scores+weights['genre']*genre+weights['mood']*mood+weights['theme']*theme+weights['learned_genre']*learned)/total
+        if not topic.strip() and pref.preferred_genres:
+            # Verified genre-only searches have a legitimate categorical match,
+            # even when a metadata-only record has no descriptive text.
+            scores = np.maximum(scores, .12*genre)
+        base_scores = scores.copy()
+        qualified, cutoff = quality_gate(domain, base_scores, allowed) if not filter_only else (allowed, 0.)
+        scores = preference_boost(base_scores, genre, mood, theme, learned)
+        self.last_diagnostics.update({'topic_query': topic[:800], 'query_strategy': 'separate topic and preference channels',
+            'topic_relevance_rejections': int(np.count_nonzero(~allowed)),
+            'quality_rejections': int(np.count_nonzero(~qualified)),
+            'quality_score_floor': round(cutoff, 4), 'relevance_policy': POLICIES[domain],
+            'ranking': 'topic relevance gate, bounded multiplicative preferences, quality cutoff, then diversity'})
         novelty=np.array([.035 if x.id in (seen_ids or set()) else 0 for x in eligible])
         scores=np.maximum(scores-novelty,0)
         if filter_only:
             # No fake relevance: use a varied sample of verified filter matches.
-            pool=sorted(range(len(eligible)),key=lambda i:(eligible[i].id in (seen_ids or set()),not bool(eligible[i].retrieval_text),eligible[i].title.casefold()))[:80]
-            scores[:]=0
+            # With only factual filters there is no text query to match. Use
+            # source completeness and diversity, not alphabetical filler.
+            scores = np.array([.06*bool(x.retrieval_text or x.description_provenance or x.source=='demo') + .025*(x.language.lower()!='unknown') + .025*(x.year is not None) + .02*bool(x.authors or x.director) + .01*bool(x.page_count or x.runtime_minutes) for x in eligible])
+            pool=sorted(range(len(eligible)),key=lambda i:(eligible[i].id in (seen_ids or set()),-scores[i],eligible[i].id))[:80]
         else:
-            positive=np.flatnonzero(scores>.015)
+            positive=np.flatnonzero(qualified & (scores > 0))
             if not len(positive): return []
             pool=sorted(positive,key=lambda i:(-scores[i],eligible[i].id))[:80]
         # MMR penalizes near-duplicate narratives, without changing any filter.
@@ -246,9 +278,9 @@ class RetrievalIndex:
                 overlap=self.matrix[eligible_indices[rank]].multiply(qvector).tocoo()
                 names=self.feature_names
                 terms=[str(names[i]) for i,_ in sorted(zip(overlap.col,overlap.data),key=lambda pair:-pair[1])[:3]]
-            results.append(Recommendation(item=eligible[rank], score=float(scores[rank]), lexical_score=float(lexical[rank]), semantic_score=semantic_score,
+            results.append(Recommendation(item=eligible[rank], score=0. if filter_only else float(scores[rank]), lexical_score=float(lexical[rank]), semantic_score=semantic_score,
                 filter_notes=['filter-only results; no text similarity signal'] if filter_only else [], matched_terms=terms,
-                score_components={'text_similarity':round(float(text_scores[rank]),4),'genre_coverage':round(float(genre[rank]),4),'text_classifier_genre_match':round(float(learned[rank]),4),'mood_alignment':round(float(mood[rank]),4),'theme_alignment':round(float(theme[rank]),4),'novelty_penalty':round(float(novelty[rank]),4)}))
+                score_components={'text_similarity':round(float(text_scores[rank]),4),'genre_coverage':round(float(genre[rank]),4),'text_classifier_genre_match':round(float(learned[rank]),4),'mood_alignment':round(float(mood[rank]),4),'theme_alignment':round(float(theme[rank]),4),'topic_lexical_similarity':round(float(topic_lexical[rank]),4),'topic_semantic_similarity':None if topic_semantic is None else round(float(topic_semantic[rank]),4),'metadata_completeness':round(float(scores[rank]),4) if filter_only else None,'novelty_penalty':round(float(novelty[rank]),4)}))
         self.last_diagnostics['returned_count']=len(results)
         self.last_diagnostics['query_text']=query[:800]
         return results

@@ -15,7 +15,7 @@
     "request_cache": "artifacts/.cache/wiki_infobox"
   },
   "plots": {
-    "matched": 6023,
+    "matched": 6382,
     "source_url": "https://huggingface.co/datasets/vishnupriyavr/wiki-movie-plots-with-summaries/resolve/a1feef074ae0580338cf2dd8e98a43ca98637fa6/wiki_movie_plots_deduped_with_summaries.csv",
     "sha256": "c01cf57604c9f279b75b9580b10af6664abe31ef6827d785953fded0cdbb344b",
     "generated_summary_columns_used": false

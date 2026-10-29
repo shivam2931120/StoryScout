@@ -1,5 +1,5 @@
 {
-  "executed_at_utc": "2026-10-28T15:20:17.952359+00:00",
+  "executed_at_utc": "2026-10-29T04:28:24.973540+00:00",
   "method": "Executed HTTP preference edits; source genre/runtime checks; not independent human relevance evaluation.",
   "catalog": {
     "book": 1000,
@@ -7,16 +7,16 @@
   },
   "coverage": {
     "book": {
-      "plot_text": 0,
-      "descriptions": 20,
+      "plot_text": 46,
+      "descriptions": 66,
       "known_runtime": 0,
       "known_pages": 12,
       "source_languages": 1000,
-      "subject_genre_mappings": 983
+      "subject_genre_mappings": 955
     },
     "movie": {
-      "plot_text": 1451,
-      "descriptions": 1459,
+      "plot_text": 1455,
+      "descriptions": 1464,
       "known_runtime": 1322,
       "known_pages": 0,
       "source_languages": 1302,
@@ -33,7 +33,7 @@
   },
   "current": {
     "mean_source_genre_precision_at_5": 1.0,
-    "unique_titles_across_five_preferences": 25,
+    "unique_titles_across_five_preferences": 23,
     "all_hard_constraints_pass": true,
     "all_next_picks_nonempty_and_unseen": true
   },
@@ -41,36 +41,36 @@
     {
       "genre": "family",
       "ids": [
+        "movie_012",
+        "movie_ml_27790",
         "movie_ml_45208",
-        "movie_ml_5099",
-        "movie_ml_6753",
         "movie_ml_38",
-        "movie_ml_1812"
+        "movie_ml_3673"
       ],
       "titles": [
+        "The Iron Giant",
+        "Millions",
         "RV",
-        "Heidi",
-        "Secondhand Lions",
         "It Takes Two",
-        "Wide Awake"
+        "Benji the Hunted"
       ],
       "genre_matches": 5,
       "precision_at_5_source_genre": 1.0,
       "hard_constraint_compliance": true,
       "eligible_candidates": 88,
       "next_ids": [
-        "movie_ml_4090",
-        "movie_ml_26198",
-        "movie_ml_808",
-        "movie_ml_3674",
-        "movie_ml_5480"
+        "movie_ml_6753",
+        "movie_ml_177765",
+        "movie_ml_79139",
+        "movie_ml_673",
+        "movie_ml_546"
       ],
       "next_titles": [
-        "Brave Little Toaster, The",
-        "Yours, Mine and Ours",
-        "Alaska",
-        "For the Love of Benji",
-        "Stuart Little 2"
+        "Secondhand Lions",
+        "Coco",
+        "Sorcerer's Apprentice, The",
+        "Space Jam",
+        "Super Mario Bros."
       ],
       "repeat_count": 0,
       "next_constraint_compliance": true
@@ -78,36 +78,36 @@
     {
       "genre": "comedy",
       "ids": [
+        "movie_ml_102747",
+        "movie_010",
         "movie_ml_2255",
-        "movie_ml_8302",
-        "movie_ml_26147",
-        "movie_ml_3325",
-        "movie_ml_4267"
+        "movie_ml_140541",
+        "movie_ml_7222"
       ],
       "titles": [
+        "Rink, The",
+        "The Princess Bride",
         "Young Doctors in Love",
-        "Front Page, The",
-        "Thousand Clowns, A",
-        "Next Best Thing, The",
-        "One Night at McCool's"
+        "The Electric Hotel",
+        "Reefer Madness (a.k.a. Tell Your Children)"
       ],
       "genre_matches": 5,
       "precision_at_5_source_genre": 1.0,
       "hard_constraint_compliance": true,
       "eligible_candidates": 493,
       "next_ids": [
-        "movie_ml_4197",
-        "movie_ml_102747",
-        "movie_ml_6798",
-        "movie_ml_2799",
-        "movie_ml_4660"
+        "movie_ml_25795",
+        "movie_ml_26147",
+        "movie_ml_25805",
+        "movie_ml_8302",
+        "movie_ml_4267"
       ],
       "next_titles": [
-        "Real Life",
-        "Rink, The",
-        "Bugsy Malone",
-        "Problem Child 2",
-        "Scenes from the Class Struggle in Beverly Hills"
+        "Dinner at Eight",
+        "Thousand Clowns, A",
+        "Atalante, L'",
+        "Front Page, The",
+        "One Night at McCool's"
       ],
       "repeat_count": 0,
       "next_constraint_compliance": true
@@ -116,17 +116,17 @@
       "genre": "crime",
       "ids": [
         "movie_ml_3442",
+        "movie_ml_6515",
         "movie_ml_2260",
-        "movie_ml_2986",
         "movie_ml_4945",
-        "movie_ml_25788"
+        "movie_ml_1260"
       ],
       "titles": [
         "Band of the Hand",
+        "You Only Live Once",
         "Wisdom",
-        "RoboCop 2",
         "Enforcer, The",
-        "Scarface"
+        "M"
       ],
       "genre_matches": 5,
       "precision_at_5_source_genre": 1.0,
@@ -134,17 +134,17 @@
       "eligible_candidates": 142,
       "next_ids": [
         "movie_ml_105593",
-        "movie_ml_32460",
+        "movie_ml_6035",
+        "movie_ml_2986",
         "movie_ml_3701",
-        "movie_ml_32632",
-        "movie_ml_4354"
+        "movie_ml_32460"
       ],
       "next_titles": [
         "Filth",
-        "Knockin' on Heaven's Door",
+        "P\u00e9p\u00e9 le Moko",
+        "RoboCop 2",
         "Alien Nation",
-        "Electra Glide in Blue",
-        "Unlawful Entry"
+        "Knockin' on Heaven's Door"
       ],
       "repeat_count": 0,
       "next_constraint_compliance": true
@@ -154,34 +154,34 @@
       "ids": [
         "movie_ml_7223",
         "movie_ml_78349",
-        "movie_ml_32060",
+        "movie_ml_107997",
         "movie_ml_533",
-        "movie_ml_7347"
+        "movie_ml_6629"
       ],
       "titles": [
         "D.O.A.",
         "Exam",
-        "Cat and the Canary, The",
+        "We Are What We Are",
         "Shadow, The",
-        "Secret Window"
+        "House of Wax"
       ],
       "genre_matches": 5,
       "precision_at_5_source_genre": 1.0,
       "hard_constraint_compliance": true,
       "eligible_candidates": 48,
       "next_ids": [
-        "movie_ml_911",
-        "movie_ml_7832",
-        "movie_ml_1269",
-        "movie_ml_60289",
-        "movie_ml_965"
+        "movie_ml_8228",
+        "movie_ml_5787",
+        "movie_ml_32060",
+        "movie_ml_714",
+        "movie_ml_82378"
       ],
       "next_titles": [
-        "Charade",
-        "Thin Man Goes Home, The",
-        "Arsenic and Old Lace",
-        "Kit Kittredge: An American Girl",
-        "39 Steps, The"
+        "Maltese Falcon, The (a.k.a. Dangerous Female)",
+        "Truth About Charlie, The",
+        "Cat and the Canary, The",
+        "Dead Man",
+        "All Good Things"
       ],
       "repeat_count": 0,
       "next_constraint_compliance": true
@@ -189,36 +189,36 @@
     {
       "genre": "science fiction",
       "ids": [
-        "movie_ml_8447",
         "movie_012",
-        "movie_ml_4777",
-        "movie_ml_1653",
-        "movie_ml_66"
+        "movie_007",
+        "movie_ml_140541",
+        "movie_ml_8447",
+        "movie_ml_4777"
       ],
       "titles": [
-        "This Island Earth",
         "The Iron Giant",
-        "American Astronaut, The",
-        "Gattaca",
-        "Lawnmower Man 2: Beyond Cyberspace"
+        "Arrival",
+        "The Electric Hotel",
+        "This Island Earth",
+        "American Astronaut, The"
       ],
       "genre_matches": 5,
       "precision_at_5_source_genre": 1.0,
       "hard_constraint_compliance": true,
       "eligible_candidates": 111,
       "next_ids": [
+        "movie_ml_32898",
+        "movie_ml_66",
         "movie_ml_8092",
-        "movie_ml_60516",
-        "movie_007",
-        "movie_ml_1077",
-        "movie_ml_5410"
+        "movie_ml_1653",
+        "movie_ml_60516"
       ],
       "next_titles": [
+        "Trip to the Moon, A (Voyage dans la lune, Le)",
+        "Lawnmower Man 2: Beyond Cyberspace",
         "Frankenstein Unbound",
-        "Meet Dave",
-        "Arrival",
-        "Sleeper",
-        "Silent Running"
+        "Gattaca",
+        "Meet Dave"
       ],
       "repeat_count": 0,
       "next_constraint_compliance": true
@@ -227,31 +227,28 @@
   "followups": [
     {
       "query": "Find movies about a prison escape under 120 minutes",
-      "first_query": "about prison escape",
-      "followup_query": "about prison escape",
+      "first_query": "prison escape",
+      "followup_query": "prison escape",
       "topic_preserved": true,
       "mood": null,
       "titles": [
         "Escape from Alcatraz",
         "The Wooden Horse",
-        "Modern Times",
+        "Collector, The",
         "Dead Presidents",
-        "Innocent Man, An"
+        "Lonely Are the Brave"
       ],
       "shorter_max_runtime": 105
     },
     {
       "query": "Recommend movies about artificial intelligence",
-      "first_query": "about artificial intelligence",
-      "followup_query": "about artificial intelligence",
+      "first_query": "artificial intelligence",
+      "followup_query": "artificial intelligence",
       "topic_preserved": true,
       "mood": null,
       "titles": [
         "The Iron Giant",
-        "A.I. Artificial Intelligence",
-        "Robot Overlords",
-        "Transformers: Dark of the Moon",
-        "Chappie"
+        "A.I. Artificial Intelligence"
       ],
       "shorter_max_runtime": 110
     },
@@ -262,11 +259,11 @@
       "topic_preserved": true,
       "mood": "cheerful",
       "titles": [
-        "Rink, The",
         "The Princess Bride",
+        "Young Doctors in Love",
+        "Rink, The",
         "The Electric Hotel",
-        "Sherlock Jr.",
-        "Young Doctors in Love"
+        "Beautician and the Beast, The"
       ],
       "shorter_max_runtime": 105
     }

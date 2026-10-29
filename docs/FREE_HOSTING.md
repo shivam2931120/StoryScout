@@ -1,5 +1,6 @@
 # StoryScout free hosting verification
 
+Historical baseline snapshot. Current ranking/data/results: [NLP relevance update](NLP_RELEVANCE_UPDATE.md).
 The hosted build uses Render's `free` plan: one Docker web service in Singapore,
 with 512 MB RAM and limited CPU. No paid compute or paid inference API is used.
 The service is `srv-dbh16getlv9c73dk5jhg`; its assigned URL is

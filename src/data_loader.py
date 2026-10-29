@@ -93,6 +93,21 @@ def apply_nlp_sources(catalogs: dict[str, list[CatalogItem]], directory: str | P
             item.subject_genres=[genre for genre,pattern in subject_rules.items() if re.search(pattern,subjects)]
             if item.subject_genres:
                 item.metadata_provenance['subject_genres']={'source':'Deterministic mapping of supplied Gutenberg subject headings; not model predictions','url':item.source_url}
+    summaries = directory / 'book_summaries.csv.gz'
+    if summaries.exists():
+        frame = pd.read_csv(summaries, dtype=str, keep_default_na=False)
+        if frame['id'].duplicated().any():
+            raise ValueError('Duplicate book summary IDs')
+        for row in frame.to_dict(orient='records'):
+            item = by_id.get(row['id'])
+            if not item or not item.source.startswith('project-gutenberg') or item.description_provenance:
+                continue
+            if not row['summary_text'].strip() or not row['source_url'].startswith('https://www.gutenberg.org/ebooks/'):
+                continue
+            item.retrieval_text = row['summary_text']
+            item.text_source, item.text_source_url = row['source'], row['source_url']
+            item.description, item.description_provenance = row['opening_excerpt'], row['provenance']
+            item.description_source, item.description_source_url = row['source'], row['source_url']
     plots = directory / 'movie_plots.csv.gz'
     if plots.exists():
         frame = pd.read_csv(plots, dtype=str, keep_default_na=False)

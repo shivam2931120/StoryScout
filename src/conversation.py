@@ -16,6 +16,7 @@ class StoryScoutEngine:
         self.title_directory = title_directory or TitleDirectory()
         self.last_title_matches = []
         self.last_title_lookup = False
+        self.last_context_action = "auto"
 
     def get_item(self, item_id):
         return next((item for group in self.catalogs.values() for item in group if item.id == item_id), None) or self.title_directory.get(item_id)
@@ -25,13 +26,31 @@ class StoryScoutEngine:
         state.last_content_query=''; state.seen_recommendations.clear()
         return state
 
+    def new_search(self, state):
+        """Explicit user action: retain chat history/format, clear old criteria."""
+        state.preferences = state.preferences.__class__()
+        state.selected_reference_id = None
+        state.last_content_query = ''
+        state.last_recommendations.clear()
+        state.seen_recommendations.clear()
+        state.pending_title_choices.clear()
+
     def _active_domains(self, selection: str) -> list[str]:
         return ["book", "movie"] if selection == "both" else (["book"] if selection == "books" else ["movie"])
 
-    def handle(self, text: str, state: ConversationState, *, reference_id: str | None = None, lookup_id: str | None = None) -> tuple[str, dict[str, list[Recommendation]]]:
+    def handle(self, text: str, state: ConversationState, *, reference_id: str | None = None, lookup_id: str | None = None, search_action: str = "auto") -> tuple[str, dict[str, list[Recommendation]]]:
         self.last_diagnostics={}
         self.last_title_matches = []
         self.last_title_lookup = False
+        command = re.match(r"^(?:start (?:a )?new search|new search|start fresh)\s*[:;,.!-]?\s*", text, re.I)
+        if command:
+            search_action = 'new'
+            text = text[command.end():].strip() or 'Show stories'
+        self.last_context_action = search_action
+        if search_action == 'new':
+            self.new_search(state)
+        if search_action == 'similar':
+            state.last_content_query = ''
         parsed = parse_preferences(text)
         # Resolve the complete title before interpreting words such as dark, no,
         # short or romance as instructions. Similarity requests keep the NLP path.
@@ -60,6 +79,7 @@ class StoryScoutEngine:
                         explanation += " Content suitability is unknown; no verified warning labels are available."
                     self.last_title_matches.append((item, explanation))
                 reply = ("Did you mean one of these titles?" if approximate else "Found the title in the catalog." if len(matches) == 1 else "Several titles match. Open the one you meant.") if matches else "That title is not in the local title directory. Try another spelling or a topic search."
+                state.selected_reference_id = matches[0].id if len(matches) == 1 and not approximate else None
                 return reply, {}
         search_query = text
         nemotron_failed = False
@@ -112,6 +132,11 @@ class StoryScoutEngine:
                 state.selected_reference_id = reference.id
                 state.preferences.referenced_title = reference.title
                 state.pending_title_choices.clear()
+        elif parsed.reference_query and parsed.reference_query.lower().strip() in {'it', 'this', 'that', 'this one', 'that one'} and state.selected_reference_id:
+            reference = self.get_item(state.selected_reference_id)
+            if reference:
+                state.preferences.referenced_title = reference.title
+                state.pending_title_choices.clear()
         elif parsed.reference_query:
             exact, approximate, _ = self.title_directory.lookup(parsed.reference_query, all_items)
             if exact and not approximate:
@@ -126,7 +151,7 @@ class StoryScoutEngine:
                 state.pending_title_choices.clear()
             else:
                 state.selected_reference_id = None
-        elif state.selected_reference_id and (parsed.intent in {'refine','more'} or re.match(r"^(also|only|make|what about|show me|more|shorter)\b", text.lower().strip())):
+        elif state.selected_reference_id and (parsed.intent in {'refine','more','similar'} or re.match(r"^(also|only|make|what about|show me|more|shorter)\b", text.lower().strip())):
             reference = self.get_item(state.selected_reference_id)
         else:
             state.selected_reference_id = None
@@ -134,7 +159,7 @@ class StoryScoutEngine:
             state.pending_title_choices.clear()
         if reference and reference.source.startswith(("movielens", "project-gutenberg")) and not (reference.retrieval_text or reference.description_provenance or reference.genres or reference.theme_tags):
             return f"I found '{reference.title}', but its source has no synopsis or genre metadata for meaningful content comparison. Choose a described reference or search for themes directly.", {}
-        followup = parsed.intent in {'refine','more'} or 'replace_genres' in parsed.explicit_fields or bool(re.match(r'^(also|only|make|what about|show me|more|shorter)\b',text.lower().strip()))
+        followup = search_action == 'refine' or parsed.intent in {'refine','more'} or 'replace_genres' in parsed.explicit_fields or bool(re.match(r'^(also|only|make|what about|show me|more|shorter)\b',text.lower().strip()))
         effective, topic = build_search_query(search_query,state.preferences,state.last_content_query,followup)
         state.last_content_query=topic
         results = self.recommend(effective, state, reference, exclude_seen=parsed.intent=='more', prepared=True)
@@ -163,7 +188,8 @@ class StoryScoutEngine:
             if reference: query = reference_context(reference) + " " + search_query
             if not query and not any((state.preferences.preferred_genres,state.preferences.excluded_genres,state.preferences.max_pages,state.preferences.max_runtime,state.preferences.min_year,state.preferences.max_year,state.preferences.language)):
                 query='An engaging story about discovery, human relationships and adventure'
-            results[domain] = self.indexes[domain].search(query, state.preferences, top_k=5, exclude_ids=exclude,seen_ids=set(state.seen_recommendations))
+            topic = (reference_context(reference) + ' ' if reference else '') + state.last_content_query
+            results[domain] = self.indexes[domain].search(query, state.preferences, top_k=5, exclude_ids=exclude,seen_ids=set(state.seen_recommendations),topic_query=topic)
             self.last_diagnostics[domain]=dict(self.indexes[domain].last_diagnostics)
             for rec in results[domain]:
                 rec.explanation = explain_reference(rec, reference, state.preferences) if reference else explain(rec, search_query, state.preferences)
@@ -185,4 +211,6 @@ class StoryScoutEngine:
         if p.max_pages: constraints.append(f"books ≤ {p.max_pages} pages")
         if p.max_runtime: constraints.append(f"movies ≤ {p.max_runtime} minutes")
         if p.min_year or p.max_year: constraints.append(f"years {p.min_year or 'any'}–{p.max_year or 'any'}")
+        if any(value.get('eligible_count', 0) > 0 and value.get('quality_rejections', 0) > 0 for value in self.last_diagnostics.values()):
+            return "Some titles pass your filters, but none match the topic strongly enough. Try a broader topic or another reference title. Your filters have been retained."
         return "No verified matches satisfy the current filters" + (" (" + ", ".join(constraints) + ")" if constraints else "") + ". I will not silently relax them; choose a less restrictive filter if you want to broaden the search."

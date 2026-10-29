@@ -59,7 +59,7 @@ The following instructions apply to the older **Streamlit interface**:
 
 Push this repository to GitHub, then open [Streamlit Community Cloud](https://share.streamlit.io/), choose **Create app**, and select this repository, the `main` branch, and `app.py`. The app does not require a secret to run. `requirements.txt` installs the CPU sentence-embedding model used locally; first startup downloads the model and builds its indexes. If model download or loading fails, the app falls back to TF-IDF. `NVIDIA_API_KEY` is optional for query interpretation and sourced description enrichment; configure it only in Streamlit's app Secrets. Never commit API keys or `.streamlit/secrets.toml`.
 
-The bundled demonstration catalog contains 14 books and 13 movies. Project Gutenberg metadata adds 10,000 English book records; MovieLens latest-small adds 9,737 movie records. The active deduplicated catalog contains 10,005 books and 9,744 movies. Movie search now includes 6,023 locally indexed Wikipedia plots and 1,322 known runtimes. Book coverage is still mostly title/author/subject metadata, with only 12 known page counts. Optional Wikipedia-sourced, Nemotron-paraphrased descriptions live separately in `data/enriched/descriptions.csv`; records without a source match remain undescribed. Hybrid retrieval uses `sentence-transformers/all-MiniLM-L6-v2` on CPU when available and falls back to TF-IDF if model download/loading fails. Model weights are not committed.
+The bundled demonstration catalog contains 14 books and 13 movies. Project Gutenberg metadata adds 10,000 English book records; MovieLens latest-small adds 9,737 movie records. The active deduplicated catalog contains 10,005 books and 9,744 movies. Movie search now includes 6,382 locally indexed Wikipedia plots and 1,322 known runtimes. Book coverage is still mostly title/author/subject metadata, with only 12 known page counts. Optional Wikipedia-sourced, Nemotron-paraphrased descriptions live separately in `data/enriched/descriptions.csv`; records without a source match remain undescribed. Hybrid retrieval uses `sentence-transformers/all-MiniLM-L6-v2` on CPU when available and falls back to TF-IDF if model download/loading fails. Model weights are not committed.
 
 ## Verified environment
 
@@ -142,7 +142,7 @@ limits. The bundled snapshot works offline after model/index preparation.
 ## Free hosted profile
 
 The default Docker/Render deployment now uses the **free** plan with 1,000
-books and 1,500 movies (1,451 with plot text; 1,322 with known runtimes). The
+books and 1,500 movies (1,455 with plot text; 1,322 with known runtimes). The
 full 10,005/9,744 source catalog remains available locally. A deterministic
 subset preserves demo references and prioritizes verified lengths/source text.
 
@@ -160,3 +160,6 @@ Bare title searches use a separate local directory of all 19,749 source records,
 including records outside the compact semantic index. Title words do not become
 preferences; remakes and filter conflicts are shown explicitly. See
 [title lookup behavior and its executed benchmark](docs/TITLE_LOOKUP.md).
+
+Current search improvements, source-summary provenance, context controls, actual
+before/after metrics and suggested NLP experiments: [NLP relevance update](docs/NLP_RELEVANCE_UPDATE.md).

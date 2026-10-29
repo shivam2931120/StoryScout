@@ -54,3 +54,13 @@ filters, mood/theme signals, classifier predictions and MMR remain local Python.
 The compact source subset contains 1,000 books and 1,500 movies. Its model cache
 keys include the ONNX backend to prevent mixing quantized and original vectors.
 The full local profile continues to use Sentence Transformers when configured.
+
+## Current relevance and state policy
+
+Title lookup remains separate from content retrieval. Topic and preference
+queries are scored separately; a small additional sparse title/entity field
+shares the TF-IDF vocabulary. Topic gates precede bounded preference boosts,
+quality cutoffs, and MMR. Factual-filter-only browsing reports zero text similarity.
+The API accepts explicit new/follow-up/similarity actions. Visible topic and
+reference chips are authoritative, so removing them cannot reparse stale UI text.
+See [policy and executed results](NLP_RELEVANCE_UPDATE.md).

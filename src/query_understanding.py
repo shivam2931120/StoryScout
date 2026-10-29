@@ -39,7 +39,7 @@ THEME_PROTOTYPES = {
     'family':'Relationships between parents, children, siblings and relatives, and family bonds.',
 }
 
-ADMIN_WORDS = {'recommend','recommendation','recommendations','suggest','suggestion','suggestions','find','show','give','please','something','anything','stories','story','book','books','novel','novels','movie','movies','film','films','watch','read','reading','watching','now','only','also','make','shorter','short','longer','duration','length','pages','page','minutes','minute','mins','hours','hour','under','below','maximum','minimum','limit','limits','preferences','preference','apply','discovery','criteria','results','picks','different','more','another','some','these','those','them','it','with','without','my','me','a','an','the','to','for','of','and','or','is','in','at','most','less','than','up','two','one','three','year','years','from','through','after','before','between'}
+ADMIN_WORDS = {'but','about','across','published','released','classic','language','english','hindi','spanish','french','german','this','that','same','similar','themes','feeling','tone','actually','instead','recommend','recommendation','recommendations','suggest','suggestion','suggestions','find','show','give','please','something','anything','stories','story','book','books','novel','novels','movie','movies','film','films','watch','read','reading','watching','now','only','also','make','shorter','short','longer','duration','length','pages','page','minutes','minute','mins','hours','hour','under','below','maximum','minimum','limit','limits','preferences','preference','apply','discovery','criteria','results','picks','different','more','another','some','these','those','them','it','with','without','my','me','a','an','the','to','for','of','and','or','is','in','at','most','less','than','up','two','one','three','year','years','from','through','after','before','between'}
 
 
 def meaningful_query(text: str) -> str:
@@ -47,6 +47,7 @@ def meaningful_query(text: str) -> str:
     # A user's present emotion describes the person, not the requested story.
     text = re.sub(r"\bi\s+(?:feel(?:ing)?|am feeling|'m feeling)\s+.*?(?=[.;!?]|\b(?:suggest|recommend|find|give|show)\b|$)", ' ', str(text),flags=re.I)
     text = re.sub(r"\bi(?: am|'m)\s+(?:sad|stressed|anxious|tired|lonely|depressed|happy)\b",' ',text,flags=re.I)
+    text = re.sub(r"\b(?:less intense|not too intense)\b", " ", text, flags=re.I)
     text = normalize_text(text)
     text = re.sub(r'\b(?:no|not|without|exclude|excluding|avoid|anything but)\s+(?:[\w-]+(?:\s+(?:and|or)\s+[\w-]+)*)', ' ', text)
     text = re.sub(r'\b(?:under|over|after|before|between|from|until|up to|max|maximum)\s+[\d\s.]+(?:pages?|minutes?|mins?|hours?|and)?', ' ', text)
@@ -56,7 +57,7 @@ def meaningful_query(text: str) -> str:
 def build_search_query(text: str, preferences: Preferences, previous: str = '', followup: bool = False) -> tuple[str,str]:
     content = meaningful_query(text)
     # A refinement does not replace the meaningful original topic with "shorter".
-    topic = previous if followup and previous else content
+    topic = ' '.join(dict.fromkeys([previous, content])) if followup and previous else content
     from .preferences import GENRES, GENRE_ALIASES, MOODS
     # Form edits must not keep searching an old genre or mood from the last message.
     descriptors = list(GENRES)+list(MOODS)+[x for values in GENRE_ALIASES.values() for x in values]+['feel good','feel-good','happy','gentle','warm','cerebral','mind bending','mind-bending']

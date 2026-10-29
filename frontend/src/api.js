@@ -1,4 +1,4 @@
-const base = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
+const base = (import.meta.env?.VITE_API_URL || "").replace(/\/$/, "");
 export async function request(path, body, signal) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 65000);
@@ -88,6 +88,7 @@ export function preferenceChips(state) {
           : label(state.media_selection),
       field: "media",
     },
+    ...(p.referenced_title ? [{text:`Like ${p.referenced_title}`, field:"reference"}] : []),
     ...p.preferred_genres.map((x) => ({
       text: label(x),
       field: "preferred_genres",
@@ -125,4 +126,10 @@ export function preferenceChips(state) {
       negative: true,
     })),
   ];
+}
+
+
+export function removeTopicTerm(topic, term) {
+  const escaped = Array.from(term).map(char => "^$\\.*+?()[]{}|".includes(char) ? "\\" + char : char).join("");
+  return topic.replace(new RegExp("\\b" + escaped + "\\b", "gi"), " ").replace(/\s+/g, " ").trim();
 }

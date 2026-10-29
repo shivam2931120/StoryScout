@@ -29,7 +29,7 @@ The React/FastAPI public deployment is live on Render free tier. Docker and Rend
 - [x] React/FastAPI is public at https://storyscout-eaw7.onrender.com on Render free tier.
 
 
-- [x] 6,023 local source plots, 1,322 known movie runtimes, and per-field provenance.
+- [x] 6,382 local source plots, 1,322 known movie runtimes, and per-field provenance.
 - [x] Current preference query rebuilding, desired/user mood separation, MMR,
   unseen next picks, and incremental document embedding reuse.
 - [x] Current real-server preference regression and desktop browser checks passed.

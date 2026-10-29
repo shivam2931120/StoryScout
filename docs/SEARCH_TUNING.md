@@ -1,5 +1,6 @@
 # Local NLP search revision
 
+Historical baseline snapshot. Current ranking/data/results: [NLP relevance update](NLP_RELEVANCE_UPDATE.md).
 The repeated recommendations had two causes: only 12 movie records had known
 runtime, and form changes could leave the old genre/mood in the search text.
 The previous live-server behavior is preserved in

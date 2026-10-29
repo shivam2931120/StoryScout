@@ -53,3 +53,7 @@ looked up offline.
 Validation also passed all **93 pytest tests** and **seven HTTP conversation
 scenarios**, covering books, movies, mixed results, both cross-media directions,
 refinement and reset. The React production build succeeded.
+
+The last unambiguous exact title is retained as reference context for pronouns
+such as “books like it”. An explicit similarity action discards an unrelated
+prior topic while keeping visible filters; New search clears prior criteria.

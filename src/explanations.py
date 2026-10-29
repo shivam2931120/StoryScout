@@ -19,7 +19,7 @@ def explain(rec: Recommendation, query: str, pref: Preferences) -> str:
     if item.page_count and pref.max_pages: bits.append(f"is {item.page_count} pages, within the limit")
     if item.runtime_minutes and pref.max_runtime: bits.append(f"runs {item.runtime_minutes} minutes, within the limit")
     if 'filter-only results; no text similarity signal' in rec.filter_notes or rec.score <= 0:
-        bits.append("satisfies the active filters; no matching text terms were found in the catalog")
+        bits.append("satisfies the active filters; no matching text terms were requested; metadata completeness and diversity guide selection")
     elif not bits:
         bits.append("has the strongest available text similarity to your request")
     suffix = " Content-safety metadata is incomplete, so unknown warnings were not treated as verified absence." if pref.negative_content and not item.verified_warnings else ""

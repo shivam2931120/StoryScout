@@ -140,6 +140,7 @@ export function StoryCard({ rec, saved, onSave, onDetails, compact = false }) {
           {item.description ||
             "Explore this catalog entry by its available genres, subjects, and metadata."}
         </p>
+        {item.description_status === "source_generated" && <span className="provenance">Source-provided automated summary</span>}
         {!compact && rec.explanation && (
           <div className="rationale">
             <Sparkles size={13} />
@@ -344,6 +345,7 @@ export function DetailDrawer({ rec, saved, onSave, onClose, onSimilar, busy }) {
           {item.description ||
             "This source provides catalog metadata only. A verified plot description is not available."}
         </p>
+        {item.description_status === "source_generated" && <span className="provenance">The source labels this as an automatically generated summary. It is not independently verified. Factual length and year fields come from separate catalog metadata.</span>}
         {item.description_status === "sourced_ai" && (
           <span className="provenance">
             AI paraphrase of a sourced Wikipedia excerpt. Verify details with

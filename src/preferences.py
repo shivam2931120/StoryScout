@@ -54,7 +54,7 @@ def parse_preferences(text: str) -> ParsedRequest:
         aliases = {"artificial intelligence": [r"\bai\b", r"\brobots?\b"], 'space':[r'\bastronauts?\b',r'\bspacecraft\b'], 'time travel':[r'\btime loops?\b',r'\btime machine\b']}.get(theme, [])
         if re.search(rf"\b{re.escape(theme)}\b", extraction_lower) or any(re.search(alias, extraction_lower) for alias in aliases):
             pref.themes.append(theme); explicit.add("themes")
-    lang = re.search(r"\b(?:in|language)\s+(english|hindi|spanish|french|german)\b", lower)
+    lang = re.search(r"\b(?:in|language)\s+(english|hindi|spanish|french|german)\b", extraction_lower) or re.search(r"\b(english|hindi|spanish|french|german)\s+(?:language\s+)?(?:books?|novels?|movies?|films?|science fiction|family|fantasy|romance|comedy)\b", extraction_lower)
     if lang:
         pref.language = lang.group(1); explicit.add("language")
     years = re.search(r"\bbetween\s+(\d{4})\s+and\s+(\d{4})\b", lower)

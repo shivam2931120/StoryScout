@@ -51,6 +51,7 @@ class ChatRequest(BaseModel):
     state: StateInput = Field(default_factory=StateInput)
     reference_id: str | None = Field(default=None, max_length=200)
     lookup_id: str | None = Field(default=None, max_length=200)
+    search_action: Literal["auto", "new", "refine", "similar"] = "auto"
     per_domain: int = Field(default=3, ge=1, le=5)
 
 

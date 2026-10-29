@@ -32,16 +32,22 @@ def correct_catalog_query(query: str, items: list[CatalogItem]) -> str:
     for label_norm in normalized_candidates:
         if label_norm and (label_norm in normalized or normalized in label_norm):
             return query
-    query_words = normalized.split()
-    title_words = {word for label in normalized_candidates for word in label.split() if len(word) >= 5}
-    corrections: dict[str, str] = {}
-    for word in query_words:
-        if len(word) < 5:
-            continue
-        match = get_close_matches(word, title_words, n=1, cutoff=0.78)
-        if match and match[0] != word:
-            corrections[word] = match[0]
-    return " ".join(corrections.get(word, word) for word in query_words)
+    # Only correct a close whole entity phrase. Rewriting individual words in
+    # free-form requests can silently change the intended subject.
+    matches = get_close_matches(normalized, normalized_candidates, n=2, cutoff=0.88)
+    if matches:
+        first = SequenceMatcher(None, normalized, matches[0]).ratio()
+        second = SequenceMatcher(None, normalized, matches[1]).ratio() if len(matches)>1 else 0.
+        if first-second >= .03:
+            return matches[0]
+    aliases = {normalize_text(alias) for item in items for alias in item.search_aliases if len(alias) >= 5 and ' ' not in alias}
+    words = normalized.split()
+    for number, word in enumerate(words):
+        close = get_close_matches(word, aliases, n=2, cutoff=.88)
+        if close and (len(close) == 1 or SequenceMatcher(None, word, close[0]).ratio()-SequenceMatcher(None, word, close[1]).ratio() >= .03):
+            words[number] = close[0]
+    corrected = ' '.join(words)
+    return corrected if corrected != normalized else query
 
 
 # Title identity is separate from content similarity: words inside a title are

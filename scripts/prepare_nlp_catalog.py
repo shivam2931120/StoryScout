@@ -23,6 +23,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from src.data_loader import load_active_catalogs
 from src.preprocessing import normalize_text
+from src.title_matching import title_key as canonical_title_key, title_names
 
 CACHE = ROOT / 'artifacts/.cache/catalog_sources'
 OUT = ROOT / 'data/enriched'
@@ -37,8 +38,7 @@ def get(url, timeout=70):
 
 def title_key(title):
     title = re.sub(r'\s*\(\d{4}\)\s*$', '', title)
-    title = re.sub(r',\s*(The|A|An)$', lambda m: '', title, flags=re.I) if ',' in title else title
-    return re.sub(r'^(the|a|an)\s+', '', normalize_text(title)).strip()
+    return canonical_title_key(title)
 
 
 def prepare_plots():
@@ -51,7 +51,9 @@ def prepare_plots():
     catalogs = load_active_catalogs()
     by_key = defaultdict(list)
     for item in catalogs['movie']:
-        if item.year: by_key[(title_key(item.title), item.year)].append(item)
+        if item.year:
+            for name in set(title_key(value) for value in title_names(item.title)):
+                by_key[(name, item.year)].append(item)
     matches = defaultdict(list)
     csv.field_size_limit(2_000_000)
     with path.open(encoding='utf-8-sig', newline='') as source:

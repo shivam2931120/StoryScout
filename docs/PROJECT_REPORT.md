@@ -14,40 +14,35 @@ The project demonstrates NLP through intent recognition, negation-aware informat
 
 ## Dataset
 
-The app includes a curated demo set of 14 books and 13 movies, 10,000 English Project Gutenberg catalog records, and 9,737 MovieLens latest-small movie records. The original public catalogs contain metadata. This revision supplements them with 6,023 original Wikipedia plots joined by exact title/year, plus source-backed runtime/language fields. There are 1,322 known movie runtimes and 1,334 known movie languages. Derived subject mappings cover 1,815 books, separately from catalog genres. Fifty-six records currently have short Nemotron paraphrases sourced from exact-title Wikipedia article leads; source URL, model, AI provenance, and Wikipedia attribution are stored separately. Gutenberg provides titles, author strings, languages, and subject fields; MovieLens provides titles, years when present, and genres. Book page counts remain known for only 12 records. Other unavailable lengths, years, cast, and content warnings remain unknown. Demo metadata is kept distinct from public-source metadata. No ebook text, ratings, or user profiles are included. Source usage conditions and citations are in `DATA_SOURCES.md`.
+The app includes a curated demo set of 14 books and 13 movies, 10,000 English Project Gutenberg catalog records, and 9,737 MovieLens latest-small movie records. The original public catalogs contain metadata. This revision supplements them with 6,382 original Wikipedia plots joined by exact title/year, plus source-backed runtime/language fields. There are 1,322 known movie runtimes and 1,334 known movie languages. Derived subject mappings cover 1,815 books, separately from catalog genres. Fifty-six records currently have short Nemotron paraphrases sourced from exact-title Wikipedia article leads; source URL, model, AI provenance, and Wikipedia attribution are stored separately. Forty-seven source-provided Gutenberg summaries (explicitly labeled automatically generated, not independently verified) now supplement book text. The hosted book description count increases from 20 to 66, without deriving factual fields from generated prose. Gutenberg provides titles, author strings, languages, and subject fields; MovieLens provides titles, years when present, and genres. Book page counts remain known for only 12 records. Other unavailable lengths, years, cast, and content warnings remain unknown. Demo metadata is kept distinct from public-source metadata. No ebook text, ratings, or user profiles are included. Source usage conditions and citations are in `DATA_SOURCES.md`.
 
 ## Architecture and methodology
 
 The React chat sends validated conversation state to FastAPI, which passes user text through an interpretable rule baseline, structured dataclass preferences, title resolution, domain-specific hard filters, and a shared retrieval interface. Exact and fuzzy title resolution supports book-to-movie and movie-to-book requests. Reference context includes the selected record's description and metadata; a similarity is not an adaptation claim.
 
-The lexical baseline uses word and bigram TF-IDF with cosine similarity. `sentence-transformers/all-MiniLM-L6-v2` produces normalized CPU embeddings for both catalogs. Semantic cosine below 0.18 is mapped to zero; values from 0.18 to 0.62 are mapped to [0, 1]. Hybrid retrieval combines these calibrated scores with fixed 45% lexical and 55% semantic weights. Current preferences reconstruct the query, hard constraints run first, and MMR reduces repetitive narratives. Selected genres match any source genre or documented subject mapping. Mood/theme prototypes and the plot classifier provide soft ranking signals. Unknown metadata cannot pass a year or length constraint, and unknown genres cannot pass an explicit genre exclusion. Explanation text cites supported genres, subjects, years, language, length, and similarity only.
+The lexical baseline uses word and bigram TF-IDF with cosine similarity. `sentence-transformers/all-MiniLM-L6-v2` produces normalized CPU embeddings for both catalogs. Semantic cosine below 0.18 is mapped to zero; values from 0.18 to 0.62 are mapped to [0, 1]. Hybrid retrieval combines these calibrated scores with fixed 45% lexical and 55% semantic weights. Separate topic and preference queries are scored. Hard constraints run first; topic gates and quality floors run before bounded multiplicative preference boosts and MMR diversity. Exact title identity lookup is separate, and source-generated summary provenance remains visible. Explicit new searches clear prior criteria, while follow-ups retain a removable topic. Selected genres match any source genre or documented subject mapping. Mood/theme prototypes and the plot classifier provide soft ranking signals. Unknown metadata cannot pass a year or length constraint, and unknown genres cannot pass an explicit genre exclusion. Explanation text cites supported genres, subjects, years, language, length, and similarity only.
 
 ## Actual evaluation results
 
 The retrieval benchmark contains 44 developer-authored queries, including both domains, mixed requests, cross-media and same-media references, and constraints. Because relevance judgments are incomplete and hand-authored, metrics indicate performance only against those labels; unjudged catalog records may be relevant. Mixed requests are scored independently by domain, then book and movie metrics are macro-averaged.
 
-On the active deduplicated catalogs (10,005 books and 9,744 movies), the current executed results are:
+On the currently hosted compact subset (1,000 books and 1,500 movies), quantized ONNX MiniLM actually ran. The full 10,005-book/9,744-movie sources remain available for offline preparation. Current measured results:
 
-| Method | P@5 | Recall@5 | MRR@5 | Hard compliance | Mean ms |
-|---|---:|---:|---:|---:|---:|
-| tfidf | 0.2370 | 0.6265 | 0.6642 | 1.000 | 46.2 |
-| semantic | 0.2296 | 0.6188 | 0.6772 | 1.000 | 89.4 |
-| hybrid | 0.2445 | 0.6497 | 0.7098 | 1.000 | 81.7 |
+| Method | P@5 | Recall@5 | MRR@5 | Returned precision | Hard compliance | Mean ms |
+|---|---:|---:|---:|---:|---:|---:|
+| tfidf | 0.2297 | 0.6312 | 0.7454 | 0.4689 | 1.0000 | 10.2 |
+| semantic | 0.2445 | 0.6559 | 0.7429 | 0.4405 | 1.0000 | 25.8 |
+| hybrid | 0.2741 | 0.7222 | 0.7917 | 0.4660 | 1.0000 | 19.5 |
 
-All semantic methods actually ran on CPU. The earlier hybrid snapshot measured
-P@5 0.1852, Recall@5 0.4491, MRR@5 0.4250. This revision changes data coverage and
-ranking together; the comparison does not isolate an individual technique's
-causal effect. Normal query latency is measured after indexing. First movie
-chunk preparation took 565 seconds; later unchanged documents reuse cached
-vectors. These values are measurements, not general accuracy guarantees.
+The prior compact hybrid measured MRR@5 0.7639, P@5 0.2926 and Recall@5 0.7500. The current hybrid improves first-hit rank and precision among returned recommendations, while P@5 and recall decrease because weak matches are withheld and the source catalog changed. This is not an isolated ablation or a universal accuracy guarantee. All query-domain cases are answered by the hybrid; slot fill is 0.7259. Hard compliance measures returned records, with answer coverage reported separately. The complete comparison, source limitations and pipeline defaults are in `NLP_RELEVANCE_UPDATE.md`.
 
 Preference extraction reached 1.000 field exact match over 25 developer-authored conversation examples (33 messages). Some fields have low support, as recorded in the JSON. No human relevance ratings have been submitted. The Evaluation page now exports candidate results for human annotation and separately summarizes uploaded ratings.
 
-The current executed genre experiment uses 6,020 plot-bearing movies and
-plot-hash-grouped splits: 3,853 train, 963 validation, 1,204 test. TF-IDF fitting
+The current executed genre experiment uses 6,379 plot-bearing movies and
+plot-hash-grouped splits: 4,081 train, 1,021 validation, 1,277 test. TF-IDF fitting
 and logistic-regression training use development data only; threshold selection
-uses validation only. The plot model's held-out micro F1 is **0.6807**, versus
-**0.4138** for a title-only baseline on the same test IDs. Full per-label
+uses validation only. The plot model's held-out micro F1 is **0.6833**, versus
+**0.4022** for a title-only baseline on the same test IDs. Full per-label
 precision/recall/F1 and support are in `artifacts/genre_text_results.json`.
 Predictions remain separate from catalog genres and provide bounded soft ranking
 evidence. MiniLM itself is not trained. Book classification remains unsupported
@@ -59,11 +54,11 @@ the same 120-minute limit: distinct titles increased from 5 to 25, and source-ge
 precision@5 from 0.28 to 1.00. All runtime/genre constraints and nonrepeating
 next-pick checks passed. This measures filter behavior, not subjective relevance.
 
-Sentence Transformers ran successfully on CPU using the same model for both domains. The app reports the active retrieval method and uses the cached model with local-only loading when available. See `artifacts/evaluation_summary.md` and `artifacts/genre_text_results.json` for complete current outputs.
+Quantized MiniLM inference ran successfully on CPU using the same pretrained encoder for both domains. The full local environment also supports Sentence Transformers/PyTorch. The app reports the active retrieval method and uses the cached model with local-only loading when available. See `artifacts/compact/evaluation_summary.md` and `artifacts/genre_text_results.json` for complete current outputs.
 
 ## Limitations
 
-Public-source metadata is uneven: the expanded book source has no plot descriptions, publication years, page counts, or genres; MovieLens has no plot, language, runtime, director, cast, or warnings. Source-backed plots and metadata now supplement MovieLens, while book text/page coverage remains limited. Unknowns remain unknown. Authored relevance labels are incomplete. No independent human evaluation has yet been collected. The original interface was deployed on Streamlit Community Cloud. The React/FastAPI interface is deployed publicly as one free Render Docker service with a compact catalog and quantized local semantic encoder: https://storyscout-eaw7.onrender.com. Browser conversations and saved items are local to each device, without account synchronization.
+Public-source metadata is uneven: most expanded book records still lack descriptions, publication years, page counts, and source genre labels; MovieLens has no plot, language, runtime, director, cast, or warnings. Source-backed plots and metadata now supplement MovieLens, while book text/page coverage remains limited. Unknowns remain unknown. Authored relevance labels are incomplete. No independent human evaluation has yet been collected. The original interface was deployed on Streamlit Community Cloud. The React/FastAPI interface is deployed publicly as one free Render Docker service with a compact catalog and quantized local semantic encoder: https://storyscout-eaw7.onrender.com. Browser conversations and saved items are local to each device, without account synchronization.
 
 ## Future scope
 
