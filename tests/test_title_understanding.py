@@ -12,6 +12,8 @@ def enhanced(engine):
         dict(id='movie_hp2',media_type='movie',title='Harry Potter and the Chamber of Secrets',description='',year=2002),
         dict(id='book_1984',media_type='book',title='Nineteen Eighty-Four',title_aliases=['1984'],description='',authors='George Orwell'),
         dict(id='movie_like',media_type='movie',title='Some Like It Hot',description='',year=1959),
+        dict(id='book_thief',media_type='book',title='The Book Thief',description=''),
+        dict(id='movie_eli',media_type='movie',title='The Book of Eli',description='',year=2010),
     ])
     return engine
 
@@ -22,7 +24,7 @@ def enhanced(engine):
     'I would like to watch Inception','Recommend Inception','What is Inception?',
     'Find me the movie called Inception','Inception movies','Give me Inception',
     'I am looking for Inception','Do you have Inception?','Show me details of Inception',
-    'Tell me about a movie Inception',
+    'Tell me about a movie Inception','Find a title called Inception',
 ])
 def test_conversational_title_identity(enhanced,query):
     _,results=enhanced.handle(query,ConversationState())
@@ -154,3 +156,15 @@ def test_unconfirmed_reference_drops_previous_selection(enhanced):
     reply,results=enhanced.handle('Recommend books similar to Incepton',state)
     assert not results and 'Did you mean' in reply
     assert state.selected_reference_id is None
+
+
+@pytest.mark.parametrize('query',['Find a book called The Book Thief','Tell me about The Book Thief','Show me The Book Thief'])
+def test_literal_book_word_survives_wrappers(enhanced,query):
+    _,results=enhanced.handle(query,ConversationState())
+    assert not results
+    assert [x.id for x,_ in enhanced.last_title_matches]==['book_thief']
+
+
+def test_literal_book_word_does_not_select_wrong_medium(enhanced):
+    enhanced.handle('The Book of Eli',ConversationState())
+    assert [x.id for x,_ in enhanced.last_title_matches]==['movie_eli']

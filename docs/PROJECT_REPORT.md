@@ -102,6 +102,6 @@ entities cannot silently turn into unrelated recommendations. Identity cards
 retain visible filter conflicts; discovery results still enforce hard filters.
 The 45-query, two-context regression passed 24/90 on the prior deployed app and
 90/90 on the updated local app. This is developer-authored behavior evaluation,
-not universal accuracy. Current validation is 165 Python tests plus four frontend
+not universal accuracy. Current validation is 170 Python tests plus four frontend
 checks. See ENTITY_SEARCH.md for implementation, source terms, executed outputs,
 and the recommendation benchmark's mixed results after catalog changes.

@@ -1,0 +1,369 @@
+{
+  "executed_at": "2026-10-29T17:24:23.646083+00:00",
+  "base_url": "http://127.0.0.1:8000",
+  "method": "Source-snapshot title/media/year identity round-trip; not independent relevance ratings. Equivalent deduplicated IDs are accepted.",
+  "cases": 45,
+  "passed": 45,
+  "rows": [
+    {
+      "query": "Find a book called Atomic Habits",
+      "passed": true,
+      "source_id": "book_ol_OL17930368W",
+      "matched_ids": [
+        "book_ol_OL17930368W"
+      ]
+    },
+    {
+      "query": "Find a book called Harry Potter and the Philosopher's Stone",
+      "passed": true,
+      "source_id": "book_ol_OL82563W",
+      "matched_ids": [
+        "book_ol_OL82563W"
+      ]
+    },
+    {
+      "query": "Find a book called Harry Potter and the Chamber of Secrets",
+      "passed": true,
+      "source_id": "book_ol_OL82537W",
+      "matched_ids": [
+        "book_ol_OL82537W"
+      ]
+    },
+    {
+      "query": "Find a book called Harry Potter and the Prisoner of Azkaban",
+      "passed": true,
+      "source_id": "book_ol_OL82536W",
+      "matched_ids": [
+        "book_ol_OL82536W"
+      ]
+    },
+    {
+      "query": "Find a book called Harry Potter and the Goblet of Fire",
+      "passed": true,
+      "source_id": "book_ol_OL82560W",
+      "matched_ids": [
+        "book_ol_OL82560W"
+      ]
+    },
+    {
+      "query": "Find a book called Harry Potter and the Order of the Phoenix",
+      "passed": true,
+      "source_id": "book_ol_OL82548W",
+      "matched_ids": [
+        "book_ol_OL82548W"
+      ]
+    },
+    {
+      "query": "Find a book called Harry Potter and the Half-Blood Prince",
+      "passed": true,
+      "source_id": "book_ol_OL82565W",
+      "matched_ids": [
+        "book_ol_OL82565W"
+      ]
+    },
+    {
+      "query": "Find a book called Harry Potter and the Deathly Hallows",
+      "passed": true,
+      "source_id": "book_ol_OL82586W",
+      "matched_ids": [
+        "book_ol_OL82586W"
+      ]
+    },
+    {
+      "query": "Find a book called Nineteen Eighty-Four",
+      "passed": true,
+      "source_id": "book_ol_OL1168083W",
+      "matched_ids": [
+        "book_ol_OL1168083W"
+      ]
+    },
+    {
+      "query": "Find a book called Animal Farm",
+      "passed": true,
+      "source_id": "book_ol_OL1168007W",
+      "matched_ids": [
+        "book_ol_OL1168007W"
+      ]
+    },
+    {
+      "query": "Find a book called Dune",
+      "passed": true,
+      "source_id": "book_ol_OL893414W",
+      "matched_ids": [
+        "book_ol_OL893414W"
+      ]
+    },
+    {
+      "query": "Find a book called The Hunger Games",
+      "passed": true,
+      "source_id": "book_ol_OL5735363W",
+      "matched_ids": [
+        "book_ol_OL5735363W"
+      ]
+    },
+    {
+      "query": "Find a book called The Da Vinci Code",
+      "passed": true,
+      "source_id": "book_ol_OL76837W",
+      "matched_ids": [
+        "book_ol_OL76837W"
+      ]
+    },
+    {
+      "query": "Find a book called The Silent Patient",
+      "passed": true,
+      "source_id": "book_ol_OL19096402W",
+      "matched_ids": [
+        "book_ol_OL19096402W"
+      ]
+    },
+    {
+      "query": "Find a book called The Psychology of Money",
+      "passed": true,
+      "source_id": "book_ol_OL21640039W",
+      "matched_ids": [
+        "book_ol_OL21640039W"
+      ]
+    },
+    {
+      "query": "Find a book called The Midnight Library",
+      "passed": true,
+      "source_id": "book_ol_OL20965973W",
+      "matched_ids": [
+        "book_ol_OL20965973W"
+      ]
+    },
+    {
+      "query": "Find a book called Project Hail Mary",
+      "passed": true,
+      "source_id": "book_ol_OL21745884W",
+      "matched_ids": [
+        "book_ol_OL21745884W"
+      ]
+    },
+    {
+      "query": "Find a book called The Kite Runner",
+      "passed": true,
+      "source_id": "book_ol_OL5781992W",
+      "matched_ids": [
+        "book_ol_OL5781992W"
+      ]
+    },
+    {
+      "query": "Find a book called The Book Thief",
+      "passed": true,
+      "source_id": "book_ol_OL5819456W",
+      "matched_ids": [
+        "book_ol_OL5819456W"
+      ]
+    },
+    {
+      "query": "Find a book called Sapiens",
+      "passed": true,
+      "source_id": "book_ol_OL17075811W",
+      "matched_ids": [
+        "book_ol_OL17075811W"
+      ]
+    },
+    {
+      "query": "Find a movie called Everything Everywhere All at Once (2022)",
+      "passed": true,
+      "source_id": "movie_wd_Q83808444",
+      "matched_ids": [
+        "movie_wd_Q83808444"
+      ]
+    },
+    {
+      "query": "Find a movie called Oppenheimer (2023)",
+      "passed": true,
+      "source_id": "movie_wd_Q108839994",
+      "matched_ids": [
+        "movie_wd_Q108839994"
+      ]
+    },
+    {
+      "query": "Find a movie called Dune: Part Two (2024)",
+      "passed": true,
+      "source_id": "movie_wd_Q109228991",
+      "matched_ids": [
+        "movie_wd_Q109228991"
+      ]
+    },
+    {
+      "query": "Find a movie called Dune (2021)",
+      "passed": true,
+      "source_id": "movie_wd_Q60834962",
+      "matched_ids": [
+        "movie_wd_Q60834962"
+      ]
+    },
+    {
+      "query": "Find a movie called Past Lives (2023)",
+      "passed": true,
+      "source_id": "movie_wd_Q116025865",
+      "matched_ids": [
+        "movie_wd_Q116025865"
+      ]
+    },
+    {
+      "query": "Find a movie called Barbie (2023)",
+      "passed": true,
+      "source_id": "movie_wd_Q55436290",
+      "matched_ids": [
+        "movie_wd_Q55436290"
+      ]
+    },
+    {
+      "query": "Find a movie called The Menu (2022)",
+      "passed": true,
+      "source_id": "movie_wd_Q108444804",
+      "matched_ids": [
+        "movie_wd_Q108444804"
+      ]
+    },
+    {
+      "query": "Find a movie called The Batman (2022)",
+      "passed": true,
+      "source_id": "movie_wd_Q61117344",
+      "matched_ids": [
+        "movie_wd_Q61117344"
+      ]
+    },
+    {
+      "query": "Find a movie called Poor Things (2023)",
+      "passed": true,
+      "source_id": "movie_wd_Q108760382",
+      "matched_ids": [
+        "movie_wd_Q108760382"
+      ]
+    },
+    {
+      "query": "Find a movie called The Holdovers (2023)",
+      "passed": true,
+      "source_id": "movie_wd_Q112114745",
+      "matched_ids": [
+        "movie_wd_Q112114745"
+      ]
+    },
+    {
+      "query": "Find a movie called Knives Out (2019)",
+      "passed": true,
+      "source_id": "movie_wd_Q57982486",
+      "matched_ids": [
+        "movie_008"
+      ]
+    },
+    {
+      "query": "Find a movie called Parasite (2019)",
+      "passed": true,
+      "source_id": "movie_wd_Q61448040",
+      "matched_ids": [
+        "movie_wd_Q61448040"
+      ]
+    },
+    {
+      "query": "Find a movie called Poor Things (2019)",
+      "passed": true,
+      "source_id": "movie_wd_Q111309477",
+      "matched_ids": [
+        "movie_wd_Q111309477"
+      ]
+    },
+    {
+      "query": "Find a movie called The Banshees of Inisherin (2022)",
+      "passed": true,
+      "source_id": "movie_wd_Q108314506",
+      "matched_ids": [
+        "movie_wd_Q108314506"
+      ]
+    },
+    {
+      "query": "Find a movie called Spider-Man: No Way Home (2021)",
+      "passed": true,
+      "source_id": "movie_wd_Q68934496",
+      "matched_ids": [
+        "movie_wd_Q68934496"
+      ]
+    },
+    {
+      "query": "Find a movie called Avengers: Endgame (2019)",
+      "passed": true,
+      "source_id": "movie_wd_Q23781155",
+      "matched_ids": [
+        "movie_wd_Q23781155"
+      ]
+    },
+    {
+      "query": "Find a movie called Spider-Man: Across the Spider-Verse (2023)",
+      "passed": true,
+      "source_id": "movie_wd_Q76448600",
+      "matched_ids": [
+        "movie_wd_Q76448600"
+      ]
+    },
+    {
+      "query": "Find a movie called The Boy and the Heron (2023)",
+      "passed": true,
+      "source_id": "movie_wd_Q47482560",
+      "matched_ids": [
+        "movie_wd_Q47482560"
+      ]
+    },
+    {
+      "query": "Find a movie called Anora (2024)",
+      "passed": true,
+      "source_id": "movie_wd_Q123185887",
+      "matched_ids": [
+        "movie_wd_Q123185887"
+      ]
+    },
+    {
+      "query": "Find a movie called The Substance (2024)",
+      "passed": true,
+      "source_id": "movie_wd_Q113380226",
+      "matched_ids": [
+        "movie_wd_Q113380226"
+      ]
+    },
+    {
+      "query": "Find a movie called Joker (2019)",
+      "passed": true,
+      "source_id": "movie_wd_Q42759035",
+      "matched_ids": [
+        "movie_wd_Q42759035"
+      ]
+    },
+    {
+      "query": "Find a movie called Inside Out 2 (2024)",
+      "passed": true,
+      "source_id": "movie_wd_Q113877606",
+      "matched_ids": [
+        "movie_wd_Q113877606"
+      ]
+    },
+    {
+      "query": "Find a movie called The Wild Robot (2024)",
+      "passed": true,
+      "source_id": "movie_wd_Q124378349",
+      "matched_ids": [
+        "movie_wd_Q124378349"
+      ]
+    },
+    {
+      "query": "Find a movie called Soul (2020)",
+      "passed": true,
+      "source_id": "movie_wd_Q64744044",
+      "matched_ids": [
+        "movie_wd_Q64744044"
+      ]
+    },
+    {
+      "query": "Find a movie called Top Gun: Maverick (2022)",
+      "passed": true,
+      "source_id": "movie_pub_cb8a2d55e5d5",
+      "matched_ids": [
+        "movie_pub_cb8a2d55e5d5"
+      ]
+    }
+  ]
+}

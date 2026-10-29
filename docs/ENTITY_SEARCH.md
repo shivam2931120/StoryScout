@@ -90,7 +90,7 @@ comparison, not an isolated training experiment or universal accuracy figure.
 Results: artifacts/entity_search/before.json and local.json. The existing 42-case
 identity check now includes the newly available Orwell book alias and still passes.
 
-**165 pytest tests**, **4 frontend checks**, production React build, **7 core HTTP
+**170 pytest tests**, **4 frontend checks**, production React build, **7 core HTTP
 scenarios**, **11 topic/context/source checks**, **42 identity checks**, and **7
 passage/provenance checks** passed locally. The 90 new HTTP checks also pass.
 Serving and source acquisition are separate; offline operation uses committed
@@ -127,3 +127,12 @@ running without these services. Dependencies remain pinned in requirements-free.
 Browser validation also passed conversational Inception lookup (one exact-title
 card), a labeled Interstellar typo suggestion, and an explicitly missing title
 without new recommendation cards. No JavaScript errors were observed.
+
+The added source catalog also passed **45/45** identity/media/year round trips
+through the HTTP API (`scripts/verify_catalog_coverage.py`, measured output in
+`artifacts/entity_search/coverage.json`). This caught and fixed over-stripping
+literal words in names such as “The Book Thief” and “The Book of Eli”. The
+extractor checks an entire candidate title before stripping another format noun.
+The final 90-case route benchmark was rerun after this fix and still passes.
+Docker separates artifact dependencies from runtime routing files so future
+identity-only fixes do not invalidate the expensive NLP preparation stage.

@@ -12,7 +12,8 @@ ENV PYTHONUNBUFFERED=1 TOKENIZERS_PARALLELISM=false OMP_NUM_THREADS=1 OPENBLAS_N
 RUN apt-get update && apt-get install -y --no-install-recommends libgomp1 && rm -rf /var/lib/apt/lists/*
 COPY requirements-free.txt ./
 RUN pip install --no-cache-dir -r requirements-free.txt
-COPY src/ ./src/
+# Only artifact dependencies invalidate the expensive NLP preparation stage.
+COPY src/__init__.py src/config.py src/schemas.py src/preprocessing.py src/data_loader.py src/retrieval.py src/passages.py src/query_understanding.py src/preferences.py src/intents.py src/onnx_encoder.py src/relevance.py ./src/
 COPY scripts/train_text_genres.py scripts/prepare_compact_catalog.py scripts/prepare_onnx_model.py scripts/build_indexes.py ./scripts/
 COPY data/ ./data/
 # Training uses the source corpus; the hosted subset is selected afterwards.
@@ -28,7 +29,7 @@ ENV PYTHONUNBUFFERED=1 TOKENIZERS_PARALLELISM=false OMP_NUM_THREADS=1 OPENBLAS_N
 RUN apt-get update && apt-get install -y --no-install-recommends libgomp1 curl && rm -rf /var/lib/apt/lists/* && useradd --create-home --uid 10001 scout
 COPY --from=nlp /usr/local/lib/python3.14/site-packages/ /usr/local/lib/python3.14/site-packages/
 COPY --from=nlp /usr/local/bin/ /usr/local/bin/
-COPY --from=nlp /app/src/ ./src/
+COPY src/ ./src/
 COPY --from=nlp --chown=scout:scout /app/artifacts/ ./artifacts/
 COPY --from=nlp /app/data/compact/ ./data/compact/
 COPY data/evaluation_queries.json data/preference_evaluation.json ./data/

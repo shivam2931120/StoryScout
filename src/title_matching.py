@@ -83,7 +83,7 @@ def title_request(text):
         r"^(?:i (?:want|would like|wish) to|i'd like to|let me)\s+(?:watch|read)\s+",
         r"^(?:i(?: am|'m)? looking for|looking for|do you have|have you got|i want|i would like|i'd like)\s+",
         r"^(?:show|give) me (?:details|information) (?:of|about|on)\s+",
-        r"^(?:find|show|give|search(?: for)?|look up|recommend|suggest)(?:\s+me)?\s+(?:(?:the|a)\s+)?(?:(?:movie|film|book|novel|title)\s+(?:(?:called|named|titled)\s+)?)?",
+        r"^(?:find|show|give|search(?: for)?|look up|recommend|suggest)(?:\s+me)?\s+",
         r"^(?:watch|read)\s+",
         r"^(?:the\s+)?(?:movie|film|book|novel)\s+",
     ]
@@ -93,10 +93,6 @@ def title_request(text):
         if match:
             query=text[match.end():];wrapped=True;break
     requested='book' if re.search(r"\b(?:book|novel|read)\b",text[:len(text)-len(query)],re.I) else ('movie' if re.search(r"\b(?:movie|film|watch)\b",text[:len(text)-len(query)],re.I) else None)
-    leading=re.match(r"^(?:(?:the|a)\s+)?(movie|film|book|novel)\s+(?:(?:called|named|titled)\s+)?",query,re.I) if wrapped else None
-    if leading:
-        requested='book' if leading[1].lower() in {'book','novel'} else 'movie'
-        query=query[leading.end():]
     trailing=re.search(r"\s+(movies|films|books|novels)$",query,re.I)
     if trailing:
         requested="book" if trailing[1].lower() in {"books","novels"} else "movie"
@@ -157,8 +153,16 @@ class TitleDirectory:
         for candidate in candidates:
             exact=identities(title_key(candidate))
             if exact:
+                if candidate==candidates[0]:
+                    requested=None;self.last_requested_media=None
                 ids=exact;key=title_key(candidate);query=candidate;break
         if not ids:
+            # Only strip a format noun after trying the entire extracted title.
+            # 'The Book Thief' and 'The Book of Eli' contain literal title words.
+            leading=re.match(r"^(?:(?:the|a)\s+)?(movie|film|book|novel|title)\s+(?:(?:called|named|titled)\s+)?",query,re.I) if wrapped else None
+            if leading:
+                requested='book' if leading[1].lower() in {'book','novel'} else ('movie' if leading[1].lower() in {'movie','film'} else None)
+                self.last_requested_media=requested;query=query[leading.end():]
             suffix=re.search(r'\s+(?:under|below|after|before|between)\s+(?:\d+|one\b|two\b|three\b)',query,re.I)
             if suffix:
                 candidate=query[:suffix.start()].strip()

@@ -108,7 +108,7 @@ def create_app(engine: StoryScoutEngine | None = None) -> FastAPI:
         all_items = [x for items in current.catalogs.values() for x in items]
         starters = [next((x for x in all_items if x.title == title and x.source.startswith("demo")), None) for title in titles]
         return {"counts": {k: len(v) for k, v in current.catalogs.items()}, "status": catalog_status(all_items),
-                "title_directory_count":len(current.title_directory.records),"search_version":"3.0-entity-routing-source-coverage",
+                "title_directory_count":len(current.title_directory.records),"search_version":"3.1-entity-routing-source-coverage",
                 "catalog_profile":os.getenv('STORYSCOUT_CATALOG_PROFILE','full'),"embedding_backend":os.getenv('STORYSCOUT_EMBEDDING_BACKEND','torch'),
                 "genres": GENRES, "moods": MOODS, "modes": modes(current), "model": MODEL_NAME,
                 "coverage":{domain:{'plot_text':sum(bool(x.retrieval_text) for x in items),'descriptions':sum(bool(x.retrieval_text or x.description_provenance or x.source=='demo') for x in items),

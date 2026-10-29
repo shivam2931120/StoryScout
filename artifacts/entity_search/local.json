@@ -1,5 +1,5 @@
 {
-  "executed_at": "2026-10-29T17:08:06.601353+00:00",
+  "executed_at": "2026-10-29T17:24:28.243653+00:00",
   "base_url": "http://127.0.0.1:8000",
   "judgment_method": "Developer-authored identity/route expectations, grounded in local source titles. Includes conversational wording and missing-title negatives. Not independent human relevance ratings.",
   "limitations": "Targeted regression set, not universal coverage or recommendation accuracy. Fresh and inherited-context cases are scored separately.",
@@ -48,7 +48,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 57.34,
+      "latency_ms": 30.48,
       "reply": "Found the title in the catalog."
     },
     {
@@ -63,7 +63,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 45.23,
+      "latency_ms": 31.45,
       "reply": "Found the title in the catalog."
     },
     {
@@ -78,7 +78,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 34.25,
+      "latency_ms": 29.2,
       "reply": "Found the title in the catalog."
     },
     {
@@ -93,7 +93,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 28.65,
+      "latency_ms": 28.39,
       "reply": "Found the title in the catalog."
     },
     {
@@ -108,7 +108,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 56.42,
+      "latency_ms": 30.51,
       "reply": "Found the title in the catalog."
     },
     {
@@ -123,7 +123,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 77.67,
+      "latency_ms": 28.28,
       "reply": "Found the title in the catalog."
     },
     {
@@ -138,7 +138,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 34.1,
+      "latency_ms": 28.45,
       "reply": "Found the title in the catalog."
     },
     {
@@ -153,7 +153,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 28.69,
+      "latency_ms": 30.6,
       "reply": "Found the title in the catalog."
     },
     {
@@ -168,7 +168,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 50.38,
+      "latency_ms": 29.05,
       "reply": "Found the title in the catalog."
     },
     {
@@ -183,7 +183,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 32.53,
+      "latency_ms": 28.64,
       "reply": "Found the title in the catalog."
     },
     {
@@ -198,7 +198,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 87.39,
+      "latency_ms": 28.7,
       "reply": "Found the title in the catalog."
     },
     {
@@ -213,7 +213,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 31.51,
+      "latency_ms": 30.01,
       "reply": "Found the title in the catalog."
     },
     {
@@ -228,7 +228,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 46.57,
+      "latency_ms": 28.51,
       "reply": "Found the title in the catalog."
     },
     {
@@ -243,7 +243,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 27.91,
+      "latency_ms": 29.56,
       "reply": "Found the title in the catalog."
     },
     {
@@ -258,7 +258,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 32.24,
+      "latency_ms": 28.51,
       "reply": "Found the title in the catalog."
     },
     {
@@ -273,7 +273,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 30.5,
+      "latency_ms": 28.37,
       "reply": "Found the title in the catalog."
     },
     {
@@ -288,7 +288,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 27.21,
+      "latency_ms": 29.87,
       "reply": "Found the title in the catalog."
     },
     {
@@ -303,7 +303,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 43.15,
+      "latency_ms": 32.64,
       "reply": "Found the title in the catalog."
     },
     {
@@ -318,7 +318,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 46.04,
+      "latency_ms": 41.8,
       "reply": "Found the title in the catalog."
     },
     {
@@ -333,7 +333,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 27.68,
+      "latency_ms": 39.84,
       "reply": "Found the title in the catalog."
     },
     {
@@ -348,7 +348,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 26.77,
+      "latency_ms": 35.11,
       "reply": "Found the title in the catalog."
     },
     {
@@ -363,7 +363,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 29.14,
+      "latency_ms": 29.69,
       "reply": "Found the title in the catalog."
     },
     {
@@ -378,7 +378,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 26.84,
+      "latency_ms": 33.66,
       "reply": "Found the title in the catalog."
     },
     {
@@ -393,7 +393,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 26.7,
+      "latency_ms": 30.25,
       "reply": "Found the title in the catalog."
     },
     {
@@ -408,7 +408,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 28.63,
+      "latency_ms": 31.68,
       "reply": "Found the title in the catalog."
     },
     {
@@ -423,7 +423,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 26.79,
+      "latency_ms": 31.82,
       "reply": "Found the title in the catalog."
     },
     {
@@ -438,7 +438,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 26.62,
+      "latency_ms": 33.38,
       "reply": "Found the title in the catalog."
     },
     {
@@ -453,7 +453,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 27.0,
+      "latency_ms": 35.02,
       "reply": "Found the title in the catalog."
     },
     {
@@ -468,7 +468,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 29.15,
+      "latency_ms": 38.4,
       "reply": "Found the title in the catalog."
     },
     {
@@ -483,7 +483,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 27.04,
+      "latency_ms": 40.98,
       "reply": "Found the title in the catalog."
     },
     {
@@ -498,7 +498,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 27.18,
+      "latency_ms": 39.79,
       "reply": "Found the title in the catalog."
     },
     {
@@ -513,7 +513,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 27.75,
+      "latency_ms": 36.22,
       "reply": "Found the title in the catalog."
     },
     {
@@ -528,7 +528,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 27.21,
+      "latency_ms": 39.39,
       "reply": "Found the title in the catalog."
     },
     {
@@ -543,7 +543,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 27.15,
+      "latency_ms": 28.07,
       "reply": "Found the title in the catalog."
     },
     {
@@ -558,7 +558,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 33.77,
+      "latency_ms": 28.84,
       "reply": "Found the title in the catalog."
     },
     {
@@ -573,7 +573,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 29.36,
+      "latency_ms": 37.98,
       "reply": "Found the title in the catalog."
     },
     {
@@ -588,7 +588,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 27.54,
+      "latency_ms": 30.21,
       "reply": "Found the title in the catalog."
     },
     {
@@ -603,7 +603,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 27.35,
+      "latency_ms": 29.23,
       "reply": "Found the title in the catalog."
     },
     {
@@ -618,7 +618,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 27.88,
+      "latency_ms": 32.82,
       "reply": "Found the title in the catalog."
     },
     {
@@ -633,7 +633,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 32.69,
+      "latency_ms": 34.85,
       "reply": "Found the title in the catalog."
     },
     {
@@ -648,7 +648,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 32.63,
+      "latency_ms": 29.05,
       "reply": "Found the title in the catalog."
     },
     {
@@ -663,7 +663,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 27.34,
+      "latency_ms": 31.8,
       "reply": "Found the title in the catalog."
     },
     {
@@ -678,7 +678,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 29.31,
+      "latency_ms": 33.27,
       "reply": "Found the title in the catalog."
     },
     {
@@ -693,7 +693,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 27.67,
+      "latency_ms": 28.71,
       "reply": "Found the title in the catalog."
     },
     {
@@ -726,7 +726,7 @@
         "partial",
         "partial"
       ],
-      "latency_ms": 36.5,
+      "latency_ms": 60.21,
       "reply": "These catalog titles contain that name. Choose the one you meant."
     },
     {
@@ -755,7 +755,7 @@
         "partial",
         "partial"
       ],
-      "latency_ms": 35.74,
+      "latency_ms": 42.86,
       "reply": "These catalog titles contain that name. Choose the one you meant."
     },
     {
@@ -784,7 +784,7 @@
         "partial",
         "partial"
       ],
-      "latency_ms": 35.8,
+      "latency_ms": 43.49,
       "reply": "These catalog titles contain that name. Choose the one you meant."
     },
     {
@@ -813,7 +813,7 @@
         "partial",
         "partial"
       ],
-      "latency_ms": 35.74,
+      "latency_ms": 37.51,
       "reply": "These catalog titles contain that name. Choose the one you meant."
     },
     {
@@ -840,7 +840,7 @@
         "partial",
         "partial"
       ],
-      "latency_ms": 35.74,
+      "latency_ms": 39.76,
       "reply": "These catalog titles contain that name. Choose the one you meant."
     },
     {
@@ -867,7 +867,7 @@
         "partial",
         "partial"
       ],
-      "latency_ms": 35.62,
+      "latency_ms": 38.81,
       "reply": "These catalog titles contain that name. Choose the one you meant."
     },
     {
@@ -882,7 +882,7 @@
       "actual_kinds": [
         "suggestion"
       ],
-      "latency_ms": 49.31,
+      "latency_ms": 55.84,
       "reply": "Did you mean one of these titles? Choose the intended match."
     },
     {
@@ -897,7 +897,7 @@
       "actual_kinds": [
         "suggestion"
       ],
-      "latency_ms": 49.54,
+      "latency_ms": 52.91,
       "reply": "Did you mean one of these titles? Choose the intended match."
     },
     {
@@ -912,7 +912,7 @@
       "actual_kinds": [
         "suggestion"
       ],
-      "latency_ms": 42.61,
+      "latency_ms": 77.31,
       "reply": "Did you mean one of these titles? Choose the intended match."
     },
     {
@@ -927,7 +927,7 @@
       "actual_kinds": [
         "suggestion"
       ],
-      "latency_ms": 48.14,
+      "latency_ms": 77.71,
       "reply": "Did you mean one of these titles? Choose the intended match."
     },
     {
@@ -942,7 +942,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 28.36,
+      "latency_ms": 29.58,
       "reply": "Found the title in the catalog."
     },
     {
@@ -957,7 +957,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 32.61,
+      "latency_ms": 30.16,
       "reply": "Found the title in the catalog."
     },
     {
@@ -972,7 +972,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 32.63,
+      "latency_ms": 37.14,
       "reply": "Found the title in the catalog."
     },
     {
@@ -987,7 +987,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 35.11,
+      "latency_ms": 43.6,
       "reply": "Found the title in the catalog."
     },
     {
@@ -1002,7 +1002,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 30.51,
+      "latency_ms": 44.12,
       "reply": "Found the title in the catalog."
     },
     {
@@ -1017,7 +1017,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 32.54,
+      "latency_ms": 39.94,
       "reply": "Found the title in the catalog."
     },
     {
@@ -1032,7 +1032,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 28.96,
+      "latency_ms": 44.49,
       "reply": "Found the title in the catalog."
     },
     {
@@ -1047,7 +1047,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 30.22,
+      "latency_ms": 46.34,
       "reply": "Found the title in the catalog."
     },
     {
@@ -1064,7 +1064,7 @@
         "exact",
         "exact"
       ],
-      "latency_ms": 37.56,
+      "latency_ms": 44.9,
       "reply": "Several titles match. Open the one you meant."
     },
     {
@@ -1079,7 +1079,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 33.94,
+      "latency_ms": 41.35,
       "reply": "Found the title in the catalog."
     },
     {
@@ -1090,7 +1090,7 @@
       "retained_preferences": true,
       "matched_ids": [],
       "actual_kinds": [],
-      "latency_ms": 37.18,
+      "latency_ms": 46.68,
       "reply": "That title is not in the local title directory under \u2018Inception\u2019. It may be missing or spelled differently. Try the full title, release year, or author. For a topic search, say \u2018stories about \u2026\u2019. I have not substituted unrelated titles."
     },
     {
@@ -1101,7 +1101,7 @@
       "retained_preferences": true,
       "matched_ids": [],
       "actual_kinds": [],
-      "latency_ms": 31.9,
+      "latency_ms": 41.59,
       "reply": "That title is not in the local title directory under \u2018Inception\u2019. It may be missing or spelled differently. Try the full title, release year, or author. For a topic search, say \u2018stories about \u2026\u2019. I have not substituted unrelated titles."
     },
     {
@@ -1112,7 +1112,7 @@
       "retained_preferences": true,
       "matched_ids": [],
       "actual_kinds": [],
-      "latency_ms": 27.47,
+      "latency_ms": 49.18,
       "reply": "That title is not in the local title directory under \u2018Inception\u2019. It may be missing or spelled differently. Try the full title, release year, or author. For a topic search, say \u2018stories about \u2026\u2019. I have not substituted unrelated titles."
     },
     {
@@ -1123,7 +1123,7 @@
       "retained_preferences": true,
       "matched_ids": [],
       "actual_kinds": [],
-      "latency_ms": 27.88,
+      "latency_ms": 45.5,
       "reply": "That title is not in the local title directory under \u2018Inception\u2019. It may be missing or spelled differently. Try the full title, release year, or author. For a topic search, say \u2018stories about \u2026\u2019. I have not substituted unrelated titles."
     },
     {
@@ -1134,7 +1134,7 @@
       "retained_preferences": true,
       "matched_ids": [],
       "actual_kinds": [],
-      "latency_ms": 72.15,
+      "latency_ms": 97.27,
       "reply": "That title is not in the local title directory under \u2018Unlisted Zzxw Film\u2019. It may be missing or spelled differently. Try the full title, release year, or author. For a topic search, say \u2018stories about \u2026\u2019. I have not substituted unrelated titles."
     },
     {
@@ -1145,7 +1145,7 @@
       "retained_preferences": true,
       "matched_ids": [],
       "actual_kinds": [],
-      "latency_ms": 81.11,
+      "latency_ms": 105.82,
       "reply": "That title is not in the local title directory under \u2018Unlisted Zzxw Film\u2019. It may be missing or spelled differently. Try the full title, release year, or author. For a topic search, say \u2018stories about \u2026\u2019. I have not substituted unrelated titles."
     },
     {
@@ -1156,7 +1156,7 @@
       "retained_preferences": true,
       "matched_ids": [],
       "actual_kinds": [],
-      "latency_ms": 71.25,
+      "latency_ms": 119.16,
       "reply": "That title is not in the local title directory under \u2018Unlisted Zzxw Title\u2019. It may be missing or spelled differently. Try the full title, release year, or author. For a topic search, say \u2018stories about \u2026\u2019. I have not substituted unrelated titles."
     },
     {
@@ -1167,7 +1167,7 @@
       "retained_preferences": true,
       "matched_ids": [],
       "actual_kinds": [],
-      "latency_ms": 78.31,
+      "latency_ms": 105.96,
       "reply": "That title is not in the local title directory under \u2018Unlisted Zzxw Title\u2019. It may be missing or spelled differently. Try the full title, release year, or author. For a topic search, say \u2018stories about \u2026\u2019. I have not substituted unrelated titles."
     },
     {
@@ -1178,7 +1178,7 @@
       "retained_preferences": true,
       "matched_ids": [],
       "actual_kinds": [],
-      "latency_ms": 66.18,
+      "latency_ms": 83.02,
       "reply": "That title is not in the local title directory under \u2018Unlisted Zzxw Novel\u2019. It may be missing or spelled differently. Try the full title, release year, or author. For a topic search, say \u2018stories about \u2026\u2019. I have not substituted unrelated titles."
     },
     {
@@ -1189,7 +1189,7 @@
       "retained_preferences": true,
       "matched_ids": [],
       "actual_kinds": [],
-      "latency_ms": 72.34,
+      "latency_ms": 101.72,
       "reply": "That title is not in the local title directory under \u2018Unlisted Zzxw Novel\u2019. It may be missing or spelled differently. Try the full title, release year, or author. For a topic search, say \u2018stories about \u2026\u2019. I have not substituted unrelated titles."
     },
     {
@@ -1200,7 +1200,7 @@
       "retained_preferences": true,
       "matched_ids": [],
       "actual_kinds": [],
-      "latency_ms": 115.62,
+      "latency_ms": 125.03,
       "reply": "I could not identify the reference title \u2018Unlisted Zzxw Reference\u2019. Try its full title, author, or release year. I have not substituted another story."
     },
     {
@@ -1211,7 +1211,7 @@
       "retained_preferences": true,
       "matched_ids": [],
       "actual_kinds": [],
-      "latency_ms": 118.15,
+      "latency_ms": 113.38,
       "reply": "I could not identify the reference title \u2018Unlisted Zzxw Reference\u2019. Try its full title, author, or release year. I have not substituted another story."
     },
     {
@@ -1222,7 +1222,7 @@
       "retained_preferences": true,
       "matched_ids": [],
       "actual_kinds": [],
-      "latency_ms": 101.66,
+      "latency_ms": 109.22,
       "reply": "Did you mean one of these reference titles? Choose the intended title before I compare its story."
     },
     {
@@ -1233,7 +1233,7 @@
       "retained_preferences": true,
       "matched_ids": [],
       "actual_kinds": [],
-      "latency_ms": 103.83,
+      "latency_ms": 96.82,
       "reply": "Did you mean one of these reference titles? Choose the intended title before I compare its story."
     },
     {
@@ -1244,7 +1244,7 @@
       "retained_preferences": true,
       "matched_ids": [],
       "actual_kinds": [],
-      "latency_ms": 63.78,
+      "latency_ms": 49.49,
       "reply": "Here are stories to explore, selected for your request."
     },
     {
@@ -1255,7 +1255,7 @@
       "retained_preferences": true,
       "matched_ids": [],
       "actual_kinds": [],
-      "latency_ms": 66.25,
+      "latency_ms": 54.18,
       "reply": "Here are stories to explore, selected for your request."
     },
     {
@@ -1266,7 +1266,7 @@
       "retained_preferences": true,
       "matched_ids": [],
       "actual_kinds": [],
-      "latency_ms": 50.58,
+      "latency_ms": 43.9,
       "reply": "Here are stories to explore, selected for your request."
     },
     {
@@ -1277,7 +1277,7 @@
       "retained_preferences": true,
       "matched_ids": [],
       "actual_kinds": [],
-      "latency_ms": 55.3,
+      "latency_ms": 44.96,
       "reply": "Here are stories to explore, selected for your request."
     },
     {
@@ -1288,7 +1288,7 @@
       "retained_preferences": true,
       "matched_ids": [],
       "actual_kinds": [],
-      "latency_ms": 144.79,
+      "latency_ms": 104.33,
       "reply": "Here are stories to explore, selected for your request."
     },
     {
@@ -1299,7 +1299,7 @@
       "retained_preferences": true,
       "matched_ids": [],
       "actual_kinds": [],
-      "latency_ms": 74.93,
+      "latency_ms": 132.74,
       "reply": "Here are stories to explore, selected for your request."
     },
     {
@@ -1310,7 +1310,7 @@
       "retained_preferences": true,
       "matched_ids": [],
       "actual_kinds": [],
-      "latency_ms": 122.11,
+      "latency_ms": 131.93,
       "reply": "Here are stories to explore, selected for your request."
     },
     {
@@ -1321,7 +1321,7 @@
       "retained_preferences": true,
       "matched_ids": [],
       "actual_kinds": [],
-      "latency_ms": 76.0,
+      "latency_ms": 73.98,
       "reply": "Here are stories to explore, selected for your request."
     },
     {
@@ -1336,7 +1336,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 34.02,
+      "latency_ms": 33.24,
       "reply": "Found the title in the catalog."
     },
     {
@@ -1351,7 +1351,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 29.54,
+      "latency_ms": 30.13,
       "reply": "Found the title in the catalog."
     },
     {
@@ -1366,7 +1366,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 29.96,
+      "latency_ms": 30.75,
       "reply": "Found the title in the catalog."
     },
     {
@@ -1381,7 +1381,7 @@
       "actual_kinds": [
         "exact"
       ],
-      "latency_ms": 31.32,
+      "latency_ms": 29.85,
       "reply": "Found the title in the catalog."
     }
   ]
