@@ -255,7 +255,7 @@ def create_app(engine: StoryScoutEngine | None = None) -> FastAPI:
         if path.startswith("api/"):
             raise HTTPException(404, "API endpoint not found.")
         # Only serve known public files. Never expose repository files or secrets.
-        if path in {"favicon.svg", "art/space.svg", "art/mystery.svg", "art/journey.svg", "art/warm.svg"} and (dist / path).is_file():
+        if path in {"favicon.svg", "tmdb-logo.svg", "art/space.svg", "art/mystery.svg", "art/journey.svg", "art/warm.svg"} and (dist / path).is_file():
             return FileResponse(dist / path)
         if (dist / "index.html").is_file():
             return FileResponse(dist / "index.html")
