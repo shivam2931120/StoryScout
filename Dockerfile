@@ -18,7 +18,7 @@ COPY data/ ./data/
 # Training uses the source corpus; the hosted subset is selected afterwards.
 RUN mkdir -p artifacts && python scripts/train_text_genres.py && python scripts/prepare_compact_catalog.py && python scripts/prepare_onnx_model.py
 ENV STORYSCOUT_CATALOG_PROFILE=compact STORYSCOUT_EMBEDDING_BACKEND=onnx
-RUN python scripts/build_indexes.py && python -c "import json; from pathlib import Path; assert all(json.loads(p.read_text())['embeddings_cached'] for p in Path('artifacts').glob('*_index_meta.json')), 'Semantic preparation failed'"
+RUN python scripts/build_indexes.py && python -c "import json; from pathlib import Path; assert all(json.loads(p.read_text())['embeddings_cached'] and json.loads(p.read_text()).get('passage_embeddings_cached') is not False for p in Path('artifacts').glob('*_index_meta.json')), 'Semantic preparation failed'"
 
 FROM python:3.14-slim-bookworm
 WORKDIR /app
@@ -36,6 +36,7 @@ COPY api/ ./api/
 COPY artifacts/evaluation_results.json artifacts/evaluation_summary.md artifacts/evaluation_query_results.csv artifacts/genre_classifier_results.json ./artifacts/
 COPY artifacts/search_tuning/ ./artifacts/search_tuning/
 COPY artifacts/compact/ ./artifacts/compact/
+COPY artifacts/passages/ ./artifacts/passages/
 COPY --from=frontend /web/dist ./frontend/dist/
 USER scout
 EXPOSE 8000

@@ -13,6 +13,8 @@ def explain(rec: Recommendation, query: str, pref: Preferences) -> str:
     if themes: bits.append("supports the theme(s) " + ", ".join(themes))
     if pref.desired_mood and pref.desired_mood not in item.mood_tags and rec.score_components.get('mood_alignment',0) >= .35:
         bits.append(f"has text aligned with a {pref.desired_mood} tone (NLP inference)")
+    if rec.passage_match:
+        bits.append(f"matches a passage in its available narrative text (passage {rec.passage_match['passage_number']} of {rec.passage_match['passage_count']})")
     if rec.matched_terms: bits.append('shares text signals: ' + ', '.join(rec.matched_terms[:3]))
     if pref.language and pref.language.lower() in item.language.lower().split('|'): bits.append(f"lists {pref.language} in its source language metadata")
     if item.year and ((pref.min_year and item.year >= pref.min_year) or (pref.max_year and item.year <= pref.max_year)): bits.append(f"fits the year range ({item.year})")

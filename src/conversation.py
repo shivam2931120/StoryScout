@@ -203,7 +203,7 @@ class StoryScoutEngine:
 
     def explain_last(self, state: ConversationState) -> str:
         if not state.last_recommendations: return "There are no recommendations to explain yet."
-        return "The last results were selected using the active hard filters first, then TF-IDF and, when available, sentence-embedding similarity. Each card lists the grounded matching evidence."
+        return "The last results were selected using the active hard filters first, then whole-description and indexed-passage matching with TF-IDF and, when available, sentence embeddings. Each card lists grounded metadata and passage evidence."
 
     def empty_message(self, state: ConversationState) -> str:
         p = state.preferences

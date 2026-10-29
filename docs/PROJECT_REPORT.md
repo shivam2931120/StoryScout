@@ -30,11 +30,17 @@ On the currently hosted compact subset (1,000 books and 1,500 movies), quantized
 
 | Method | P@5 | Recall@5 | MRR@5 | Returned precision | Hard compliance | Mean ms |
 |---|---:|---:|---:|---:|---:|---:|
-| tfidf | 0.2297 | 0.6312 | 0.7454 | 0.4689 | 1.0000 | 11.4 |
-| semantic | 0.2445 | 0.6559 | 0.7336 | 0.4410 | 1.0000 | 20.0 |
-| hybrid | 0.2703 | 0.7129 | 0.7824 | 0.4747 | 1.0000 | 17.8 |
+| tfidf | 0.2297 | 0.6312 | 0.7238 | 0.4689 | 1.0000 | 12.9 |
+| semantic | 0.2445 | 0.6559 | 0.7368 | 0.4435 | 1.0000 | 19.6 |
+| hybrid | 0.2666 | 0.7037 | 0.7855 | 0.4688 | 1.0000 | 19.1 |
 
-The prior compact hybrid measured MRR@5 0.7639, P@5 0.2926 and Recall@5 0.7500. The current hybrid improves first-hit rank and precision among returned recommendations, while P@5 and recall decrease because weak matches are withheld and the source catalog changed. This is not an isolated ablation or a universal accuracy guarantee. All query-domain cases are answered by the hybrid; slot fill is 0.7185. Hard compliance measures returned records, with answer coverage reported separately. The complete comparison, source limitations and pipeline defaults are in `NLP_RELEVANCE_UPDATE.md`.
+Overlapping narrative passages now supplement whole-document retrieval. The
+controlled ablation increases focal-detail hybrid MRR@5 from 0.7333 to 0.8000
+on 10 developer-authored movie queries, and broad macro MRR@5 from 0.7824 to
+0.7855. Broad P@5 and recall decrease. This does not establish universal accuracy
+improvements; two focal target movies still fail. Hard compliance remains 1.0.
+The implementation, source limitations, full comparison, and constrained-memory
+verification are in [PASSAGE_MATCHING.md](PASSAGE_MATCHING.md).
 
 Preference extraction reached 1.000 field exact match over 25 developer-authored conversation examples (33 messages). Some fields have low support, as recorded in the JSON. No human relevance ratings have been submitted. The Evaluation page now exports candidate results for human annotation and separately summarizes uploaded ratings.
 

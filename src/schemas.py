@@ -108,8 +108,9 @@ class Recommendation:
     semantic_score: float | None = None
     explanation: str = ""
     filter_notes: list[str] = field(default_factory=list)
-    score_components: dict[str, float] = field(default_factory=dict)
+    score_components: dict[str, float | None] = field(default_factory=dict)
     matched_terms: list[str] = field(default_factory=list)
+    passage_match: dict[str, Any] | None = None
 
 
 def item_from_row(row: dict[str, Any], media_type: MediaType) -> CatalogItem:

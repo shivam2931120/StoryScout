@@ -68,3 +68,9 @@ rules, not trained confidence scores. New search clears old criteria; follow-ups
 retain a removable topic and visible filters. Source-provided automatic summaries
 are labeled and never populate factual metadata. See [the executed comparison
 and further NLP experiments](NLP_RELEVANCE_UPDATE.md).
+
+## Passage matching update
+
+Overlapping narrative passages now supplement whole-document retrieval, with one
+card per title and source-grounded passage evidence. See [implementation, actual
+ablation results, caching, and validation](PASSAGE_MATCHING.md).

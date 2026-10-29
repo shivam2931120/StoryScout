@@ -64,3 +64,9 @@ quality cutoffs, and MMR. Factual-filter-only browsing reports zero text similar
 The API accepts explicit new/follow-up/similarity actions. Visible topic and
 reference chips are authoritative, so removing them cannot reparse stale UI text.
 See [policy and executed results](NLP_RELEVANCE_UPDATE.md).
+
+## Passage matching update
+
+Overlapping narrative passages now supplement whole-document retrieval, with one
+card per title and source-grounded passage evidence. See [implementation, actual
+ablation results, caching, and validation](PASSAGE_MATCHING.md).

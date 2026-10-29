@@ -32,8 +32,20 @@
         "semantic_ran": false,
         "retrieval_used": "tfidf",
         "query_cache_policy": "cleared before each mode; shared across domains within that mode",
-        "index_preparation_ms": 1995.62,
-        "mean_query_latency_ms_after_indexing": 11.398,
+        "passages": {
+          "book": {
+            "count": 93,
+            "semantic_ran": false,
+            "mode": "TF-IDF passages"
+          },
+          "movie": {
+            "count": 10367,
+            "semantic_ran": false,
+            "mode": "TF-IDF passages"
+          }
+        },
+        "index_preparation_ms": 1062.74,
+        "mean_query_latency_ms_after_indexing": 12.884,
         "by_domain": {
           "book": {
             "queries": 27,
@@ -50,22 +62,22 @@
             "queries": 27,
             "precision_at_5": 0.1852,
             "recall_at_5": 0.5031,
-            "mrr_at_5": 0.6852,
+            "mrr_at_5": 0.642,
             "hard_constraint_compliance": 1.0,
             "answer_rate": 0.963,
             "precision_when_returned": 0.3712,
-            "slot_fill_rate": 0.6889,
+            "slot_fill_rate": 0.7037,
             "nonempty_compliant_query_rate": 0.963
           }
         },
         "macro_average_of_book_and_movie_metrics": {
           "precision_at_5": 0.2297,
           "recall_at_5": 0.6312,
-          "mrr_at_5": 0.7454,
+          "mrr_at_5": 0.7238,
           "hard_constraint_compliance": 1.0,
           "answer_rate": 0.9815,
           "precision_when_returned": 0.4689,
-          "slot_fill_rate": 0.6629,
+          "slot_fill_rate": 0.6704,
           "nonempty_compliant_query_rate": 0.9815
         }
       },
@@ -74,18 +86,30 @@
         "semantic_ran": true,
         "retrieval_used": "semantic",
         "query_cache_policy": "cleared before each mode; shared across domains within that mode",
-        "index_preparation_ms": 2013.14,
-        "mean_query_latency_ms_after_indexing": 19.982,
+        "passages": {
+          "book": {
+            "count": 93,
+            "semantic_ran": true,
+            "mode": "TF-IDF + semantic passages"
+          },
+          "movie": {
+            "count": 10367,
+            "semantic_ran": true,
+            "mode": "TF-IDF + semantic passages"
+          }
+        },
+        "index_preparation_ms": 1608.85,
+        "mean_query_latency_ms_after_indexing": 19.638,
         "by_domain": {
           "book": {
             "queries": 27,
             "precision_at_5": 0.2963,
             "recall_at_5": 0.8333,
-            "mrr_at_5": 0.8642,
+            "mrr_at_5": 0.8704,
             "hard_constraint_compliance": 1.0,
             "answer_rate": 1,
-            "precision_when_returned": 0.616,
-            "slot_fill_rate": 0.6222,
+            "precision_when_returned": 0.621,
+            "slot_fill_rate": 0.6074,
             "nonempty_compliant_query_rate": 1.0
           },
           "movie": {
@@ -103,11 +127,11 @@
         "macro_average_of_book_and_movie_metrics": {
           "precision_at_5": 0.2445,
           "recall_at_5": 0.6559,
-          "mrr_at_5": 0.7336,
+          "mrr_at_5": 0.7368,
           "hard_constraint_compliance": 1.0,
           "answer_rate": 1,
-          "precision_when_returned": 0.441,
-          "slot_fill_rate": 0.7333,
+          "precision_when_returned": 0.4435,
+          "slot_fill_rate": 0.7259,
           "nonempty_compliant_query_rate": 1.0
         }
       },
@@ -116,18 +140,30 @@
         "semantic_ran": true,
         "retrieval_used": "hybrid",
         "query_cache_policy": "cleared before each mode; shared across domains within that mode",
-        "index_preparation_ms": 1216.32,
-        "mean_query_latency_ms_after_indexing": 17.777,
+        "passages": {
+          "book": {
+            "count": 93,
+            "semantic_ran": true,
+            "mode": "TF-IDF + semantic passages"
+          },
+          "movie": {
+            "count": 10367,
+            "semantic_ran": true,
+            "mode": "TF-IDF + semantic passages"
+          }
+        },
+        "index_preparation_ms": 1430.41,
+        "mean_query_latency_ms_after_indexing": 19.053,
         "by_domain": {
           "book": {
             "queries": 27,
-            "precision_at_5": 0.3111,
-            "recall_at_5": 0.8642,
-            "mrr_at_5": 0.8642,
+            "precision_at_5": 0.3037,
+            "recall_at_5": 0.8457,
+            "mrr_at_5": 0.8704,
             "hard_constraint_compliance": 1.0,
             "answer_rate": 1,
-            "precision_when_returned": 0.6309,
-            "slot_fill_rate": 0.6222,
+            "precision_when_returned": 0.6253,
+            "slot_fill_rate": 0.6148,
             "nonempty_compliant_query_rate": 1.0
           },
           "movie": {
@@ -137,18 +173,18 @@
             "mrr_at_5": 0.7006,
             "hard_constraint_compliance": 1.0,
             "answer_rate": 1,
-            "precision_when_returned": 0.3185,
-            "slot_fill_rate": 0.8148,
+            "precision_when_returned": 0.3123,
+            "slot_fill_rate": 0.8222,
             "nonempty_compliant_query_rate": 1.0
           }
         },
         "macro_average_of_book_and_movie_metrics": {
-          "precision_at_5": 0.2703,
-          "recall_at_5": 0.7129,
-          "mrr_at_5": 0.7824,
+          "precision_at_5": 0.2666,
+          "recall_at_5": 0.7037,
+          "mrr_at_5": 0.7855,
           "hard_constraint_compliance": 1.0,
           "answer_rate": 1,
-          "precision_when_returned": 0.4747,
+          "precision_when_returned": 0.4688,
           "slot_fill_rate": 0.7185,
           "nonempty_compliant_query_rate": 1.0
         }

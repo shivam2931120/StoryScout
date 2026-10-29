@@ -163,3 +163,9 @@ preferences; remakes and filter conflicts are shown explicitly. See
 
 Current search improvements, source-summary provenance, context controls, actual
 before/after metrics and suggested NLP experiments: [NLP relevance update](docs/NLP_RELEVANCE_UPDATE.md).
+
+## Passage matching update
+
+Overlapping narrative passages now supplement whole-document retrieval, with one
+card per title and source-grounded passage evidence. See [implementation, actual
+ablation results, caching, and validation](docs/PASSAGE_MATCHING.md).

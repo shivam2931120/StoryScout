@@ -1,5 +1,8 @@
 # NLP relevance and conversation update
 
+This report records the preceding revision. For the current passage-level change
+and controlled comparison, see [Passage matching](PASSAGE_MATCHING.md).
+
 ## Implemented changes
 
 - **Coverage:** canonical title/year joins recover 6,382 Wikipedia movie plots,

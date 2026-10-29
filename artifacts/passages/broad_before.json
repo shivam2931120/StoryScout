@@ -1,0 +1,210 @@
+{
+  "metric_definitions": {
+    "hard_constraint_compliance": "fraction of returned records satisfying all explicit constraints; null when no records returned",
+    "answer_rate": "fraction of query-domain cases with any result",
+    "precision_when_returned": "mean judged hits / returned count over answered cases only",
+    "precision_at_5": "judged hits / 5, including intentionally unfilled slots",
+    "nonempty_compliant_query_rate": "legacy metric: fraction of query-domain cases both answered and fully compliant"
+  },
+  "active_catalog": {
+    "book": {
+      "records": 1000,
+      "source_counts": {
+        "demo": 14,
+        "project-gutenberg-catalog": 986
+      }
+    },
+    "movie": {
+      "records": 1500,
+      "source_counts": {
+        "demo": 13,
+        "movielens-latest-small": 1487
+      }
+    }
+  },
+  "retrieval_benchmark": {
+    "query_count": 44,
+    "judgment_method": "Developer-authored relevance IDs grounded in catalog metadata; no independent human evaluation.",
+    "mixed_media_aggregation": "Book and movie metrics are calculated independently for each mixed query, then domain-level means are macro-averaged.",
+    "models": {
+      "tfidf": {
+        "status": "measured",
+        "semantic_ran": false,
+        "retrieval_used": "tfidf",
+        "query_cache_policy": "cleared before each mode; shared across domains within that mode",
+        "index_preparation_ms": 1995.62,
+        "mean_query_latency_ms_after_indexing": 11.398,
+        "by_domain": {
+          "book": {
+            "queries": 27,
+            "precision_at_5": 0.2741,
+            "recall_at_5": 0.7593,
+            "mrr_at_5": 0.8056,
+            "hard_constraint_compliance": 1.0,
+            "answer_rate": 1,
+            "precision_when_returned": 0.5667,
+            "slot_fill_rate": 0.637,
+            "nonempty_compliant_query_rate": 1.0
+          },
+          "movie": {
+            "queries": 27,
+            "precision_at_5": 0.1852,
+            "recall_at_5": 0.5031,
+            "mrr_at_5": 0.6852,
+            "hard_constraint_compliance": 1.0,
+            "answer_rate": 0.963,
+            "precision_when_returned": 0.3712,
+            "slot_fill_rate": 0.6889,
+            "nonempty_compliant_query_rate": 0.963
+          }
+        },
+        "macro_average_of_book_and_movie_metrics": {
+          "precision_at_5": 0.2297,
+          "recall_at_5": 0.6312,
+          "mrr_at_5": 0.7454,
+          "hard_constraint_compliance": 1.0,
+          "answer_rate": 0.9815,
+          "precision_when_returned": 0.4689,
+          "slot_fill_rate": 0.6629,
+          "nonempty_compliant_query_rate": 0.9815
+        }
+      },
+      "semantic": {
+        "status": "measured",
+        "semantic_ran": true,
+        "retrieval_used": "semantic",
+        "query_cache_policy": "cleared before each mode; shared across domains within that mode",
+        "index_preparation_ms": 2013.14,
+        "mean_query_latency_ms_after_indexing": 19.982,
+        "by_domain": {
+          "book": {
+            "queries": 27,
+            "precision_at_5": 0.2963,
+            "recall_at_5": 0.8333,
+            "mrr_at_5": 0.8642,
+            "hard_constraint_compliance": 1.0,
+            "answer_rate": 1,
+            "precision_when_returned": 0.616,
+            "slot_fill_rate": 0.6222,
+            "nonempty_compliant_query_rate": 1.0
+          },
+          "movie": {
+            "queries": 27,
+            "precision_at_5": 0.1926,
+            "recall_at_5": 0.4784,
+            "mrr_at_5": 0.6031,
+            "hard_constraint_compliance": 1.0,
+            "answer_rate": 1,
+            "precision_when_returned": 0.266,
+            "slot_fill_rate": 0.8444,
+            "nonempty_compliant_query_rate": 1.0
+          }
+        },
+        "macro_average_of_book_and_movie_metrics": {
+          "precision_at_5": 0.2445,
+          "recall_at_5": 0.6559,
+          "mrr_at_5": 0.7336,
+          "hard_constraint_compliance": 1.0,
+          "answer_rate": 1,
+          "precision_when_returned": 0.441,
+          "slot_fill_rate": 0.7333,
+          "nonempty_compliant_query_rate": 1.0
+        }
+      },
+      "hybrid": {
+        "status": "measured",
+        "semantic_ran": true,
+        "retrieval_used": "hybrid",
+        "query_cache_policy": "cleared before each mode; shared across domains within that mode",
+        "index_preparation_ms": 1216.32,
+        "mean_query_latency_ms_after_indexing": 17.777,
+        "by_domain": {
+          "book": {
+            "queries": 27,
+            "precision_at_5": 0.3111,
+            "recall_at_5": 0.8642,
+            "mrr_at_5": 0.8642,
+            "hard_constraint_compliance": 1.0,
+            "answer_rate": 1,
+            "precision_when_returned": 0.6309,
+            "slot_fill_rate": 0.6222,
+            "nonempty_compliant_query_rate": 1.0
+          },
+          "movie": {
+            "queries": 27,
+            "precision_at_5": 0.2296,
+            "recall_at_5": 0.5617,
+            "mrr_at_5": 0.7006,
+            "hard_constraint_compliance": 1.0,
+            "answer_rate": 1,
+            "precision_when_returned": 0.3185,
+            "slot_fill_rate": 0.8148,
+            "nonempty_compliant_query_rate": 1.0
+          }
+        },
+        "macro_average_of_book_and_movie_metrics": {
+          "precision_at_5": 0.2703,
+          "recall_at_5": 0.7129,
+          "mrr_at_5": 0.7824,
+          "hard_constraint_compliance": 1.0,
+          "answer_rate": 1,
+          "precision_when_returned": 0.4747,
+          "slot_fill_rate": 0.7185,
+          "nonempty_compliant_query_rate": 1.0
+        }
+      }
+    }
+  },
+  "preference_extraction": {
+    "labeled_conversations": 25,
+    "labeled_messages": 33,
+    "relevance_judgments": "developer-authored expected fields; not independent annotation",
+    "field_exact_match": {
+      "desired_mood": {
+        "support": 4,
+        "exact_match": 1.0
+      },
+      "excluded_genres": {
+        "support": 8,
+        "exact_match": 1.0
+      },
+      "language": {
+        "support": 1,
+        "exact_match": 1.0
+      },
+      "max_pages": {
+        "support": 7,
+        "exact_match": 1.0
+      },
+      "max_runtime": {
+        "support": 7,
+        "exact_match": 1.0
+      },
+      "max_year": {
+        "support": 2,
+        "exact_match": 1.0
+      },
+      "media": {
+        "support": 25,
+        "exact_match": 1.0
+      },
+      "min_year": {
+        "support": 2,
+        "exact_match": 1.0
+      },
+      "positive_content": {
+        "support": 3,
+        "exact_match": 1.0
+      },
+      "preferred_genres": {
+        "support": 5,
+        "exact_match": 1.0
+      },
+      "themes": {
+        "support": 3,
+        "exact_match": 1.0
+      }
+    },
+    "overall_labeled_field_exact_match": 1.0
+  }
+}

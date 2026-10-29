@@ -12,6 +12,7 @@ from .config import ARTIFACT_DIR, MODEL_NAME, MODEL_CONFIG_VERSION
 from .preprocessing import build_query_text
 from .relevance import topic_gate, quality_gate, preference_boost, POLICIES
 from .schemas import CatalogItem, Preferences, Recommendation
+from .passages import PassageIndex, PASSAGE_WEIGHT
 from .query_understanding import MOOD_PROTOTYPES, THEME_PROTOTYPES, meaningful_query, content_chunks, build_search_query
 
 @lru_cache(maxsize=1)
@@ -54,8 +55,10 @@ def combine_hybrid_scores(lexical: np.ndarray, semantic: np.ndarray) -> np.ndarr
     return 0.45 * lexical + 0.55 * semantic_unit
 
 class RetrievalIndex:
-    def __init__(self, items: list[CatalogItem], mode: str = "hybrid", artifact_dir: Path = ARTIFACT_DIR):
+    def __init__(self, items: list[CatalogItem], mode: str = "hybrid", artifact_dir: Path = ARTIFACT_DIR, passage_matching: bool | None = None):
         self.items, self.mode, self.artifact_dir = items, mode, artifact_dir
+        self.passage_matching = (os.getenv("STORYSCOUT_PASSAGE_MATCHING", "true").lower() == "true") if passage_matching is None else passage_matching
+        self.passages = None
         self.vectorizer: TfidfVectorizer | None = None
         self.matrix = None
         self.model = None
@@ -130,6 +133,8 @@ class RetrievalIndex:
                 self.semantic_available = True
             except Exception:
                 self.semantic_available = False
+        if self.passage_matching:
+            self.passages = PassageIndex(self.items,self.vectorizer,lexical_key,self.artifact_dir,self.model if self.semantic_available else None)
         self._prepare_profiles(docs)
         self.preparation_seconds = time.perf_counter() - start
 
@@ -222,6 +227,25 @@ class RetrievalIndex:
             return lexical_values
         general_scores = text_similarity(lexical, semantic)
         topic_scores = text_similarity(topic_lexical, topic_semantic) if topic.strip() else general_scores
+        document_topic_scores = topic_scores.copy()
+        document_lexical = topic_lexical.copy()
+        document_semantic = topic_semantic.copy() if topic_semantic is not None else None
+        passage_result = None
+        passage_promoted = np.zeros(len(eligible),dtype=bool)
+        if self.passages is not None and topic.strip() and self.passages.indexed_records:
+            passage_result = self.passages.score(topic_vector,encoded[1] if topic_semantic is not None else None,eligible_indices,self.mode,combine_hybrid_scores,calibrate_semantic_scores)
+            # Local windows have higher accidental keyword overlap than full
+            # descriptions. Require stronger support before promoting a result.
+            required = min(2,len(topic_vector.indices))
+            supported = (passage_result['lexical'] >= .12) & (passage_result['coverage'] >= max(1,required))
+            if passage_result['semantic'] is not None:
+                supported |= passage_result['semantic'] >= .40
+            blended = PASSAGE_WEIGHT*passage_result['score'] + (1-PASSAGE_WEIGHT)*topic_scores
+            passage_promoted = supported & (passage_result['index']>=0) & (blended>topic_scores)
+            topic_scores = np.where(passage_promoted,blended,topic_scores)
+            topic_lexical = np.where(passage_promoted,np.maximum(topic_lexical,passage_result['lexical']),topic_lexical)
+            if topic_semantic is not None and passage_result['semantic'] is not None:
+                topic_semantic = np.where(passage_promoted,np.maximum(topic_semantic,passage_result['semantic']),topic_semantic)
         scores = .80*topic_scores + .20*general_scores if topic.strip() else general_scores
         text_scores = scores.copy()
         rich_text=np.array([bool(x.retrieval_text or x.description_provenance or x.source=='demo') for x in eligible])
@@ -251,7 +275,7 @@ class RetrievalIndex:
         base_scores = scores.copy()
         qualified, cutoff = quality_gate(domain, base_scores, allowed) if not filter_only else (allowed, 0.)
         scores = preference_boost(base_scores, genre, mood, theme, learned)
-        self.last_diagnostics.update({'topic_query': topic[:800], 'query_strategy': 'separate topic and preference channels',
+        self.last_diagnostics.update({'passage_matching':self.passages.mode if self.passages else 'disabled','passage_count':len(self.passages.spans) if self.passages else 0,'passage_indexed_records':self.passages.indexed_records if self.passages else 0,'passage_partial_records':len(self.passages.sampled_records) if self.passages else 0,'passage_promoted_candidates':int(np.count_nonzero(passage_promoted)),'topic_query': topic[:800], 'query_strategy': 'separate topic and preference channels',
             'topic_relevance_rejections': int(np.count_nonzero(~allowed)),
             'quality_rejections': int(np.count_nonzero(~qualified)),
             'quality_score_floor': round(cutoff, 4), 'relevance_policy': POLICIES[domain],
@@ -285,12 +309,17 @@ class RetrievalIndex:
             semantic_score = None if semantic is None else float(semantic[rank])
             terms=[]
             if query:
-                overlap=self.matrix[eligible_indices[rank]].multiply(qvector).tocoo()
+                terms_vector = topic_vector if topic.strip() else qvector
+                if passage_promoted[rank]:
+                    overlap=self.passages.matrix[passage_result['index'][rank]].multiply(terms_vector).tocoo()
+                else:
+                    overlap=self.matrix[eligible_indices[rank]].multiply(terms_vector).tocoo()
                 names=self.feature_names
                 terms=[str(names[i]) for i,_ in sorted(zip(overlap.col,overlap.data),key=lambda pair:-pair[1])[:3]]
             results.append(Recommendation(item=eligible[rank], score=0. if filter_only else float(scores[rank]), lexical_score=float(lexical[rank]), semantic_score=semantic_score,
+                passage_match=self.passages.evidence(int(passage_result['index'][rank]),passage_result['lexical'][rank],None if passage_result['semantic'] is None else passage_result['semantic'][rank]) if passage_promoted[rank] else None,
                 filter_notes=['filter-only results; no text similarity signal'] if filter_only else [], matched_terms=terms,
-                score_components={'text_similarity':round(float(text_scores[rank]),4),'genre_coverage':round(float(genre[rank]),4),'text_classifier_genre_match':round(float(learned[rank]),4),'mood_alignment':round(float(mood[rank]),4),'theme_alignment':round(float(theme[rank]),4),'topic_lexical_similarity':round(float(topic_lexical[rank]),4),'topic_semantic_similarity':None if topic_semantic is None else round(float(topic_semantic[rank]),4),'metadata_completeness':round(float(scores[rank]),4) if filter_only else None,'novelty_penalty':round(float(novelty[rank]),4)}))
+                score_components={'document_lexical_similarity':round(float(document_lexical[rank]),4),'document_semantic_similarity':None if document_semantic is None else round(float(document_semantic[rank]),4),'document_topic_similarity':round(float(document_topic_scores[rank]),4),'passage_topic_similarity':round(float(passage_result['score'][rank]),4) if passage_result is not None else None,'passage_boost':round(float(topic_scores[rank]-document_topic_scores[rank]),4),'text_similarity':round(float(text_scores[rank]),4),'genre_coverage':round(float(genre[rank]),4),'text_classifier_genre_match':round(float(learned[rank]),4),'mood_alignment':round(float(mood[rank]),4),'theme_alignment':round(float(theme[rank]),4),'topic_lexical_similarity':round(float(topic_lexical[rank]),4),'topic_semantic_similarity':None if topic_semantic is None else round(float(topic_semantic[rank]),4),'metadata_completeness':round(float(scores[rank]),4) if filter_only else None,'novelty_penalty':round(float(novelty[rank]),4)}))
         self.last_diagnostics['returned_count']=len(results)
         self.last_diagnostics['query_text']=query[:800]
         return results

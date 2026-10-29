@@ -11,25 +11,25 @@ Mixed-media queries are scored separately for each active domain; book and movie
 Status: measured
 
 - book: P@5 0.2741, Recall@5 0.7593, MRR@5 0.8056, hard-filter compliance 1.0 (27 domain queries)
-- movie: P@5 0.1852, Recall@5 0.5031, MRR@5 0.6852, hard-filter compliance 1.0 (27 domain queries)
-- Domain macro average: P@5 0.2297, Recall@5 0.6312, MRR@5 0.7454, hard-filter compliance 1.0
-- Mean search latency after indexing: 11.398 ms; index setup: 1995.62 ms
+- movie: P@5 0.1852, Recall@5 0.5031, MRR@5 0.642, hard-filter compliance 1.0 (27 domain queries)
+- Domain macro average: P@5 0.2297, Recall@5 0.6312, MRR@5 0.7238, hard-filter compliance 1.0
+- Mean search latency after indexing: 12.884 ms; index setup: 1062.74 ms
 
 ### semantic
 Status: measured
 
-- book: P@5 0.2963, Recall@5 0.8333, MRR@5 0.8642, hard-filter compliance 1.0 (27 domain queries)
+- book: P@5 0.2963, Recall@5 0.8333, MRR@5 0.8704, hard-filter compliance 1.0 (27 domain queries)
 - movie: P@5 0.1926, Recall@5 0.4784, MRR@5 0.6031, hard-filter compliance 1.0 (27 domain queries)
-- Domain macro average: P@5 0.2445, Recall@5 0.6559, MRR@5 0.7336, hard-filter compliance 1.0
-- Mean search latency after indexing: 19.982 ms; index setup: 2013.14 ms
+- Domain macro average: P@5 0.2445, Recall@5 0.6559, MRR@5 0.7368, hard-filter compliance 1.0
+- Mean search latency after indexing: 19.638 ms; index setup: 1608.85 ms
 
 ### hybrid
 Status: measured
 
-- book: P@5 0.3111, Recall@5 0.8642, MRR@5 0.8642, hard-filter compliance 1.0 (27 domain queries)
+- book: P@5 0.3037, Recall@5 0.8457, MRR@5 0.8704, hard-filter compliance 1.0 (27 domain queries)
 - movie: P@5 0.2296, Recall@5 0.5617, MRR@5 0.7006, hard-filter compliance 1.0 (27 domain queries)
-- Domain macro average: P@5 0.2703, Recall@5 0.7129, MRR@5 0.7824, hard-filter compliance 1.0
-- Mean search latency after indexing: 17.777 ms; index setup: 1216.32 ms
+- Domain macro average: P@5 0.2666, Recall@5 0.7037, MRR@5 0.7855, hard-filter compliance 1.0
+- Mean search latency after indexing: 19.053 ms; index setup: 1430.41 ms
 
 ## Preference extraction
 

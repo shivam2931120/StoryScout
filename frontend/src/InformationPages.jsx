@@ -28,7 +28,7 @@ export function PipelinePage({ meta }) {
     [
       "05",
       "Rank and explain",
-      "A minimum topic match is required before bounded genre, mood, theme and learned genre boosts. A quality cutoff allows fewer results instead of filling slots with weak matches. Maximal marginal relevance reduces redundant narratives. Different picks excludes already shown IDs while preserving every hard filter.",
+      "Overlapping passages are matched independently, then aggregated to one book/movie result with whole-description context. A minimum topic match is required before bounded genre, mood, theme and learned genre boosts. A quality cutoff allows fewer results instead of filling slots with weak matches. Maximal marginal relevance reduces redundant narratives. Different picks excludes already shown IDs while preserving every hard filter.",
     ],
   ];
   return (
@@ -42,6 +42,7 @@ export function PipelinePage({ meta }) {
         The interface is React. The language processing, retrieval, and
         evaluation are Python.
       </p>
+      {meta?.passages && <p>{Object.entries(meta.passages).map(([domain,stats])=>`${label(domain)}: ${stats.count.toLocaleString()} passages from ${stats.indexed_records.toLocaleString()} records (${stats.mode})`).join(" · ")}</p>}
       <div className="pipeline-steps">
         {stages.map(([n, title, description]) => (
           <article key={n}>
@@ -129,6 +130,14 @@ export function EvaluationPage() {
             </div>
           </div>
           <p>Precision@5 counts all five slots, including deliberately unfilled ones. Precision among returned items and answer rate are reported separately. Missing judgments can undercount relevant new catalog records.</p>
+          {data.passage_evaluation && <section className="info-panel">
+            <h2>Passage matching: focal-detail queries</h2>
+            <p>{data.passage_evaluation.focal_query_count} developer-authored movie queries checked against source plots. This is a small diagnostic set, not independent human evaluation.</p>
+            <div className="table-scroll"><table><thead><tr><th>Hybrid retrieval</th><th>Recall@5</th><th>MRR@5</th><th>Answer rate</th></tr></thead><tbody>
+              {Object.entries(data.passage_evaluation.results).map(([name,modes])=>{const m=modes.hybrid.focal.movie;return <tr key={name}><td>{name === "passages" ? "With passages" : "Whole description"}</td><td>{m.recall_at_5.toFixed(3)}</td><td>{m.mrr_at_5.toFixed(3)}</td><td>{m.answer_rate.toFixed(3)}</td></tr>;})}
+            </tbody></table></div>
+            <p>Only passage matching changes within this comparison. Broader benchmark trade-offs and all three retrieval modes are recorded in the project report; a match does not verify plot facts or content suitability.</p>
+          </section>}
           <div className="table-scroll">
             <table>
               <thead>

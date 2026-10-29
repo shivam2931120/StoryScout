@@ -46,3 +46,9 @@ Current relevance update: 108 pytest tests, four frontend context checks, seven
 HTTP conversation flows, 11 source/context/relevance checks and 42 title cases
 passed. Updated retrieval and classifier outputs are executed artifacts. See
 [NLP relevance update](NLP_RELEVANCE_UPDATE.md) for measured trade-offs and limits.
+
+## Passage matching update
+
+Overlapping narrative passages now supplement whole-document retrieval, with one
+card per title and source-grounded passage evidence. See [implementation, actual
+ablation results, caching, and validation](PASSAGE_MATCHING.md).

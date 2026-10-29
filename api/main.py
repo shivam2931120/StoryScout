@@ -111,7 +111,8 @@ def create_app(engine: StoryScoutEngine | None = None) -> FastAPI:
                 "coverage":{domain:{'plot_text':sum(bool(x.retrieval_text) for x in items),'descriptions':sum(bool(x.retrieval_text or x.description_provenance or x.source=='demo') for x in items),
                     'source_generated_summaries':sum('source-generated' in x.description_provenance.lower() for x in items),'known_runtime':sum(x.runtime_minutes is not None for x in items),'known_pages':sum(x.page_count is not None for x in items),'source_languages':sum(x.language.lower()!='unknown' for x in items),
                     'subject_genre_mappings':sum(bool(x.subject_genres) for x in items)} for domain,items in current.catalogs.items()},
-                "nlp_profiles":"Corpus TF-IDF keyphrases, chunk-pooled MiniLM vectors, semantic mood/theme prototypes, locally trained plot genre classifier, MMR selection",
+                "passages":{domain:{"count":len(index.passages.spans) if index.passages else 0,"indexed_records":index.passages.indexed_records if index.passages else 0,"mode":index.passages.mode if index.passages else "disabled","partial_records":len(index.passages.sampled_records) if index.passages else 0} for domain,index in current.indexes.items()},
+                "nlp_profiles":"Overlapping narrative-passage matching, corpus TF-IDF keyphrases, chunk-pooled MiniLM vectors, semantic mood/theme prototypes, locally trained plot genre classifier, MMR selection",
                 "optional_interpreter": current.query_interpreter is not None,
                 "starters": [item_payload(x) for x in starters if x is not None]}
 
@@ -167,7 +168,7 @@ def create_app(engine: StoryScoutEngine | None = None) -> FastAPI:
                  "latency_ms": round((time.perf_counter() - start) * 1000, 1)}
         return {"reply": reply, "title_matches": title_matches, "state": asdict(state), "results": {domain: [{"item": item_payload(rec.item), "similarity_score": rec.score,
                 "lexical_score": rec.lexical_score, "semantic_score": rec.semantic_score, "explanation": rec.explanation,
-                "score_components":rec.score_components,"matched_terms":rec.matched_terms} for rec in group] for domain, group in results.items()},
+                "score_components":rec.score_components,"matched_terms":rec.matched_terms,"passage_match":rec.passage_match} for rec in group] for domain, group in results.items()},
                 "choices": [item_payload(current.get_item(x)) for x in state.pending_title_choices if current.get_item(x)], "trace": trace}
 
     @app.post("/api/chat")
@@ -184,7 +185,13 @@ def create_app(engine: StoryScoutEngine | None = None) -> FastAPI:
         directory=ROOT/'artifacts/compact' if os.getenv('STORYSCOUT_CATALOG_PROFILE')=='compact' and (ROOT/'artifacts/compact/evaluation_results.json').exists() else ROOT/'artifacts'
         path = directory / "evaluation_results.json"
         preference_path=directory/'preference_v2_results.json' if directory.name=='compact' else ROOT/'artifacts/search_tuning/preference_v2_results.json'
-        return {"results": json.loads(path.read_text()) if path.exists() else None,
+        passage_path=ROOT/'artifacts/passages/comparison.json'
+        passage_evaluation=None
+        if passage_path.exists():
+            measured=json.loads(passage_path.read_text())
+            passage_evaluation={key:measured[key] for key in ['executed_at','method','judgment_method','limitations','broad_query_count','focal_query_count']}
+            passage_evaluation['results']={name:{mode:values['by_benchmark'] for mode,values in modes.items()} for name,modes in measured['results'].items()}
+        return {"passage_evaluation":passage_evaluation,"results": json.loads(path.read_text()) if path.exists() else None,
                 "summary": (directory / "evaluation_summary.md").read_text() if (directory / "evaluation_summary.md").exists() else "Not evaluated yet.",
                 "genre_classifier": json.loads((ROOT / "artifacts/genre_classifier_results.json").read_text()) if (ROOT / "artifacts/genre_classifier_results.json").exists() else None,
                 "genre_text_classifier": json.loads((ROOT/'artifacts/genre_text_results.json').read_text()) if (ROOT/'artifacts/genre_text_results.json').exists() else None,

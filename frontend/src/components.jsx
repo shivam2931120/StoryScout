@@ -398,11 +398,11 @@ export function DetailDrawer({ rec, saved, onSave, onClose, onSimilar, busy }) {
           <p>
             Similarity score: {rec.similarity_score.toFixed(3)}
             <br />
-            TF-IDF cosine: {rec.lexical_score?.toFixed(3)}
+            Whole-document TF-IDF cosine: {rec.lexical_score?.toFixed(3)}
             {rec.semantic_score != null && (
               <>
                 <br />
-                Embedding cosine: {rec.semantic_score.toFixed(3)}
+                Whole-description embedding cosine: {rec.semantic_score.toFixed(3)}
               </>
             )}
           </p>
@@ -411,11 +411,12 @@ export function DetailDrawer({ rec, saved, onSave, onClose, onSimilar, busy }) {
             a probability of enjoyment. Genres, themes, and source metadata may
             be incomplete.
           </p>
+          {rec.passage_match && <p>Passage support: {rec.passage_match.passage_number} of {rec.passage_match.passage_count} in {rec.passage_match.source}. Plot text is hidden to avoid spoilers.{rec.passage_match.partial_coverage ? " This long record uses a bounded sample of passages." : ""}{rec.passage_match.source_generated ? " This source summary is automatically generated and not independently verified." : ""}</p>}
           <p>Tag provenance: {item.tag_provenance}</p>
           {item.nlp_keywords?.length > 0 && <p>Local TF-IDF keyphrases: {item.nlp_keywords.join(' · ')}</p>}
           {item.predicted_genres?.length > 0 && <p>Experimental text-classified genres: {item.predicted_genres.join(', ')}. These predictions do not replace source genres.</p>}
           {Object.keys(item.inferred_moods || {}).length > 0 && <p>Text-inferred tones: {Object.keys(item.inferred_moods).slice(0,4).join(', ')}. These are soft NLP inferences, not verified content labels.</p>}
-          {rec.score_components && <p>Reranking signals: {Object.entries(rec.score_components).map(([key,value])=>`${key.replaceAll('_',' ')} ${value.toFixed(3)}`).join(' · ')}. Alignment values are not confidence percentages.</p>}
+          {rec.score_components && <p>Reranking signals: {Object.entries(rec.score_components).map(([key,value])=>`${key.replaceAll('_',' ')} ${Number.isFinite(value) ? value.toFixed(3) : 'unavailable'}`).join(' · ')}. Alignment values are not confidence percentages.</p>}
         </details>
       )}
       {Object.entries(item.metadata_provenance || {}).map(([field,source]) => <p className="provenance" key={field}>{field.replaceAll('_',' ')}: <a href={source.url} target="_blank" rel="noreferrer">{source.source}</a></p>)}

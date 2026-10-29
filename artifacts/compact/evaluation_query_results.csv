@@ -16,21 +16,21 @@ tfidf,science fiction book published after 2000,,year,book,book_005|book_007,boo
 tfidf,adventure book under 220 pages,,book length,book,book_002|book_012,book_002|book_012,2,0.4,1.0,1.0,1.0,2,0,1.0
 tfidf,uplifting family movie,,movie mood,movie,movie_004|movie_012|movie_013,movie_013|movie_004|movie_ml_26198|movie_ml_1551|movie_ml_1920,2,0.4,0.6666666666666666,1.0,1.0,5,0,1.0
 tfidf,uplifting movie under two hours,,movie runtime,movie,movie_004|movie_005|movie_010|movie_012,movie_010,1,0.2,0.25,1.0,1.0,1,0,1.0
-tfidf,time travel comedy movie,,movie theme,movie,movie_002,movie_002|movie_ml_86882|movie_ml_8943,1,0.2,1.0,1.0,1.0,3,0,1.0
+tfidf,time travel comedy movie,,movie theme,movie,movie_002,movie_ml_86882|movie_002|movie_ml_8943,1,0.2,1.0,0.5,1.0,3,0,1.0
 tfidf,thoughtful science fiction about artificial intelligence,,movie theme,movie,movie_007|movie_012,movie_012|movie_ml_4370,1,0.2,0.5,1.0,1.0,2,0,1.0
 tfidf,funny mystery crime movie,,movie genre,movie,movie_008,movie_008,1,0.2,1.0,1.0,1.0,1,0,1.0
 tfidf,fantasy adventure movie,,movie genre,movie,movie_006|movie_010|movie_013,movie_009|movie_006,1,0.2,0.3333333333333333,0.5,1.0,2,0,1.0
-tfidf,comforting animated movie,,movie mood,movie,movie_009|movie_012,movie_ml_476|movie_ml_79139|movie_ml_5764,0,0.0,0.0,0.0,1.0,3,0,1.0
+tfidf,comforting animated movie,,movie mood,movie,movie_009|movie_012,movie_ml_79139|movie_ml_5764|movie_ml_3391|movie_ml_2202|movie_ml_476,0,0.0,0.0,0.0,1.0,5,0,1.0
 tfidf,uplifting historical drama movie,,movie genre,movie,movie_011,movie_011|movie_006,1,0.2,1.0,1.0,1.0,2,0,1.0
 tfidf,movie under 100 minutes,,movie runtime,movie,movie_005|movie_010|movie_012,movie_005|movie_ml_188|movie_ml_160980|movie_ml_168350|movie_ml_171,1,0.2,0.3333333333333333,1.0,1.0,5,0,1.0
-tfidf,science fiction movie about space,,movie theme,movie,movie_001|movie_003,movie_007|movie_ml_673|movie_ml_4952|movie_ml_5410|movie_ml_3638,0,0.0,0.0,0.0,1.0,5,0,1.0
+tfidf,science fiction movie about space,,movie theme,movie,movie_001|movie_003,movie_007|movie_ml_673|movie_ml_4952|movie_ml_5410|movie_ml_4777,0,0.0,0.0,0.0,1.0,5,0,1.0
 tfidf,family science fiction under 90 minutes,,movie runtime,movie,movie_012,movie_ml_140541|movie_012|movie_ml_2046|movie_ml_673|movie_ml_5444,1,0.2,1.0,0.5,1.0,5,0,1.0
 tfidf,mystery movie without horror,,negation,movie,movie_008,movie_008|movie_ml_965|movie_ml_5787|movie_ml_46664|movie_ml_68237,1,0.2,1.0,1.0,1.0,5,0,1.0
 tfidf,lighthearted movie under 110 minutes,,movie runtime,movie,movie_004|movie_005|movie_010|movie_012,,0,0.0,0.0,0.0,,0,0,0.0
 tfidf,science fiction movie released after 2015,,year,movie,movie_007,movie_007|movie_ml_160565|movie_ml_175197|movie_ml_168612|movie_ml_176371,1,0.2,1.0,1.0,1.0,5,0,1.0
 tfidf,English language movie between 2000 and 2020,,year and language,movie,movie_004|movie_006|movie_008|movie_009|movie_011|movie_013,movie_001|movie_005|movie_ml_133419|movie_ml_112911|movie_ml_103801,0,0.0,0.0,0.0,1.0,5,0,1.0
 tfidf,books and movies about time travel,,mixed themes,book,book_002,book_002|book_pg_68483|book_pg_31357|book_pg_22559|book_pg_64354,1,0.2,1.0,1.0,1.0,5,0,1.0
-tfidf,books and movies about time travel,,mixed themes,movie,movie_001|movie_002|movie_007,movie_002|movie_ml_8914|movie_ml_104374|movie_ml_86882|movie_ml_27788,1,0.2,0.3333333333333333,1.0,1.0,5,0,1.0
+tfidf,books and movies about time travel,,mixed themes,movie,movie_001|movie_002|movie_007,movie_ml_8914|movie_ml_86882|movie_002|movie_ml_104374|movie_ml_27788,1,0.2,0.3333333333333333,0.3333333333333333,1.0,5,0,1.0
 tfidf,comforting story to read or watch,,mixed mood,book,book_004|book_009,book_004|book_009|book_014,2,0.4,1.0,1.0,1.0,3,0,1.0
 tfidf,comforting story to read or watch,,mixed mood,movie,movie_004|movie_009|movie_012,movie_012|movie_009,2,0.4,0.6666666666666666,1.0,1.0,2,0,1.0
 tfidf,friendship and a big journey in books and movies,,mixed themes,book,book_001|book_013,book_009|book_001|book_012|book_013|book_pg_23599,2,0.4,1.0,0.5,1.0,5,0,1.0
@@ -84,10 +84,10 @@ semantic,lighthearted movie under 110 minutes,,movie runtime,movie,movie_004|mov
 semantic,science fiction movie released after 2015,,year,movie,movie_007,movie_007,1,0.2,1.0,1.0,1.0,1,0,1.0
 semantic,English language movie between 2000 and 2020,,year and language,movie,movie_004|movie_006|movie_008|movie_009|movie_011|movie_013,movie_001|movie_ml_106491|movie_ml_112552|movie_006|movie_ml_105731,1,0.2,0.16666666666666666,0.25,1.0,5,0,1.0
 semantic,books and movies about time travel,,mixed themes,book,book_002,book_002,1,0.2,1.0,1.0,1.0,1,0,1.0
-semantic,books and movies about time travel,,mixed themes,movie,movie_001|movie_002|movie_007,movie_002|movie_ml_8914|movie_ml_7254|movie_007|movie_ml_27788,2,0.4,0.6666666666666666,1.0,1.0,5,0,1.0
+semantic,books and movies about time travel,,mixed themes,movie,movie_001|movie_002|movie_007,movie_002|movie_ml_27788|movie_ml_8914|movie_ml_7254|movie_007,2,0.4,0.6666666666666666,1.0,1.0,5,0,1.0
 semantic,comforting story to read or watch,,mixed mood,book,book_004|book_009,book_009,1,0.2,0.5,1.0,1.0,1,0,1.0
 semantic,comforting story to read or watch,,mixed mood,movie,movie_004|movie_009|movie_012,movie_ml_92694|movie_ml_1502|movie_ml_1812|movie_ml_107997|movie_ml_95558,0,0.0,0.0,0.0,1.0,5,0,1.0
-semantic,friendship and a big journey in books and movies,,mixed themes,book,book_001|book_013,book_004|book_009|book_001|book_012|book_pg_50818,1,0.2,0.5,0.3333333333333333,1.0,5,0,1.0
+semantic,friendship and a big journey in books and movies,,mixed themes,book,book_001|book_013,book_004|book_001|book_009,1,0.2,0.5,0.5,1.0,3,0,1.0
 semantic,friendship and a big journey in books and movies,,mixed themes,movie,movie_002|movie_004|movie_006,movie_010|movie_ml_5106|movie_012|movie_005|movie_006,1,0.2,0.3333333333333333,0.2,1.0,5,0,1.0
 semantic,mystery books and movies,,mixed genre,book,book_003|book_011,book_003|book_pg_53214|book_011|book_pg_29704|book_pg_65783,2,0.4,1.0,1.0,1.0,5,0,1.0
 semantic,mystery books and movies,,mixed genre,movie,movie_008,movie_ml_107314|movie_008|movie_ml_78349|movie_ml_74458|movie_ml_7223,1,0.2,1.0,0.5,1.0,5,0,1.0
@@ -125,7 +125,7 @@ hybrid,adventure book under 220 pages,,book length,book,book_002|book_012,book_0
 hybrid,uplifting family movie,,movie mood,movie,movie_004|movie_012|movie_013,movie_ml_1812|movie_012|movie_013|movie_ml_27|movie_ml_5099,2,0.4,0.6666666666666666,0.5,1.0,5,0,1.0
 hybrid,uplifting movie under two hours,,movie runtime,movie,movie_004|movie_005|movie_010|movie_012,movie_ml_1812|movie_010|movie_ml_386|movie_ml_113378,1,0.2,0.25,0.5,1.0,4,0,1.0
 hybrid,time travel comedy movie,,movie theme,movie,movie_002,movie_002|movie_ml_4571,1,0.2,1.0,1.0,1.0,2,0,1.0
-hybrid,thoughtful science fiction about artificial intelligence,,movie theme,movie,movie_007|movie_012,movie_012|movie_ml_4370,1,0.2,0.5,1.0,1.0,2,0,1.0
+hybrid,thoughtful science fiction about artificial intelligence,,movie theme,movie,movie_007|movie_012,movie_012|movie_ml_4370|movie_ml_4545,1,0.2,0.5,1.0,1.0,3,0,1.0
 hybrid,funny mystery crime movie,,movie genre,movie,movie_008,movie_008|movie_ml_70206|movie_ml_2186|movie_ml_7347|movie_ml_1464,1,0.2,1.0,1.0,1.0,5,0,1.0
 hybrid,fantasy adventure movie,,movie genre,movie,movie_006|movie_010|movie_013,movie_009|movie_006|movie_013|movie_010|movie_ml_71745,3,0.6,1.0,0.5,1.0,5,0,1.0
 hybrid,comforting animated movie,,movie mood,movie,movie_009|movie_012,movie_ml_140541|movie_ml_69720|movie_ml_673|movie_ml_56152|movie_ml_102747,0,0.0,0.0,0.0,1.0,5,0,1.0
@@ -138,10 +138,10 @@ hybrid,lighthearted movie under 110 minutes,,movie runtime,movie,movie_004|movie
 hybrid,science fiction movie released after 2015,,year,movie,movie_007,movie_007,1,0.2,1.0,1.0,1.0,1,0,1.0
 hybrid,English language movie between 2000 and 2020,,year and language,movie,movie_004|movie_006|movie_008|movie_009|movie_011|movie_013,movie_001|movie_ml_106491|movie_ml_112552|movie_006|movie_ml_105731,1,0.2,0.16666666666666666,0.25,1.0,5,0,1.0
 hybrid,books and movies about time travel,,mixed themes,book,book_002,book_002,1,0.2,1.0,1.0,1.0,1,0,1.0
-hybrid,books and movies about time travel,,mixed themes,movie,movie_001|movie_002|movie_007,movie_002|movie_ml_8914|movie_ml_27788|movie_007|movie_ml_7254,2,0.4,0.6666666666666666,1.0,1.0,5,0,1.0
+hybrid,books and movies about time travel,,mixed themes,movie,movie_001|movie_002|movie_007,movie_002|movie_ml_27788|movie_ml_8914|movie_ml_104374|movie_007,2,0.4,0.6666666666666666,1.0,1.0,5,0,1.0
 hybrid,comforting story to read or watch,,mixed mood,book,book_004|book_009,book_009|book_004|book_014,2,0.4,1.0,1.0,1.0,3,0,1.0
 hybrid,comforting story to read or watch,,mixed mood,movie,movie_004|movie_009|movie_012,movie_ml_92694|movie_012|movie_ml_1502|movie_ml_1812|movie_009,2,0.4,0.6666666666666666,0.5,1.0,5,0,1.0
-hybrid,friendship and a big journey in books and movies,,mixed themes,book,book_001|book_013,book_004|book_009|book_001|book_012|book_013,2,0.4,1.0,0.3333333333333333,1.0,5,0,1.0
+hybrid,friendship and a big journey in books and movies,,mixed themes,book,book_001|book_013,book_004|book_001|book_009|book_012,1,0.2,0.5,0.5,1.0,4,0,1.0
 hybrid,friendship and a big journey in books and movies,,mixed themes,movie,movie_002|movie_004|movie_006,movie_010|movie_005|movie_006|movie_ml_5106|movie_012,1,0.2,0.3333333333333333,0.3333333333333333,1.0,5,0,1.0
 hybrid,mystery books and movies,,mixed genre,book,book_003|book_011,book_003|book_pg_53214|book_011|book_pg_41151|book_pg_29704,2,0.4,1.0,1.0,1.0,5,0,1.0
 hybrid,mystery books and movies,,mixed genre,movie,movie_008,movie_008|movie_ml_107314|movie_ml_78349|movie_ml_7223|movie_ml_74458,1,0.2,1.0,1.0,1.0,5,0,1.0

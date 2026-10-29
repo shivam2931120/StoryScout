@@ -1,0 +1,16 @@
+{
+  "judgment_method":"Developer-authored focal-detail paraphrases verified against the cached source plot text. Relevant IDs are incomplete; not independent human evaluation.",
+  "limitations":"Seven known movies, selected for available narrative text. These queries are not representative of all users and do not establish general accuracy.",
+  "queries":[
+    {"query":"a lunar station worker receives recorded messages because live communication with Earth is broken", "media":"movies", "relevant_ids":["movie_ml_68237"]},
+    {"query":"harvesting helium three from lunar soil at an automated mining station", "media":"movies", "relevant_ids":["movie_ml_68237"]},
+    {"query":"using another person's blood and urine samples to pass genetic identity screening", "media":"movies", "relevant_ids":["movie_ml_1653"]},
+    {"query":"a paralyzed former swimming champion lends someone his genetic identity", "media":"movies", "relevant_ids":["movie_ml_1653"]},
+    {"query":"a rival stage magician asks Nikola Tesla to build a machine", "media":"movies", "relevant_ids":["movie_ml_48780"]},
+    {"query":"learning piano and French while reliving the same day", "media":"movies", "relevant_ids":["movie_ml_1265"]},
+    {"query":"a conman sells personalized Bibles to recently widowed women", "media":"movies", "relevant_ids":["movie_ml_6724"]},
+    {"query":"investigating a stolen space shuttle and a hidden nerve gas laboratory", "media":"movies", "relevant_ids":["movie_ml_3638"]},
+    {"query":"a deadly toxin comes from a rare Amazonian orchid", "media":"movies", "relevant_ids":["movie_ml_3638"]},
+    {"query":"two pen pals secretly agree to run away together on a New England island", "media":"movies", "relevant_ids":["movie_ml_94959"]}
+  ]
+}
