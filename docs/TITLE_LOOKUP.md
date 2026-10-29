@@ -1,5 +1,8 @@
 # Title identity and content recommendations
 
+This document records the earlier bare-title rollout. Current conversational
+lookup, coverage and validation are documented in [ENTITY_SEARCH.md](ENTITY_SEARCH.md).
+
 The deployed compact catalog originally omitted *Love and Other Drugs*. The
 chat path also treated bare titles as description queries. Its words were ranked
 alongside the inherited Dark mood, producing unrelated films. TF-IDF was not
