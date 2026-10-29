@@ -29,6 +29,16 @@ def _sentence_model():
     return SentenceTransformer(MODEL_NAME, device="cpu", local_files_only=local_only)
 
 
+@lru_cache(maxsize=128)
+def _query_vector(model, text):
+    """One query at a time bounds 256-token attention memory on free hosting.
+
+    The shared encoder reuses vectors across books/movies and follow-up limits;
+    only vectors and bounded query strings are cached, never user results/state.
+    """
+    return np.asarray(model.encode([text], normalize_embeddings=True, show_progress_bar=False))[0]
+
+
 SEMANTIC_COSINE_FLOOR = 0.18
 SEMANTIC_COSINE_CEILING = 0.62
 
@@ -200,7 +210,7 @@ class RetrievalIndex:
         semantic = topic_semantic = None
         if self.semantic_available and query and not filter_only:
             texts = [build_query_text(query)] + ([build_query_text(topic)] if topic.strip() else [])
-            encoded = self.model.encode(texts, normalize_embeddings=True, show_progress_bar=False)
+            encoded = np.stack([_query_vector(self.model, text) for text in texts])
             semantic = cosine_similarity(encoded[:1], self.embeddings[eligible_indices]).ravel()
             if topic.strip():
                 topic_semantic = cosine_similarity(encoded[1:2], self.embeddings[eligible_indices]).ravel()

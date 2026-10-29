@@ -133,3 +133,22 @@ def test_adjectival_language_is_extracted_without_reference_language_leaking():
     from src.preferences import parse_preferences
     assert parse_preferences('English science fiction books').preferences.language == 'english'
     assert parse_preferences('I loved The English Patient. Recommend French movies').preferences.language == 'french'
+
+
+def test_query_embeddings_are_singleton_and_reused_across_domains(tmp_path, monkeypatch):
+    import src.retrieval as retrieval
+    class Encoder:
+        def __init__(self): self.query_calls=[]; self.serving=False
+        def encode(self,texts,**kwargs):
+            if self.serving:
+                assert len(texts)==1
+                self.query_calls.extend(texts)
+            return np.array([[1.,len(text)%19+1,sum(map(ord,text))%31+1] for text in texts],dtype=np.float32)
+    model=Encoder()
+    monkeypatch.setattr(retrieval,'_sentence_model',lambda:model)
+    books=RetrievalIndex([CatalogItem('book_space','book','Space Voyage','Astronauts repair spacecraft oxygen equipment.')],'hybrid',artifact_dir=tmp_path/'book')
+    movies=RetrievalIndex([CatalogItem('movie_space','movie','Space Mission','Astronauts repair spacecraft oxygen equipment.')],'hybrid',artifact_dir=tmp_path/'movie')
+    model.serving=True
+    for index in [books,movies]:
+        assert index.search('spacecraft oxygen',Preferences(),topic_query='spacecraft oxygen')
+    assert model.query_calls==['spacecraft oxygen']
