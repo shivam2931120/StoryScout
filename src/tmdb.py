@@ -39,6 +39,7 @@ class TMDBMovieSource:
         self.api_key = (api_key if api_key is not None else os.getenv("TMDB_API_KEY", "")).strip()
         self.timeout = timeout
         self._cache: dict[str, tuple[float, list[CatalogItem]]] = {}
+        self._detail_cache: dict[str, tuple[float, CatalogItem]] = {}
         self._lock = threading.Lock()
 
     @property
@@ -88,7 +89,10 @@ class TMDBMovieSource:
         year = int(year_match[1]) if year_match else None
         original_language = str(row.get("original_language") or "").lower()
         language = LANGUAGES.get(original_language, original_language or "Unknown")
-        genres = list(dict.fromkeys(TMDB_GENRES.get(int(value), "") for value in row.get("genre_ids", []) if str(value).isdigit()))
+        genre_values = row.get("genre_ids", [])
+        if not genre_values and isinstance(row.get("genres"), list):
+            genre_values = [genre.get("id") for genre in row["genres"] if isinstance(genre, dict)]
+        genres = list(dict.fromkeys(TMDB_GENRES.get(int(value), "") for value in genre_values if str(value).isdigit()))
         genres = [genre for genre in genres if genre]
         overview = str(row.get("overview") or "").strip()
         aliases = [str(row.get("original_title") or "").strip()]
@@ -110,6 +114,41 @@ class TMDBMovieSource:
             text_source="TMDB" if overview else "", text_source_url=source_url if overview else "",
             metadata_provenance=provenance,
         )
+
+    def details(self, item: CatalogItem) -> CatalogItem:
+        """Hydrate exact search hits with detail fields such as runtime."""
+        if not self.configured or not item.id.startswith("movie_tmdb_"):
+            return item
+        now = time.monotonic()
+        with self._lock:
+            cached = self._detail_cache.get(item.id)
+            if cached and cached[0] > now:
+                return cached[1]
+        try:
+            response = httpx.get(
+                f"https://api.themoviedb.org/3/movie/{item.id.removeprefix('movie_tmdb_')}",
+                params={"api_key": self.api_key, "language": "en-US"},
+                headers={"Accept": "application/json", "User-Agent": "StoryScout/1.0"},
+                timeout=self.timeout,
+            )
+            response.raise_for_status()
+            detail = response.json()
+            if not isinstance(detail, dict) or int(detail.get("id", -1)) != int(item.id.rsplit("_", 1)[-1]):
+                return item
+            hydrated = self._to_item(detail)
+            runtime = detail.get("runtime")
+            if hydrated is None:
+                return item
+            hydrated.runtime_minutes = runtime if isinstance(runtime, int) and runtime > 0 else None
+            hydrated.metadata_provenance["runtime_minutes"] = {
+                "source": "TMDB movie details", "url": hydrated.source_url,
+            }
+            with self._lock:
+                self._detail_cache[item.id] = (now + 6 * 60 * 60, hydrated)
+            return hydrated
+        except (httpx.HTTPError, ValueError, TypeError):
+            logger.info("TMDB movie details unavailable")
+            return item
 
     @staticmethod
     def identity_matches(query: str, items: list[CatalogItem]) -> tuple[list[CatalogItem], bool]:

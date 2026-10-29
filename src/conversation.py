@@ -23,7 +23,29 @@ class StoryScoutEngine:
     def _lookup_title(self, query, all_items, selection="both"):
         matches, approximate, explicit = self.title_directory.lookup(query, all_items, selection)
         requested = self.title_directory.last_requested_media
-        if matches or not explicit or not self.movie_source or requested == "book":
+        if not self.movie_source or requested == "book":
+            return matches, approximate, explicit
+        if matches:
+            # Hydrate only unambiguous exact local movie identities. Keep the
+            # local result if TMDB does not confirm the same title and year.
+            if self.title_directory.last_match_kind == "exact" and not approximate:
+                hydrated = []
+                for item in matches:
+                    if item.media_type != "movie" or item.source == "tmdb-api":
+                        hydrated.append(item)
+                        continue
+                    remote = self.movie_source.search(item.title)
+                    exact, _ = self.movie_source.identity_matches(item.title, remote)
+                    exact = [candidate for candidate in exact if item.year is None or candidate.year is None or candidate.year == item.year]
+                    if len(exact) == 1:
+                        candidate = self.movie_source.details(exact[0])
+                        self.title_directory.add_item(candidate)
+                        hydrated.append(candidate)
+                    else:
+                        hydrated.append(item)
+                return hydrated, approximate, explicit
+            return matches, approximate, explicit
+        if not explicit:
             return matches, approximate, explicit
         # The source is consulted only after the local identity directory fails
         # on a likely title. It never receives a general recommendation prompt.
@@ -33,7 +55,11 @@ class StoryScoutEngine:
         matched, approximate = self.movie_source.identity_matches(self.title_directory.last_entity, remote)
         if not matched:
             return matches, approximate, explicit
+        if not approximate:
+            matched = [self.movie_source.details(item) for item in matched]
         for item in remote:
+            self.title_directory.add_item(item)
+        for item in matched:
             self.title_directory.add_item(item)
         requested = self.title_directory.last_requested_media
         preferred = requested or {"books": "book", "movies": "movie"}.get(selection)

@@ -29,6 +29,18 @@ def test_tmdb_maps_sourced_fields_and_unknown_runtime(monkeypatch):
     assert item.source_url.endswith("/movie/27205")
 
 
+def fake_tmdb_get(url, **kwargs):
+    if "/search/movie" in url:
+        return SimpleNamespace(raise_for_status=lambda: None, json=sample_payload)
+    return SimpleNamespace(raise_for_status=lambda: None, json=lambda: {
+        "id": 27205, "title": "Inception", "original_title": "Inception",
+        "overview": "A skilled thief enters dreams to plant an idea.",
+        "release_date": "2010-07-15", "original_language": "en",
+        "genres": [{"id": 28, "name": "Action"}, {"id": 878, "name": "Science Fiction"}],
+        "runtime": 148,
+    })
+
+
 def test_tmdb_disambiguates_exact_and_returns_typo_suggestions(monkeypatch):
     monkeypatch.setattr("src.tmdb.httpx.get", lambda *a, **k: SimpleNamespace(raise_for_status=lambda: None, json=sample_payload))
     source = TMDBMovieSource("test-key")
@@ -49,7 +61,7 @@ def test_unconfigured_and_failed_tmdb_stay_local(monkeypatch, engine):
 
 
 def test_external_exact_movie_lookup_is_never_mislabeled_as_recommendation(monkeypatch, engine):
-    monkeypatch.setattr("src.tmdb.httpx.get", lambda *a, **k: SimpleNamespace(raise_for_status=lambda: None, json=sample_payload))
+    monkeypatch.setattr("src.tmdb.httpx.get", fake_tmdb_get)
     engine.movie_source = TMDBMovieSource("test-key")
     state = ConversationState()
     reply, results = engine.handle("Find a movie called Inception", state)
@@ -57,15 +69,31 @@ def test_external_exact_movie_lookup_is_never_mislabeled_as_recommendation(monke
     assert "Found the title" in reply
     item, explanation = engine.last_title_matches[0]
     assert item.id == "movie_tmdb_27205" and "TMDB" in explanation
-    assert engine.get_item(item.id).runtime_minutes is None
+    assert engine.get_item(item.id).runtime_minutes == 148
 
 
 def test_cross_media_reference_can_use_tmdb_title(monkeypatch, engine):
-    monkeypatch.setattr("src.tmdb.httpx.get", lambda *a, **k: SimpleNamespace(raise_for_status=lambda: None, json=sample_payload))
+    monkeypatch.setattr("src.tmdb.httpx.get", fake_tmdb_get)
     engine.movie_source = TMDBMovieSource("test-key")
     reply, _ = engine.handle("Recommend books similar to Inception", ConversationState())
     assert "could not identify" not in reply
     assert engine.get_item("movie_tmdb_27205") is not None
+    assert engine.get_item("movie_tmdb_27205").runtime_minutes == 148
+
+
+def test_exact_local_movie_identity_is_enriched_when_tmdb_confirms_same_year(monkeypatch, engine):
+    from src.schemas import CatalogItem
+    local = CatalogItem("movie_inception", "movie", "Inception", "", year=2010, source="movielens-latest-small")
+    engine.title_directory.records[local.id] = {
+        "id": local.id, "media_type": "movie", "title": local.title, "description": "", "year": local.year,
+        "source": local.source,
+    }
+    engine.title_directory.keys.setdefault("inception", set()).add(local.id)
+    monkeypatch.setattr("src.tmdb.httpx.get", fake_tmdb_get)
+    engine.movie_source = TMDBMovieSource("test-key")
+    engine.handle("Find a movie called Inception", ConversationState())
+    item = engine.last_title_matches[0][0]
+    assert item.source == "tmdb-api" and item.year == 2010 and item.runtime_minutes == 148
 
 
 def test_tmdb_network_failure_does_not_leak_key_or_break_search(monkeypatch, engine, caplog):
