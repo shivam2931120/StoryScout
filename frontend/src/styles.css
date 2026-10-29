@@ -2404,3 +2404,34 @@ body:has(dialog[open]) {
 .retained-topic button { padding:4px; display:flex; align-items:center; }
 .quality-note { font-size:12px; color:#bfc9c5; margin-top:10px; }
 @media(max-width:600px) { .search-context-controls { align-items:flex-start; flex-direction:column; } }
+.tmdb-credit {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 20px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: var(--low, #181c20);
+}
+
+.tmdb-credit a {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  min-width: 54px;
+  min-height: 44px;
+}
+
+.tmdb-credit img {
+  display: block;
+  width: 52px;
+  height: 38px;
+  object-fit: contain;
+}
+
+.tmdb-credit p {
+  margin: 0;
+  color: var(--secondary, #bfc9c5);
+  font-size: 12px;
+  line-height: 1.5;
+}

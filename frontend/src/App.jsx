@@ -967,6 +967,18 @@ export default function App() {
                   Artwork is an original StoryScout illustration, not an
                   official publisher cover or movie poster.
                 </p>
+                {meta?.movie_title_source === "TMDB on-demand" && (
+                  <div className="tmdb-credit" aria-label="TMDB credits">
+                    <a href="https://www.themoviedb.org" target="_blank" rel="noreferrer">
+                      <img src="/tmdb-logo.svg" alt="The Movie Database (TMDB)" />
+                    </a>
+                    <p>
+                      This product uses the TMDB API but is not endorsed or
+                      certified by TMDB. Movie title lookup and linked metadata
+                      are supplied by TMDB.
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
           )}

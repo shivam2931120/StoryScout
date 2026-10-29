@@ -1,5 +1,11 @@
 # Data sources and limitations
 
+## Optional TMDB movie title lookup
+
+When the server has `TMDB_API_KEY`, a likely movie-title lookup that misses the local identity directory is checked against TMDB's official `/3/search/movie` endpoint. This improves title and alternate-name recognition, including reference-title resolution. Only the movie-title phrase is sent; general recommendation requests stay on StoryScout's local NLP pipeline. TMDB's returned title, original title, overview, release year, genre IDs, and original language are retained in process memory for the current server lifetime, with a six-hour query cache. They are not written into the catalog files or TF-IDF/embedding indexes. Runtime, director, cast, ratings, and content warnings are not requested and remain unknown. Source links point to the TMDB movie record. Network/API errors fall back to local title matching. TMDB is free for non-commercial use with attribution; the app shows its logo and required non-endorsement notice on the Dataset/Credits view. Read [TMDB's current terms and attribution instructions](https://developer.themoviedb.org/docs/faq), [authentication guide](https://developer.themoviedb.org/docs/authentication-application), and [movie search guide](https://developer.themoviedb.org/docs/finding-data). Store the v3 key only as a backend environment secret; never add it to React, a catalog file, or Git.
+
+The bundled official TMDB logo SVG is reproduced unmodified from [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Tmdb.new.logo.svg), credited there to Travis Bell and sourced from TMDB. That file is available under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/); the attribution is included here and the displayed logo links to TMDB.
+
 The bundled CSVs contain 14 books and 13 movies in a small, curated demonstration catalog. Their descriptions are short project-written summaries, not copied long plot text. `source=demo` and `tag_provenance=curated demo metadata` mark that origin. Unknown metadata remains blank. The app marks warning metadata as incomplete; a missing warning is not proof of safety.
 
 ## MovieLens catalog

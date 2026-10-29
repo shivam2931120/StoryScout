@@ -29,6 +29,7 @@ from src.llm_interpreter import NemotronQueryInterpreter
 from src.preferences import GENRES, MOODS, parse_preferences
 from src.retrieval import RetrievalIndex
 from src.human_evaluation import create_judgment_template, score_human_judgments
+from src.tmdb import TMDBMovieSource
 
 logger = logging.getLogger(__name__)
 
@@ -41,7 +42,9 @@ def make_engine() -> StoryScoutEngine:
     indexes = {domain: RetrievalIndex(items, mode=mode) for domain, items in catalogs.items()}
     # External interpretation is an explicit server option; local NLP is default.
     key = get_server_api_key() if os.getenv("STORYSCOUT_USE_NVIDIA", "false").lower() == "true" else None
-    return StoryScoutEngine(catalogs, indexes, mode, NemotronQueryInterpreter(key) if key else None, title_directory=TitleDirectory.load(ROOT / "data/compact/titles.json.gz"))
+    return StoryScoutEngine(catalogs, indexes, mode, NemotronQueryInterpreter(key) if key else None,
+                            title_directory=TitleDirectory.load(ROOT / "data/compact/titles.json.gz"),
+                            movie_source=TMDBMovieSource())
 
 
 def item_payload(item):
@@ -111,6 +114,7 @@ def create_app(engine: StoryScoutEngine | None = None) -> FastAPI:
                 "title_directory_count":len(current.title_directory.records),"search_version":"3.1-entity-routing-source-coverage",
                 "catalog_profile":os.getenv('STORYSCOUT_CATALOG_PROFILE','full'),"embedding_backend":os.getenv('STORYSCOUT_EMBEDDING_BACKEND','torch'),
                 "genres": GENRES, "moods": MOODS, "modes": modes(current), "model": MODEL_NAME,
+                "movie_title_source": "TMDB on-demand" if current.movie_source and current.movie_source.configured else "local catalog",
                 "coverage":{domain:{'plot_text':sum(bool(x.retrieval_text) for x in items),'descriptions':sum(bool(x.retrieval_text or x.description_provenance or x.source=='demo') for x in items),
                     'source_generated_summaries':sum('source-generated' in x.description_provenance.lower() for x in items),'known_runtime':sum(x.runtime_minutes is not None for x in items),'known_pages':sum(x.page_count is not None for x in items),'source_languages':sum(x.language.lower()!='unknown' for x in items),
                     'subject_genre_mappings':sum(bool(x.subject_genres) for x in items)} for domain,items in current.catalogs.items()},

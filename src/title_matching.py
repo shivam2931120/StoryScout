@@ -137,6 +137,26 @@ class TitleDirectory:
         record = self.records.get(item_id)
         return CatalogItem(**record) if record else None
 
+    def add_item(self, item: CatalogItem):
+        """Add a request-time, provenance-carrying identity to process memory."""
+        self.records[item.id] = {
+            "id": item.id, "media_type": item.media_type, "title": item.title,
+            "description": item.description, "year": item.year,
+            "source": item.source, "source_url": item.source_url,
+            "title_aliases": list(item.title_aliases), "genres": list(item.genres),
+            "language": item.language, "runtime_minutes": item.runtime_minutes,
+            "director": item.director, "retrieval_text": item.retrieval_text,
+            "description_source": item.description_source,
+            "description_source_url": item.description_source_url,
+            "description_provenance": item.description_provenance,
+            "text_source": item.text_source, "text_source_url": item.text_source_url,
+            "metadata_provenance": item.metadata_provenance,
+        }
+        for name in title_names(item.title) + item.title_aliases:
+            key = title_key(name)
+            if key:
+                self.keys.setdefault(key, set()).add(item.id)
+
     def lookup(self, text, active_items, selection="both"):
         query,wrapped,requested=title_request(text)
         self.last_requested_media=requested

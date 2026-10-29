@@ -29,7 +29,9 @@ port 5173 with an API proxy to the Python server. The production application
 needs one Python server and no separate Node server. See
 [deployment instructions](docs/DEPLOYMENT.md).
 
-The default React/API app uses local NLP without an external chat API. Set
+The default React/API app uses local NLP without an external chat API. An optional server-side `TMDB_API_KEY` enables on-demand movie title verification when the local title directory misses a likely named movie or reference. TMDB supplies exact identity and linked metadata; local preference extraction, hard filters, and NLP ranking remain authoritative. The key is never sent to the browser or saved to the repository. The Dataset page includes TMDB's required logo and notice. TMDB's developer API is for non-commercial use with attribution; review [its current terms and attribution rules](https://developer.themoviedb.org/docs/faq) before sharing or monetizing the app.
+
+Set
 `STORYSCOUT_USE_NVIDIA=true` and a private backend `NVIDIA_API_KEY` only if you
 want the optional interpreter. Local filtering and ranking remain in Python.
 
@@ -106,6 +108,7 @@ To add optional summaries for records with no supplied description, configure `N
 - If `sentence-transformers` is unavailable, the default hybrid mode automatically falls back to TF-IDF; the app identifies this as lexical retrieval, not semantic retrieval.
 - If Streamlit is unavailable, use the same engine from Python modules and run the tests.
 - Explicit filters never relax automatically. Unknown page count/runtime/year cannot satisfy that hard filter.
+- If TMDB title lookup is unavailable or its key is invalid, StoryScout falls back to its local title directory. TMDB search results are not persisted into the NLP indexes; a returned unknown runtime cannot satisfy a runtime limit.
 
 Main files to study: `src/preferences.py`, `src/retrieval.py`,
 `src/conversation.py`, `api/main.py`, `api/models.py`, `frontend/src/App.jsx`,

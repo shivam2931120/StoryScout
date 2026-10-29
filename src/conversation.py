@@ -9,15 +9,39 @@ from .explanations import explain, explain_reference
 from .query_understanding import build_search_query
 
 class StoryScoutEngine:
-    def __init__(self, catalogs: dict[str, list[CatalogItem]], indexes: dict[str, object], retrieval_mode: str = "hybrid", query_interpreter=None, title_directory=None):
+    def __init__(self, catalogs: dict[str, list[CatalogItem]], indexes: dict[str, object], retrieval_mode: str = "hybrid", query_interpreter=None, title_directory=None, movie_source=None):
         self.catalogs, self.indexes, self.retrieval_mode = catalogs, indexes, retrieval_mode
         self.query_interpreter = query_interpreter
         self.last_diagnostics = {}
         self.title_directory = title_directory or TitleDirectory()
+        self.movie_source = movie_source
         self.last_title_matches = []
         self.last_title_lookup = False
         self.last_title_match_kind = "none"
         self.last_context_action = "auto"
+
+    def _lookup_title(self, query, all_items, selection="both"):
+        matches, approximate, explicit = self.title_directory.lookup(query, all_items, selection)
+        requested = self.title_directory.last_requested_media
+        if matches or not explicit or not self.movie_source or requested == "book":
+            return matches, approximate, explicit
+        # The source is consulted only after the local identity directory fails
+        # on a likely title. It never receives a general recommendation prompt.
+        remote = self.movie_source.search(self.title_directory.last_entity)
+        if not remote:
+            return matches, approximate, explicit
+        matched, approximate = self.movie_source.identity_matches(self.title_directory.last_entity, remote)
+        if not matched:
+            return matches, approximate, explicit
+        for item in remote:
+            self.title_directory.add_item(item)
+        requested = self.title_directory.last_requested_media
+        preferred = requested or {"books": "book", "movies": "movie"}.get(selection)
+        if preferred:
+            matched = [item for item in matched if item.media_type == preferred]
+        if matched:
+            self.title_directory.last_match_kind = "suggestion" if approximate else "exact"
+        return matched, approximate, explicit
 
     def get_item(self, item_id):
         return next((item for group in self.catalogs.values() for item in group if item.id == item_id), None) or self.title_directory.get(item_id)
@@ -58,7 +82,7 @@ class StoryScoutEngine:
         # short or romance as instructions. Similarity requests keep the NLP path.
         controls = {"reset", "reset my preferences", "help", "show preferences", "why did you recommend this"}
         if not reference_id and parsed.intent not in {"reset", "help", "show_preferences", "explain", "more"} and text.strip().lower().rstrip("?.!") not in controls:
-            matches, approximate, explicit = self.title_directory.lookup(text, [x for group in self.catalogs.values() for x in group], state.media_selection)
+            matches, approximate, explicit = self._lookup_title(text, [x for group in self.catalogs.values() for x in group], state.media_selection)
             if lookup_id:
                 selected = self.get_item(lookup_id)
                 matches, approximate, explicit = ([selected] if selected else []), False, True
@@ -78,7 +102,14 @@ class StoryScoutEngine:
                     _, conflicts = self.indexes[item.media_type]._hard_filter(item, state.preferences)
                     if state.preferences.language and item.language.lower() == "unknown":
                         conflicts = ["language is unknown; cannot verify " + state.preferences.language if note.startswith("language is not ") else note for note in conflicts]
-                    explanation = "Possible title spelling match; choose the intended title." if approximate else ("Matched part of a catalog title; choose the intended title." if self.last_title_match_kind == "partial" else "Matched the catalog title directly.")
+                    if approximate:
+                        explanation = "Possible title spelling match; choose the intended title."
+                    elif self.last_title_match_kind == "partial":
+                        explanation = "Matched part of a catalog title; choose the intended title."
+                    elif item.source == "tmdb-api":
+                        explanation = "Exact movie title verified with TMDB. Metadata is linked to its source."
+                    else:
+                        explanation = "Matched the catalog title directly."
                     if conflicts:
                         explanation += " Current recommendation filters: " + "; ".join(conflicts) + ". This is a title lookup, not a verified filtered recommendation."
                     if state.preferences.negative_content and not item.verified_warnings:
@@ -151,7 +182,7 @@ class StoryScoutEngine:
                 state.preferences.referenced_title = reference.title
                 state.pending_title_choices.clear()
         elif parsed.reference_query:
-            exact, approximate, _ = self.title_directory.lookup(parsed.reference_query, all_items)
+            exact, approximate, _ = self._lookup_title(parsed.reference_query, all_items, "both")
             if approximate:
                 state.selected_reference_id=None
                 state.pending_title_choices=[x.id for x in exact]

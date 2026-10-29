@@ -20,3 +20,5 @@ services:
         value: compact
       - key: STORYSCOUT_EMBEDDING_BACKEND
         value: onnx
+      - key: TMDB_API_KEY
+        sync: false
