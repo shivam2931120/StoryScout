@@ -133,3 +133,15 @@ def test_compact_catalog_retains_source_plotted_reference_titles(tmp_path, monke
     retained=next(x for x in saved['movie'] if x['id']==anchor.id)
     assert retained['runtime_minutes'] is None
     assert set(x['id'] for x in saved['movie']) <= set(x.id for x in movies+[anchor])
+
+
+def test_model_quote_typography_is_normalized_back_to_original_source(identifier):
+    class Model:
+        def identify_task(self,task,clues,candidates):
+            if task=='extract': return None
+            return {'evidence':[{'id':'movie_dream','clue':0,'verdict':'supported',
+                'quote':"A thief enters sleeping people\\'s dreams to steal secrets."}]}
+    identifier.query_interpreter=Model()
+    _,results,details=identify(identifier,'A thief enters sleeping people’s dreams to steal secrets',ConversationState(media_selection='movies'))
+    assert details['assessment'].startswith('Nemotron')
+    assert 'people’s dreams' in results['movie'][0].explanation

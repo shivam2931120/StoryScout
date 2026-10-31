@@ -1,0 +1,175 @@
+{
+  "executed_at": "2026-10-31T07:48:28.580584+00:00",
+  "requested_mode": "hybrid",
+  "active_modes": {
+    "book": "hybrid (TF-IDF + sentence embeddings)",
+    "movie": "hybrid (TF-IDF + sentence embeddings)"
+  },
+  "model_assistance": false,
+  "query_count": 12,
+  "judgment_method": "Developer-authored description paraphrases checked against bundled demo descriptions; not independent human judgments.",
+  "limitations": "Small demo catalog; descriptions are short; no out-of-catalog coverage guarantee; multiple relevant media may exist.",
+  "top1_accuracy": 1.0,
+  "hit_at_3": 1.0,
+  "mrr_at_3": 1.0,
+  "rows": [
+    {
+      "query": "People leave Earth seeking a future for humanity while gravity and time affect a family",
+      "media": "movies",
+      "relevant_ids": [
+        "movie_001"
+      ],
+      "returned_ids": [
+        "movie_001"
+      ],
+      "top1_correct": true,
+      "hit_at_3": true,
+      "reciprocal_rank_at_3": 1.0
+    },
+    {
+      "query": "A teenager gets stuck in the past and must fix events to return home",
+      "media": "movies",
+      "relevant_ids": [
+        "movie_002"
+      ],
+      "returned_ids": [
+        "movie_002"
+      ],
+      "top1_correct": true,
+      "hit_at_3": true,
+      "reciprocal_rank_at_3": 1.0
+    },
+    {
+      "query": "An isolated astronaut survives using science while Earth organizes a rescue",
+      "media": "movies",
+      "relevant_ids": [
+        "movie_003"
+      ],
+      "returned_ids": [
+        "movie_003"
+      ],
+      "top1_correct": true,
+      "hit_at_3": true,
+      "reciprocal_rank_at_3": 1.0
+    },
+    {
+      "query": "A friendly bear is falsely accused and his community tries to help",
+      "media": "movies",
+      "relevant_ids": [
+        "movie_004"
+      ],
+      "returned_ids": [
+        "movie_004"
+      ],
+      "top1_correct": true,
+      "hit_at_3": true,
+      "reciprocal_rank_at_3": 1.0
+    },
+    {
+      "query": "A hotel concierge and a young apprentice are caught in a caper about loyalty",
+      "media": "movies",
+      "relevant_ids": [
+        "movie_005"
+      ],
+      "returned_ids": [
+        "movie_005"
+      ],
+      "top1_correct": true,
+      "hit_at_3": true,
+      "reciprocal_rank_at_3": 1.0
+    },
+    {
+      "query": "A reluctant traveler grows courageous through friendship on a dangerous fantasy quest",
+      "media": "books",
+      "relevant_ids": [
+        "book_001"
+      ],
+      "returned_ids": [
+        "book_001"
+      ],
+      "top1_correct": true,
+      "hit_at_3": true,
+      "reciprocal_rank_at_3": 1.0
+    },
+    {
+      "query": "A scientist visits the distant future and discovers problems of progress and class",
+      "media": "books",
+      "relevant_ids": [
+        "book_002"
+      ],
+      "returned_ids": [
+        "book_002"
+      ],
+      "top1_correct": true,
+      "hit_at_3": true,
+      "reciprocal_rank_at_3": 1.0
+    },
+    {
+      "query": "Guests trapped on an isolated island grow suspicious of each other during a mystery",
+      "media": "books",
+      "relevant_ids": [
+        "book_003"
+      ],
+      "returned_ids": [
+        "book_003"
+      ],
+      "top1_correct": true,
+      "hit_at_3": true,
+      "reciprocal_rank_at_3": 1.0
+    },
+    {
+      "query": "A pilot meets a young traveler and they discuss friendship and imagination",
+      "media": "books",
+      "relevant_ids": [
+        "book_004"
+      ],
+      "returned_ids": [
+        "book_004"
+      ],
+      "top1_correct": true,
+      "hit_at_3": true,
+      "reciprocal_rank_at_3": 1.0
+    },
+    {
+      "query": "An astronaut far from Earth uses engineering and humor to survive until rescue",
+      "media": "books",
+      "relevant_ids": [
+        "book_005"
+      ],
+      "returned_ids": [
+        "book_005"
+      ],
+      "top1_correct": true,
+      "hit_at_3": true,
+      "reciprocal_rank_at_3": 1.0
+    },
+    {
+      "query": "An astronaut stranded far from home survives while a team attempts a rescue",
+      "media": "both",
+      "relevant_ids": [
+        "book_005",
+        "movie_003"
+      ],
+      "returned_ids": [
+        "book_005",
+        "movie_003"
+      ],
+      "top1_correct": true,
+      "hit_at_3": true,
+      "reciprocal_rank_at_3": 1.0
+    },
+    {
+      "query": "A man travels through time to the distant future",
+      "media": "books",
+      "relevant_ids": [
+        "book_002"
+      ],
+      "returned_ids": [
+        "book_002"
+      ],
+      "top1_correct": true,
+      "hit_at_3": true,
+      "reciprocal_rank_at_3": 1.0
+    }
+  ]
+}

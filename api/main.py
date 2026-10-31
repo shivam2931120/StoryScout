@@ -213,7 +213,7 @@ def create_app(engine: StoryScoutEngine | None = None) -> FastAPI:
             entity_path=ROOT/f"artifacts/entity_search/{name}.json"
             if entity_path.exists():
                 entity_evaluation[name]={key:value for key,value in json.loads(entity_path.read_text()).items() if key!="rows"}
-        return {"identification": json.loads((ROOT/"artifacts/identification/tfidf.json").read_text()) if (ROOT/"artifacts/identification/tfidf.json").exists() else None, "entity_search":entity_evaluation,"passage_evaluation":passage_evaluation,"results": json.loads(path.read_text()) if path.exists() else None,
+        return {"identification_hybrid": json.loads((ROOT/"artifacts/identification/hybrid.json").read_text()) if (ROOT/"artifacts/identification/hybrid.json").exists() else None, "identification": json.loads((ROOT/"artifacts/identification/tfidf.json").read_text()) if (ROOT/"artifacts/identification/tfidf.json").exists() else None, "entity_search":entity_evaluation,"passage_evaluation":passage_evaluation,"results": json.loads(path.read_text()) if path.exists() else None,
                 "summary": (directory / "evaluation_summary.md").read_text() if (directory / "evaluation_summary.md").exists() else "Not evaluated yet.",
                 "genre_classifier": json.loads((ROOT / "artifacts/genre_classifier_results.json").read_text()) if (ROOT / "artifacts/genre_classifier_results.json").exists() else None,
                 "genre_text_classifier": json.loads((ROOT/'artifacts/genre_text_results.json').read_text()) if (ROOT/'artifacts/genre_text_results.json').exists() else None,

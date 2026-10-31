@@ -71,3 +71,15 @@ The compact selection explicitly retains a small documented set of popular
 reference titles when existing source plots are available (including Inception).
 The 1,500-movie cap is unchanged; omitted or undescribed titles still cannot be
 identified from plot text. The selection list is in `prepare_compact_catalog.py`.
+
+A compact-catalog diagnostic used “A thief enters people’s dreams to steal
+secrets. He is hired to plant an idea in someone’s mind.” Pure TF-IDF did not
+retain a supported match; hybrid MiniLM retrieval plus live Nemotron comparison
+retained Inception with both clues supported by source quotes. This is one
+diagnostic example, not a general performance estimate. Retrieval also expands
+simple inflections against the fitted TF-IDF vocabulary, excluding stop words;
+original phrasing remains intact for semantic encoding. Quote validation tolerates
+JSON apostrophe escaping, whitespace and typographic quote differences, then
+returns an actual source span capped at 200 characters. Incoming quotes up to
+500 characters are accepted only when they match both supplied excerpts and the
+original plot.

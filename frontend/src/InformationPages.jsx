@@ -134,6 +134,7 @@ export function EvaluationPage() {
             <h3>Story identification from plot clues</h3>
             <p>{data.identification.query_count} developer-authored demo descriptions; TF-IDF only, without model assistance.</p>
             <p>Top-1: {data.identification.top1_accuracy.toFixed(3)} · Hit@3: {data.identification.hit_at_3.toFixed(3)} · MRR@3: {data.identification.mrr_at_3.toFixed(3)}</p>
+            {data.identification_hybrid && <p>Executed hybrid baseline: Top-1 {data.identification_hybrid.top1_accuracy.toFixed(3)} · Hit@3 {data.identification_hybrid.hit_at_3.toFixed(3)} · MRR@3 {data.identification_hybrid.mrr_at_3.toFixed(3)}. Sentence embeddings ran; model assistance was disabled for this benchmark.</p>}
             <p>{data.identification.limitations} This small demo test does not measure real-world or Nemotron-assisted accuracy.</p>
           </section>}
           {data.entity_search?.local && <section className="info-panel">

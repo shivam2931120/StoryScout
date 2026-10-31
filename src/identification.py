@@ -9,6 +9,7 @@ from dataclasses import dataclass
 import re
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS
 from .schemas import Recommendation
 
 
@@ -37,10 +38,25 @@ def plot_text(item):
     return item.description
 
 
+def lexical_query(index, text):
+    """Vocabulary-constrained inflection expansion, retaining the original words."""
+    extras=set()
+    for word in re.findall(r'[a-z]+',text.lower()):
+        if word in ENGLISH_STOP_WORDS or len(word)<4: continue
+        forms={word+'s',word+'es'}
+        if word.endswith('s'): forms.add(word[:-1])
+        if word.endswith('es'): forms.add(word[:-2])
+        if word.endswith('ies'): forms.add(word[:-3]+'y')
+        for suffix in ('ing','ed'):
+            if word.endswith(suffix): forms.update({word[:-len(suffix)],word[:-len(suffix)]+'e'})
+        extras.update(form for form in forms if len(form)>2 and form in index.vectorizer.vocabulary_)
+    return text+' '+' '.join(sorted(extras))
+
+
 def recall_candidates(index, query, preferences):
     """Broad hybrid recall; recommendation diversity/cutoffs do not identify titles."""
     from .retrieval import _query_vector, combine_hybrid_scores, calibrate_semantic_scores
-    vector=index.vectorizer.transform([query])
+    vector=index.vectorizer.transform([lexical_query(index,query)])
     lexical=cosine_similarity(index.matrix,vector).ravel()
     semantic=None
     scores=lexical
@@ -98,17 +114,17 @@ def identify(engine, text, state):
         vectors=index.vectorizer.transform(sentences)
         rows=[]; excerpts=[]
         for number,clue in enumerate(clues):
-            q=index.vectorizer.transform([clue.text])
+            q=index.vectorizer.transform([lexical_query(index,clue.text)])
             values=cosine_similarity(vectors,q).ravel()
             best=int(np.argmax(values))
-            overlap=set(re.findall(r'[a-z]{3,}',clue.text.lower())) & set(re.findall(r'[a-z]{3,}',sentences[best].lower()))
-            overlap-={'the','and','that','this','was','with','from','movie','book','film','about','where','there','who','into'}
+            overlap=set(index.feature_names[q.indices]) & set(index.feature_names[vectors[best].indices])
+            overlap={term for term in overlap if ' ' not in term}
             if values[best]>=.18 and len(overlap)>=2:
                 rows.append({'clue':number,'verdict':'text_overlap','quote':sentences[best][:200], 'method':'local TF-IDF passage overlap'})
             excerpts.append(sentences[best])
-        documents[rec.item.id]=' '.join(dict.fromkeys(excerpts))[:2200]
+        documents[rec.item.id]=text_source[:1000]+'\n'+' '.join(dict.fromkeys(excerpts))[:1200]
         evidence[rec.item.id]=rows
-    source_plots={rec.item.id:plot_text(rec.item).casefold() for rec in candidates}
+    source_plots={rec.item.id:plot_text(rec.item) for rec in candidates}
     assessment='local passage overlap'
     if candidates and interpreter and hasattr(interpreter,'identify_task'):
         payload=interpreter.identify_task('assess', {'clues':[{'text':c.text,'uncertain':c.uncertain} for c in clues]},
@@ -119,8 +135,15 @@ def identify(engine, text, state):
                 if not isinstance(row,dict): continue
                 item_id=row.get('id'); clue=row.get('clue'); quote=row.get('quote'); verdict=row.get('verdict')
                 if item_id not in documents or type(clue) is not int or not 0<=clue<len(clues): continue
-                if verdict not in {'supported','contradicted'} or type(quote) is not str or not 10<=len(quote)<=200: continue
-                if quote.casefold() not in documents[item_id].casefold() or quote.casefold() not in source_plots[item_id]: continue
+                if verdict not in {'supported','contradicted'} or type(quote) is not str or not 10<=len(quote)<=500: continue
+                # Tolerate typography/JSON apostrophe escaping while returning
+                # only the actual source span; no paraphrase can pass this check.
+                quote=quote.replace("\\'", "'").replace('’', "'").replace('“', '"').replace('”', '"')
+                pattern=r'\s+'.join(re.escape(word).replace("'", "['’]").replace('"', '["“”]') for word in quote.split())
+                source_match=re.search(pattern,source_plots[item_id],re.I)
+                if not source_match or not re.search(pattern,documents[item_id],re.I): continue
+                # Display the original source span, preserving its typography.
+                quote=source_match.group(0)[:200]
                 if any(x['clue']==clue for x in accepted.get(item_id,[])): continue
                 accepted.setdefault(item_id,[]).append({'clue':clue,'verdict':verdict,'quote':quote,'method':'Nemotron inference; quote checked against source passage'})
             if accepted:
