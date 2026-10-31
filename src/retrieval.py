@@ -185,6 +185,112 @@ class RetrievalIndex:
         if "graphic violence" in pref.negative_content and "graphic violence" in item.verified_warnings: notes.append("verified graphic violence")
         return not notes, notes
 
+    def rank_external(self, query: str, items: list[CatalogItem], pref: Preferences,
+                      top_k: int = 5, topic_query: str | None = None,
+                      exclude_ids: set[str] | None = None) -> list[Recommendation]:
+        """Rank request-scoped external candidates with this local NLP index.
+
+        The fitted local TF-IDF vocabulary and optional shared sentence encoder
+        score API results; only candidates are external. No remote item or
+        vector is written to the catalog, index artifacts, or a cache.
+        """
+        exclude_ids = exclude_ids or set()
+        eligible = []
+        rejected = Counter()
+        for item in items:
+            keep, notes = self._hard_filter(item, pref)
+            if keep and item.id not in exclude_ids:
+                eligible.append(item)
+            else:
+                rejected.update(notes or (["already shown"] if item.id in exclude_ids else []))
+        self.last_external_diagnostics = {
+            "candidate_count": len(items), "eligible_count": len(eligible),
+            "filter_rejections": dict(rejected), "source": "Big Book API, fetched on demand",
+        }
+        if not eligible:
+            return []
+        query = meaningful_query(query)
+        topic = (topic_query if topic_query is not None else query).strip()
+        docs = [build_query_text(item.search_text) for item in eligible]
+        topic_vector = self.vectorizer.transform([build_query_text(topic)]) if topic else None
+        query_vector = self.vectorizer.transform([build_query_text(query)]) if query else None
+        lexical_topic = cosine_similarity(self.vectorizer.transform(docs), topic_vector).ravel() if topic_vector is not None else np.zeros(len(eligible))
+        lexical_query = cosine_similarity(self.vectorizer.transform(docs), query_vector).ravel() if query_vector is not None else lexical_topic.copy()
+        semantic_topic = semantic_query = None
+        candidate_vectors = None
+        if self.semantic_available and (topic or query):
+            try:
+                candidate_vectors = np.asarray(self.model.encode(
+                    docs, normalize_embeddings=True, show_progress_bar=False,
+                    convert_to_numpy=True,
+                ))
+                if topic:
+                    semantic_topic = cosine_similarity(_query_vector(self.model, build_query_text(topic)).reshape(1, -1), candidate_vectors).ravel()
+                if query:
+                    semantic_query = cosine_similarity(_query_vector(self.model, build_query_text(query)).reshape(1, -1), candidate_vectors).ravel()
+            except Exception:
+                candidate_vectors = semantic_topic = semantic_query = None
+        def blend(lexical, semantic):
+            if semantic is not None and self.mode == "semantic":
+                return calibrate_semantic_scores(semantic)
+            if semantic is not None and self.mode == "hybrid":
+                return combine_hybrid_scores(lexical, semantic)
+            return lexical
+        general = blend(lexical_query, semantic_query)
+        topical = blend(lexical_topic, semantic_topic) if topic else general.copy()
+        raw = .8 * topical + .2 * general if topic else general
+        has_description = np.array([bool(x.retrieval_text or x.description_provenance) for x in eligible])
+        base = raw * np.where(has_description, 1.0, .65)
+        if topic:
+            allowed = topic_gate("book", lexical_topic, semantic_topic)
+        else:
+            allowed = np.ones(len(eligible), dtype=bool)
+        genres = np.array([
+            len(set(item.genres + item.subject_genres) & set(pref.preferred_genres)) / max(len(pref.preferred_genres), 1)
+            for item in eligible
+        ])
+        qualified, cutoff = quality_gate("book", base, allowed) if topic else (allowed, 0.0)
+        scores = preference_boost(base, genres, np.zeros(len(eligible)), np.zeros(len(eligible)), np.zeros(len(eligible)))
+        self.last_external_diagnostics.update({
+            "topic_relevance_rejections": int(np.count_nonzero(~allowed)),
+            "quality_rejections": int(np.count_nonzero(~qualified)),
+            "quality_score_floor": round(cutoff, 4),
+            "ranker": "local TF-IDF + shared sentence embeddings + hard filters",
+        })
+        pool = sorted(np.flatnonzero(qualified & (scores > 0)), key=lambda i: (-scores[i], eligible[i].id))
+        pool = pool[:max(20, top_k)]
+        if not pool:
+            return []
+        pool_vectors = candidate_vectors[pool] if candidate_vectors is not None else self.vectorizer.transform([build_query_text(eligible[i].search_text) for i in pool])
+        pairwise = cosine_similarity(pool_vectors)
+        selected: list[int] = []
+        while len(selected) < min(top_k, len(pool)):
+            remaining = [i for i in range(len(pool)) if i not in selected]
+            best = max(remaining, key=lambda i: (
+                .84 * float(scores[pool[i]]) - .16 * max((float(pairwise[i, j]) for j in selected), default=0),
+                -i,
+            ))
+            selected.append(best)
+        recommendations = []
+        for local_pos in selected:
+            index = pool[local_pos]
+            terms = []
+            if topic_vector is not None:
+                overlap = self.vectorizer.transform([build_query_text(eligible[index].search_text)]).multiply(topic_vector).tocoo()
+                order = np.argsort(overlap.data)[::-1][:3]
+                terms = [str(self.feature_names[overlap.col[i]]) for i in order if overlap.data[i] > 0]
+            recommendations.append(Recommendation(
+                item=eligible[index], score=float(scores[index]),
+                lexical_score=float(lexical_topic[index]),
+                semantic_score=None if semantic_topic is None else float(semantic_topic[index]),
+                matched_terms=terms,
+                score_components={"document_lexical_similarity": round(float(lexical_topic[index]), 4),
+                    "document_semantic_similarity": None if semantic_topic is None else round(float(semantic_topic[index]), 4),
+                    "source": "Big Book API; locally reranked"},
+            ))
+        self.last_external_diagnostics["returned_count"] = len(recommendations)
+        return recommendations
+
     def search(self, query: str, pref: Preferences, top_k: int = 5, exclude_ids: set[str] | None = None, seen_ids: set[str] | None = None, topic_query: str | None = None) -> list[Recommendation]:
         exclude_ids = exclude_ids or set()
         eligible, eligible_indices, notes = [], [], {}

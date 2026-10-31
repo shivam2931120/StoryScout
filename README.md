@@ -178,3 +178,18 @@ ablation results, caching, and validation](docs/PASSAGE_MATCHING.md).
 Exact title extraction, source aliases, franchise choices, spelling suggestions,
 missing-title handling, and source-backed modern coverage are implemented. See
 [the current policy, executed checks, and limitations](docs/ENTITY_SEARCH.md).
+
+## Optional live book search
+
+Set `BIGBOOK_API_KEY` as a **server-side environment secret** to enable live
+Big Book API candidates. StoryScout fetches candidates for the current request,
+then applies local NLP ranking and metadata hard filters. This broadens live
+search; it does not enlarge the bundled 1,000-book index. API records and derived
+scores are not cached or saved. Without a key, the local catalog continues to
+work. See [Big Book API setup and terms](docs/DATA_SOURCES.md#optional-live-big-book-api-search).
+
+For local development, export `BIGBOOK_API_KEY` in the shell before starting the
+FastAPI process. On Render, open the StoryScout service’s **Environment** page,
+add `BIGBOOK_API_KEY`, and enter it there as a secret. Never put it in React/Vite
+variables, catalog files, source control, or request URLs. Rotate the key if it
+has been exposed.

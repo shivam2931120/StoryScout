@@ -22,3 +22,5 @@ services:
         value: onnx
       - key: TMDB_API_KEY
         sync: false
+      - key: BIGBOOK_API_KEY
+        sync: false

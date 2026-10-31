@@ -26,6 +26,7 @@ import {
   X,
 } from "lucide-react";
 import PreferencesDrawer from "./PreferencesDrawer.jsx";
+import { isLiveBook, persistentLibrary } from "./persistence.js";
 import { PipelinePage, EvaluationPage } from "./InformationPages.jsx";
 import {
   request,
@@ -81,7 +82,7 @@ function readLibrary() {
       ) &&
       Array.isArray(stored.saved)
     )
-      return stored;
+      return persistentLibrary(stored);
   } catch {
     /* Fresh or unavailable browser storage. */
   }
@@ -116,7 +117,7 @@ export default function App() {
 
   useEffect(() => {
     try {
-      localStorage.setItem(storageKey, JSON.stringify(library));
+      localStorage.setItem(storageKey, JSON.stringify(persistentLibrary(library)));
       setStorageError(false);
     } catch {
       setStorageError(true);
@@ -243,6 +244,10 @@ export default function App() {
   }
   function saveStory(rec) {
     const item = rec.item || rec;
+    if (isLiveBook(item)) {
+      setToast("Live book results can’t be saved by this source");
+      return;
+    }
     const exists = savedIds.has(item.id);
     setLibrary((old) => ({
       ...old,
@@ -923,7 +928,7 @@ export default function App() {
               <h1>Stories with a source.</h1>
               <p className="page-lede">
                 {meta?.counts.book.toLocaleString() || "…"} books and{" "}
-                {meta?.counts.movie.toLocaleString() || "…"} movies in the recommendation index.
+                {meta?.counts.movie.toLocaleString() || "…"} movies in the local recommendation index.
                 {meta?.title_directory_count > 0 && ` ${meta.title_directory_count.toLocaleString()} source records searchable by title.`}
               </p>
               <div className="info-panel">
@@ -932,6 +937,9 @@ export default function App() {
                   Project Gutenberg public catalog metadata, plus 14 curated
                   demonstration records. Most expanded records provide titles,
                   authors, and subjects, with page counts and years unavailable.
+                  {meta?.book_candidate_source?.startsWith("Big Book API") && (
+                    <> Book requests can also search Big Book API live. Its candidates are reranked with StoryScout’s local NLP index and filtered using verified metadata; remote records are not stored in this catalog.</>
+                  )}
                 </p>
                 <h3>Movies</h3>
                 <p>

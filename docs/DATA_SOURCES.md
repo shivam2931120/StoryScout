@@ -1,5 +1,32 @@
 # Data sources and limitations
 
+## Optional live Big Book API search
+
+When the server has `BIGBOOK_API_KEY`, book searches can request candidate
+records from Big Book API's `/search-books` endpoint and fetch metadata for the
+small returned set. The key is sent in the `x-api-key` header. StoryScout uses
+those candidates only for the current request: hard metadata constraints are
+applied first and the local TF-IDF vocabulary plus the available shared sentence
+encoder rerank them. No remote catalog rows, embeddings, search responses, or
+derived scores are written to local artifacts or browser storage; live results
+cannot be saved to the browser collection. The included book index count remains
+the local count, not the provider's catalog size. API failure or no configured
+key leaves local search available. Unknown page counts, years, genres, and
+language remain unknown and cannot satisfy explicit hard constraints.
+
+Configure the key only in the server environment (locally, export it in the
+shell; on Render, add it as a service secret). The React app never receives it.
+Big Book API documents a semantic search endpoint, request quotas/rate limits,
+and the `x-api-key` header in its [official documentation](https://bigbookapi.com/docs/).
+Its [terms](https://bigbookapi.com/terms/) prohibit copying or storing returned
+data and derived data; they permit caching user-requested data for up to one hour
+only with prior written permission. Those terms also restrict applications that
+provide the same experience as Big Book API. Confirm the provider permits your
+specific public deployment before enabling the key. StoryScout does not claim
+provider affiliation or endorsement. The provider may return inaccurate or
+incomplete metadata; link each result to its source and treat its fields as
+provider-supplied rather than independently verified.
+
 ## Optional TMDB movie title lookup
 
 When the server has `TMDB_API_KEY`, a likely movie-title lookup that misses the local identity directory is checked against TMDB's official `/3/search/movie` endpoint. This improves title and alternate-name recognition, including reference-title resolution. Only the movie-title phrase is sent; general recommendation requests stay on StoryScout's local NLP pipeline. TMDB's returned title, original title, overview, release year, genre IDs, and original language are retained in process memory for the current server lifetime, with a six-hour query cache. They are not written into the catalog files or TF-IDF/embedding indexes. Runtime, director, cast, ratings, and content warnings are not requested and remain unknown. Source links point to the TMDB movie record. Network/API errors fall back to local title matching. TMDB is free for non-commercial use with attribution; the app shows its logo and required non-endorsement notice on the Dataset/Credits view. Read [TMDB's current terms and attribution instructions](https://developer.themoviedb.org/docs/faq), [authentication guide](https://developer.themoviedb.org/docs/authentication-application), and [movie search guide](https://developer.themoviedb.org/docs/finding-data). Store the v3 key only as a backend environment secret; never add it to React, a catalog file, or Git.

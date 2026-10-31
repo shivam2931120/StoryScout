@@ -9,12 +9,13 @@ from .explanations import explain, explain_reference
 from .query_understanding import build_search_query
 
 class StoryScoutEngine:
-    def __init__(self, catalogs: dict[str, list[CatalogItem]], indexes: dict[str, object], retrieval_mode: str = "hybrid", query_interpreter=None, title_directory=None, movie_source=None):
+    def __init__(self, catalogs: dict[str, list[CatalogItem]], indexes: dict[str, object], retrieval_mode: str = "hybrid", query_interpreter=None, title_directory=None, movie_source=None, book_source=None):
         self.catalogs, self.indexes, self.retrieval_mode = catalogs, indexes, retrieval_mode
         self.query_interpreter = query_interpreter
         self.last_diagnostics = {}
         self.title_directory = title_directory or TitleDirectory()
         self.movie_source = movie_source
+        self.book_source = book_source
         self.last_title_matches = []
         self.last_title_lookup = False
         self.last_title_match_kind = "none"
@@ -23,6 +24,31 @@ class StoryScoutEngine:
     def _lookup_title(self, query, all_items, selection="both"):
         matches, approximate, explicit = self.title_directory.lookup(query, all_items, selection)
         requested = self.title_directory.last_requested_media
+        if self.book_source and selection in {"books", "both"} and requested != "movie" and explicit:
+            # The external source is a live candidate source only. Filter its
+            # semantic results back to title-like matches for identity lookup;
+            # do not retain remote records in the local title directory.
+            remote = self.book_source.search(self.title_directory.last_entity, number=12, details_limit=12)
+            phrase = self.title_directory.last_entity.casefold()
+            phrase_terms = {x for x in phrase.split() if len(x) > 1}
+            remote = [item for item in remote if (
+                phrase and phrase in item.title.casefold()
+                or phrase_terms and len(phrase_terms & set(item.title.casefold().split())) >= max(1, len(phrase_terms) - 1)
+            )]
+            preferred = requested or {"books": "book", "both": None}.get(selection)
+            if preferred:
+                remote = [item for item in remote if item.media_type == preferred]
+            if selection == "books":
+                if remote:
+                    matches, approximate = remote, False
+                    self.title_directory.last_match_kind = "exact" if any(phrase == item.title.casefold() for item in remote) else "partial"
+                elif matches:
+                    matches = [item for item in matches if item.media_type == "book"]
+            elif remote:
+                ids = {item.id for item in matches}
+                matches.extend(item for item in remote if item.id not in ids)
+                if not self.title_directory.last_match_kind or self.title_directory.last_match_kind == "none":
+                    self.title_directory.last_match_kind = "partial"
         if not self.movie_source or requested == "book":
             return matches, approximate, explicit
         if matches:
@@ -70,7 +96,10 @@ class StoryScoutEngine:
         return matched, approximate, explicit
 
     def get_item(self, item_id):
-        return next((item for group in self.catalogs.values() for item in group if item.id == item_id), None) or self.title_directory.get(item_id)
+        local = next((item for group in self.catalogs.values() for item in group if item.id == item_id), None) or self.title_directory.get(item_id)
+        if local or not self.book_source or not str(item_id).startswith("book_bigbook_"):
+            return local
+        return self.book_source.details(str(item_id).removeprefix("book_bigbook_"))
 
     def reset(self, state: ConversationState) -> ConversationState:
         state.messages.clear(); state.preferences = state.preferences.__class__(); state.media_selection = "both"; state.has_explicit_media = False; state.selected_reference_id = None; state.last_recommendations.clear(); state.pending_title_choices.clear()
@@ -265,7 +294,29 @@ class StoryScoutEngine:
                 query='An engaging story about discovery, human relationships and adventure'
             topic = (reference_context(reference) + ' ' if reference else '') + state.last_content_query
             results[domain] = self.indexes[domain].search(query, state.preferences, top_k=5, exclude_ids=exclude,seen_ids=set(state.seen_recommendations),topic_query=topic)
-            self.last_diagnostics[domain]=dict(self.indexes[domain].last_diagnostics)
+            local_diagnostics = dict(self.indexes[domain].last_diagnostics)
+            if domain == "book" and self.book_source and self.book_source.configured:
+                # Keep the live request bounded: one search plus at most six
+                # detail lookups per recommendation turn.
+                remote_items = self.book_source.search(query or topic or "books", number=12, details_limit=6)
+                remote_recs = self.indexes[domain].rank_external(
+                    query, remote_items, state.preferences, top_k=5, topic_query=topic,
+                    exclude_ids=exclude | (set(state.seen_recommendations) if exclude_seen else set()),
+                )
+                remote_diagnostics = dict(getattr(self.indexes[domain], "last_external_diagnostics", {}))
+                combined = {rec.item.id: rec for rec in results[domain]}
+                combined.update({rec.item.id: rec for rec in remote_recs})
+                deduplicated = {}
+                for rec in sorted(combined.values(), key=lambda rec: (-rec.score, rec.item.id)):
+                    identity = (rec.item.title.casefold().strip(), (rec.item.authors or "").casefold().strip())
+                    deduplicated.setdefault(identity, rec)
+                results[domain] = list(deduplicated.values())[:5]
+                local_diagnostics["on_demand_source"] = "Big Book API, NLP-reranked; no remote records cached"
+                local_diagnostics["on_demand_candidates"] = remote_diagnostics.get("candidate_count", 0)
+                local_diagnostics["on_demand_eligible"] = remote_diagnostics.get("eligible_count", 0)
+                local_diagnostics["on_demand_filter_rejections"] = remote_diagnostics.get("filter_rejections", {})
+                local_diagnostics["on_demand_returned"] = len(remote_recs)
+            self.last_diagnostics[domain]=local_diagnostics
             for rec in results[domain]:
                 rec.explanation = explain_reference(rec, reference, state.preferences) if reference else explain(rec, search_query, state.preferences)
         state.last_recommendations = [r.item.id for group in results.values() for r in group]

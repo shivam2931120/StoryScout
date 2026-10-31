@@ -92,6 +92,7 @@ export function Cover({ item, large = false }) {
 
 export function StoryCard({ rec, saved, onSave, onDetails, compact = false }) {
   const item = rec.item || rec;
+  const liveSource = item.source === "bigbook-api";
   return (
     <article className={`story-card ${compact ? "compact" : ""}`}>
       <button
@@ -149,7 +150,7 @@ export function StoryCard({ rec, saved, onSave, onDetails, compact = false }) {
           </div>
         )}
         <div className="card-actions">
-          {!compact ? (
+          {!compact && !liveSource ? (
             <button
               className={`save-button ${saved ? "is-saved" : ""}`}
               onClick={() => onSave(rec)}
@@ -159,13 +160,13 @@ export function StoryCard({ rec, saved, onSave, onDetails, compact = false }) {
               <Bookmark size={16} fill={saved ? "currentColor" : "none"} />
               <span>{saved ? "Saved" : "Save"}</span>
             </button>
-          ) : (
+          ) : compact ? (
             <span className="catalog-dot">
               {item.media_type === "book"
                 ? "Read something remarkable"
                 : "Watch something memorable"}
             </span>
-          )}
+          ) : <span className="catalog-dot">Live result</span>}
           <button className="text-button" onClick={() => onDetails(rec)}>
             {compact ? "Explore story" : "View details"}
             <ArrowRight size={13} />
@@ -347,6 +348,7 @@ export function DetailDrawer({ rec, saved, onSave, onClose, onSimilar, busy }) {
             "This source provides catalog metadata only. A verified plot description is not available."}
         </p>
         {item.description_status === "source_generated" && <span className="provenance">The source labels this as an automatically generated summary. It is not independently verified. Factual length and year fields come from separate catalog metadata.</span>}
+        {item.source === "bigbook-api" && <span className="provenance">Live record from Big Book API; metadata may be incomplete. It is not saved in your browser.</span>}
         {item.description_status === "sourced_ai" && (
           <span className="provenance">
             AI paraphrase of a sourced Wikipedia excerpt. Verify details with
