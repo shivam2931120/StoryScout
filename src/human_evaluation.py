@@ -1,6 +1,7 @@
 """Human relevance judgment templates and transparent summaries."""
 from __future__ import annotations
 
+import math
 import pandas as pd
 
 REQUIRED_COLUMNS = {"mode", "query", "domain", "rank", "item_id", "relevance_0_2"}
@@ -27,6 +28,9 @@ def score_human_judgments(frame: pd.DataFrame) -> tuple[pd.DataFrame, int]:
     ratings = judged["relevance_0_2"].dropna()
     if not ratings.isin([0, 1, 2]).all():
         raise ValueError("Relevance must be 0, 1, 2, or blank.")
+    group_keys = ["mode", "domain", "query"]
+    candidate_counts = {key: group[["rank", "item_id"]].drop_duplicates().shape[0]
+                        for key, group in judged.groupby(group_keys)}
     judged = judged.dropna(subset=["relevance_0_2"])
     if judged.empty:
         return pd.DataFrame(columns=["mode", "domain", "query", "judged_items", "judged_precision", "judged_mrr"]), 0
@@ -34,13 +38,23 @@ def score_human_judgments(frame: pd.DataFrame) -> tuple[pd.DataFrame, int]:
     judged = judged.dropna(subset=["rank"])
     per_item = judged.groupby(["mode", "domain", "query", "rank", "item_id"], as_index=False)["relevance_0_2"].mean()
     rows = []
-    for (mode, domain, query), candidates in per_item.groupby(["mode", "domain", "query"]):
+    for (mode, domain, query), candidates in per_item.groupby(group_keys):
         candidates = candidates.sort_values("rank")
         relevant = candidates["relevance_0_2"] >= 1
         relevant_ranks = candidates.loc[relevant, "rank"]
+        top5 = candidates[candidates["rank"] <= 5]
+        returned_items = candidate_counts.get((mode, domain, query), 0)
+        expected_top5 = min(5, returned_items)
+        fully_judged_top5 = expected_top5 > 0 and len(top5) == expected_top5
+        gains = [2 ** float(value) - 1 for value in top5.sort_values('rank')['relevance_0_2']] if fully_judged_top5 else []
+        dcg = sum(gain / math.log2(rank + 1) for rank, gain in enumerate(gains, 1))
+        ideal = sum(gain / math.log2(rank + 1) for rank, gain in enumerate(sorted(gains, reverse=True), 1))
         rows.append({
             "mode": mode, "domain": domain, "query": query,
-            "judged_items": len(candidates), "judged_precision": float(relevant.mean()),
+            "judged_items": len(candidates), "returned_items": returned_items, "judged_precision": float(relevant.mean()),
             "judged_mrr": float(1 / relevant_ranks.iloc[0]) if not relevant_ranks.empty else 0.0,
+            "judgment_coverage": float(len(candidates) / returned_items) if returned_items else 0.0,
+            "fully_judged_top5": bool(fully_judged_top5),
+            "human_ndcg_at_5": float(dcg / ideal) if ideal else None,
         })
     return pd.DataFrame(rows), len(judged)

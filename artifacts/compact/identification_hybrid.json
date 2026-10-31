@@ -1,0 +1,480 @@
+{
+  "executed_at": "2026-10-31T14:23:57.859552+00:00",
+  "requested_mode": "hybrid",
+  "active_modes": {
+    "book": "hybrid (TF-IDF + sentence embeddings)",
+    "movie": "hybrid (TF-IDF + sentence embeddings)"
+  },
+  "model_assistance": false,
+  "catalog_profile": "compact",
+  "catalog_size": {
+    "book": 1000,
+    "movie": 1500
+  },
+  "query_count": 22,
+  "category_counts": {
+    "broad_plot": 12,
+    "focal_detail": 10
+  },
+  "judgment_method": "Developer-authored description paraphrases checked against bundled demo descriptions; not independent human judgments. Developer-authored focal-detail paraphrases verified against the cached source plot text. Relevant IDs are incomplete; not independent human evaluation.",
+  "limitations": "Small demo catalog; descriptions are short; no out-of-catalog coverage guarantee; multiple relevant media may exist. Seven known movies, selected for available narrative text. These queries are not representative of all users and do not establish general accuracy.",
+  "target_coverage": 1.0,
+  "overall": {
+    "queries": 22,
+    "top1_accuracy": 0.8636,
+    "hit_at_3": 0.9091,
+    "mrr_at_5": 0.8864,
+    "recall_at_5": 0.8864,
+    "ndcg_at_5": 0.8747
+  },
+  "by_category": {
+    "broad_plot": {
+      "queries": 12,
+      "top1_accuracy": 0.8333,
+      "hit_at_3": 0.9167,
+      "mrr_at_5": 0.875,
+      "recall_at_5": 0.875,
+      "ndcg_at_5": 0.8537
+    },
+    "focal_detail": {
+      "queries": 10,
+      "top1_accuracy": 0.9,
+      "hit_at_3": 0.9,
+      "mrr_at_5": 0.9,
+      "recall_at_5": 0.9,
+      "ndcg_at_5": 0.9
+    }
+  },
+  "bootstrap_95_percent_ci": {
+    "top1_correct": [
+      0.7273,
+      1.0
+    ],
+    "hit_at_3": [
+      0.7727,
+      1.0
+    ],
+    "reciprocal_rank_at_5": [
+      0.75,
+      1.0
+    ],
+    "recall_at_5": [
+      0.75,
+      1.0
+    ],
+    "ndcg_at_5": [
+      0.7376,
+      0.9832
+    ]
+  },
+  "bootstrap_note": "Percentile bootstrap over query cases (2,000 resamples; fixed seed); interval describes this curated query set only.",
+  "rows": [
+    {
+      "query": "People leave Earth seeking a future for humanity while gravity and time affect a family",
+      "media": "movies",
+      "relevant_ids": [
+        "movie_001"
+      ],
+      "category": "broad_plot",
+      "returned_ids": [
+        "movie_001"
+      ],
+      "top1_correct": true,
+      "hit_at_3": true,
+      "reciprocal_rank_at_5": 1.0,
+      "recall_at_5": 1.0,
+      "ndcg_at_5": 1.0,
+      "target_count": 1,
+      "target_coverage": 1.0
+    },
+    {
+      "query": "A teenager gets stuck in the past and must fix events to return home",
+      "media": "movies",
+      "relevant_ids": [
+        "movie_002"
+      ],
+      "category": "broad_plot",
+      "returned_ids": [
+        "movie_002"
+      ],
+      "top1_correct": true,
+      "hit_at_3": true,
+      "reciprocal_rank_at_5": 1.0,
+      "recall_at_5": 1.0,
+      "ndcg_at_5": 1.0,
+      "target_count": 1,
+      "target_coverage": 1.0
+    },
+    {
+      "query": "An isolated astronaut survives using science while Earth organizes a rescue",
+      "media": "movies",
+      "relevant_ids": [
+        "movie_003"
+      ],
+      "category": "broad_plot",
+      "returned_ids": [
+        "movie_ml_3981",
+        "movie_003",
+        "movie_ml_2046"
+      ],
+      "top1_correct": false,
+      "hit_at_3": true,
+      "reciprocal_rank_at_5": 0.5,
+      "recall_at_5": 1.0,
+      "ndcg_at_5": 0.6309297535714575,
+      "target_count": 1,
+      "target_coverage": 1.0
+    },
+    {
+      "query": "A friendly bear is falsely accused and his community tries to help",
+      "media": "movies",
+      "relevant_ids": [
+        "movie_004"
+      ],
+      "category": "broad_plot",
+      "returned_ids": [
+        "movie_ml_2751",
+        "movie_ml_34",
+        "movie_ml_152081",
+        "movie_ml_32632",
+        "movie_ml_808"
+      ],
+      "top1_correct": false,
+      "hit_at_3": false,
+      "reciprocal_rank_at_5": 0,
+      "recall_at_5": 0.0,
+      "ndcg_at_5": 0.0,
+      "target_count": 1,
+      "target_coverage": 1.0
+    },
+    {
+      "query": "A hotel concierge and a young apprentice are caught in a caper about loyalty",
+      "media": "movies",
+      "relevant_ids": [
+        "movie_005"
+      ],
+      "category": "broad_plot",
+      "returned_ids": [
+        "movie_005"
+      ],
+      "top1_correct": true,
+      "hit_at_3": true,
+      "reciprocal_rank_at_5": 1.0,
+      "recall_at_5": 1.0,
+      "ndcg_at_5": 1.0,
+      "target_count": 1,
+      "target_coverage": 1.0
+    },
+    {
+      "query": "A reluctant traveler grows courageous through friendship on a dangerous fantasy quest",
+      "media": "books",
+      "relevant_ids": [
+        "book_001"
+      ],
+      "category": "broad_plot",
+      "returned_ids": [
+        "book_001"
+      ],
+      "top1_correct": true,
+      "hit_at_3": true,
+      "reciprocal_rank_at_5": 1.0,
+      "recall_at_5": 1.0,
+      "ndcg_at_5": 1.0,
+      "target_count": 1,
+      "target_coverage": 1.0
+    },
+    {
+      "query": "A scientist visits the distant future and discovers problems of progress and class",
+      "media": "books",
+      "relevant_ids": [
+        "book_002"
+      ],
+      "category": "broad_plot",
+      "returned_ids": [
+        "book_002"
+      ],
+      "top1_correct": true,
+      "hit_at_3": true,
+      "reciprocal_rank_at_5": 1.0,
+      "recall_at_5": 1.0,
+      "ndcg_at_5": 1.0,
+      "target_count": 1,
+      "target_coverage": 1.0
+    },
+    {
+      "query": "Guests trapped on an isolated island grow suspicious of each other during a mystery",
+      "media": "books",
+      "relevant_ids": [
+        "book_003"
+      ],
+      "category": "broad_plot",
+      "returned_ids": [
+        "book_003"
+      ],
+      "top1_correct": true,
+      "hit_at_3": true,
+      "reciprocal_rank_at_5": 1.0,
+      "recall_at_5": 1.0,
+      "ndcg_at_5": 1.0,
+      "target_count": 1,
+      "target_coverage": 1.0
+    },
+    {
+      "query": "A pilot meets a young traveler and they discuss friendship and imagination",
+      "media": "books",
+      "relevant_ids": [
+        "book_004"
+      ],
+      "category": "broad_plot",
+      "returned_ids": [
+        "book_004"
+      ],
+      "top1_correct": true,
+      "hit_at_3": true,
+      "reciprocal_rank_at_5": 1.0,
+      "recall_at_5": 1.0,
+      "ndcg_at_5": 1.0,
+      "target_count": 1,
+      "target_coverage": 1.0
+    },
+    {
+      "query": "An astronaut far from Earth uses engineering and humor to survive until rescue",
+      "media": "books",
+      "relevant_ids": [
+        "book_005"
+      ],
+      "category": "broad_plot",
+      "returned_ids": [
+        "book_005"
+      ],
+      "top1_correct": true,
+      "hit_at_3": true,
+      "reciprocal_rank_at_5": 1.0,
+      "recall_at_5": 1.0,
+      "ndcg_at_5": 1.0,
+      "target_count": 1,
+      "target_coverage": 1.0
+    },
+    {
+      "query": "An astronaut stranded far from home survives while a team attempts a rescue",
+      "media": "both",
+      "relevant_ids": [
+        "book_005",
+        "movie_003"
+      ],
+      "category": "broad_plot",
+      "returned_ids": [
+        "book_005",
+        "movie_ml_3981"
+      ],
+      "top1_correct": true,
+      "hit_at_3": true,
+      "reciprocal_rank_at_5": 1.0,
+      "recall_at_5": 0.5,
+      "ndcg_at_5": 0.6131471927654584,
+      "target_count": 2,
+      "target_coverage": 1.0
+    },
+    {
+      "query": "A man travels through time to the distant future",
+      "media": "books",
+      "relevant_ids": [
+        "book_002"
+      ],
+      "category": "broad_plot",
+      "returned_ids": [
+        "book_002"
+      ],
+      "top1_correct": true,
+      "hit_at_3": true,
+      "reciprocal_rank_at_5": 1.0,
+      "recall_at_5": 1.0,
+      "ndcg_at_5": 1.0,
+      "target_count": 1,
+      "target_coverage": 1.0
+    },
+    {
+      "query": "a lunar station worker receives recorded messages because live communication with Earth is broken",
+      "media": "movies",
+      "relevant_ids": [
+        "movie_ml_68237"
+      ],
+      "category": "focal_detail",
+      "returned_ids": [
+        "movie_ml_68237",
+        "movie_001"
+      ],
+      "top1_correct": true,
+      "hit_at_3": true,
+      "reciprocal_rank_at_5": 1.0,
+      "recall_at_5": 1.0,
+      "ndcg_at_5": 1.0,
+      "target_count": 1,
+      "target_coverage": 1.0
+    },
+    {
+      "query": "harvesting helium three from lunar soil at an automated mining station",
+      "media": "movies",
+      "relevant_ids": [
+        "movie_ml_68237"
+      ],
+      "category": "focal_detail",
+      "returned_ids": [
+        "movie_ml_68237"
+      ],
+      "top1_correct": true,
+      "hit_at_3": true,
+      "reciprocal_rank_at_5": 1.0,
+      "recall_at_5": 1.0,
+      "ndcg_at_5": 1.0,
+      "target_count": 1,
+      "target_coverage": 1.0
+    },
+    {
+      "query": "using another person's blood and urine samples to pass genetic identity screening",
+      "media": "movies",
+      "relevant_ids": [
+        "movie_ml_1653"
+      ],
+      "category": "focal_detail",
+      "returned_ids": [
+        "movie_ml_1653"
+      ],
+      "top1_correct": true,
+      "hit_at_3": true,
+      "reciprocal_rank_at_5": 1.0,
+      "recall_at_5": 1.0,
+      "ndcg_at_5": 1.0,
+      "target_count": 1,
+      "target_coverage": 1.0
+    },
+    {
+      "query": "a paralyzed former swimming champion lends someone his genetic identity",
+      "media": "movies",
+      "relevant_ids": [
+        "movie_ml_1653"
+      ],
+      "category": "focal_detail",
+      "returned_ids": [
+        "movie_ml_1653"
+      ],
+      "top1_correct": true,
+      "hit_at_3": true,
+      "reciprocal_rank_at_5": 1.0,
+      "recall_at_5": 1.0,
+      "ndcg_at_5": 1.0,
+      "target_count": 1,
+      "target_coverage": 1.0
+    },
+    {
+      "query": "a rival stage magician asks Nikola Tesla to build a machine",
+      "media": "movies",
+      "relevant_ids": [
+        "movie_ml_48780"
+      ],
+      "category": "focal_detail",
+      "returned_ids": [
+        "movie_ml_48780",
+        "movie_ml_107771"
+      ],
+      "top1_correct": true,
+      "hit_at_3": true,
+      "reciprocal_rank_at_5": 1.0,
+      "recall_at_5": 1.0,
+      "ndcg_at_5": 1.0,
+      "target_count": 1,
+      "target_coverage": 1.0
+    },
+    {
+      "query": "learning piano and French while reliving the same day",
+      "media": "movies",
+      "relevant_ids": [
+        "movie_ml_1265"
+      ],
+      "category": "focal_detail",
+      "returned_ids": [
+        "movie_ml_104374"
+      ],
+      "top1_correct": false,
+      "hit_at_3": false,
+      "reciprocal_rank_at_5": 0,
+      "recall_at_5": 0.0,
+      "ndcg_at_5": 0.0,
+      "target_count": 1,
+      "target_coverage": 1.0
+    },
+    {
+      "query": "a conman sells personalized Bibles to recently widowed women",
+      "media": "movies",
+      "relevant_ids": [
+        "movie_ml_6724"
+      ],
+      "category": "focal_detail",
+      "returned_ids": [
+        "movie_ml_6724"
+      ],
+      "top1_correct": true,
+      "hit_at_3": true,
+      "reciprocal_rank_at_5": 1.0,
+      "recall_at_5": 1.0,
+      "ndcg_at_5": 1.0,
+      "target_count": 1,
+      "target_coverage": 1.0
+    },
+    {
+      "query": "investigating a stolen space shuttle and a hidden nerve gas laboratory",
+      "media": "movies",
+      "relevant_ids": [
+        "movie_ml_3638"
+      ],
+      "category": "focal_detail",
+      "returned_ids": [
+        "movie_ml_3638",
+        "movie_ml_3471"
+      ],
+      "top1_correct": true,
+      "hit_at_3": true,
+      "reciprocal_rank_at_5": 1.0,
+      "recall_at_5": 1.0,
+      "ndcg_at_5": 1.0,
+      "target_count": 1,
+      "target_coverage": 1.0
+    },
+    {
+      "query": "a deadly toxin comes from a rare Amazonian orchid",
+      "media": "movies",
+      "relevant_ids": [
+        "movie_ml_3638"
+      ],
+      "category": "focal_detail",
+      "returned_ids": [
+        "movie_ml_3638"
+      ],
+      "top1_correct": true,
+      "hit_at_3": true,
+      "reciprocal_rank_at_5": 1.0,
+      "recall_at_5": 1.0,
+      "ndcg_at_5": 1.0,
+      "target_count": 1,
+      "target_coverage": 1.0
+    },
+    {
+      "query": "two pen pals secretly agree to run away together on a New England island",
+      "media": "movies",
+      "relevant_ids": [
+        "movie_ml_94959"
+      ],
+      "category": "focal_detail",
+      "returned_ids": [
+        "movie_ml_94959"
+      ],
+      "top1_correct": true,
+      "hit_at_3": true,
+      "reciprocal_rank_at_5": 1.0,
+      "recall_at_5": 1.0,
+      "ndcg_at_5": 1.0,
+      "target_count": 1,
+      "target_coverage": 1.0
+    }
+  ]
+}

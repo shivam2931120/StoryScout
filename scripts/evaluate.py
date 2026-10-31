@@ -1,14 +1,17 @@
 """Run retrieval and preference checks against transparent developer labels."""
 from __future__ import annotations
 
-from collections import defaultdict
+from collections import Counter, defaultdict
 from pathlib import Path
 import csv
 import json
 import statistics
+import random
+import math
 import sys
 import time
 import os
+import argparse
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from src.config import ARTIFACT_DIR
@@ -55,18 +58,67 @@ def compliant(item, constraints: dict) -> bool:
 
 def aggregate_rows(rows: list[dict]) -> dict:
     if not rows:
-        return {"queries": 0, "precision_at_5": None, "recall_at_5": None, "mrr_at_5": None, "hard_constraint_compliance": None}
+        return {"queries": 0, "precision_at_5": None, "recall_at_5": None, "mrr_at_5": None, "ndcg_at_5": None, "hard_constraint_compliance": None}
     return {
         "queries": len(rows),
         "precision_at_5": round(statistics.mean(row["precision_at_5"] for row in rows), 4),
         "recall_at_5": round(statistics.mean(row["recall_at_5"] for row in rows), 4),
         "mrr_at_5": round(statistics.mean(row["mrr_at_5"] for row in rows), 4),
+        "ndcg_at_5": round(statistics.mean(row["ndcg_at_5"] for row in rows), 4),
         "hard_constraint_compliance": round(1-sum(row['constraint_violations'] for row in rows)/sum(row['returned_count'] for row in rows),4) if sum(row['returned_count'] for row in rows) else None,
         "answer_rate": round(statistics.mean(bool(row['returned_count']) for row in rows),4),
         "precision_when_returned": round(statistics.mean(row['hits']/row['returned_count'] for row in rows if row['returned_count']),4) if any(row['returned_count'] for row in rows) else None,
         "slot_fill_rate": round(sum(row['returned_count'] for row in rows)/(5*len(rows)),4),
         "nonempty_compliant_query_rate": round(statistics.mean(row['nonempty_compliant_query_rate'] for row in rows),4),
     }
+
+
+def bootstrap_ci(rows: list[dict], metric: str, *, seed: int = 20261031, samples: int = 2000) -> list[float] | None:
+    """Cluster-bootstrap by query text; mixed-media query rows stay together."""
+    if not rows:
+        return None
+    grouped: dict[str, list[dict]] = defaultdict(list)
+    for number, row in enumerate(rows):
+        grouped[str(row.get("query", number))].append(row)
+    groups = list(grouped.values())
+    if len(groups) < 2:
+        return None
+    domains = sorted({row.get('domain') for row in rows})
+    values = [{domain: [row[metric] for row in group if row.get('domain') == domain and row.get(metric) is not None]
+               for domain in domains} for group in groups]
+    rng = random.Random(seed)
+    estimates = []
+    for _ in range(samples):
+        draw = [values[rng.randrange(len(values))] for _ in values]
+        domain_means = [statistics.mean(observations)
+                        for domain in domains
+                        if (observations := [value for group in draw for value in group[domain]])]
+        if domain_means:
+            estimates.append(statistics.mean(domain_means))
+    if not estimates:
+        return None
+    estimates.sort()
+    return [round(estimates[int((len(estimates)-1)*.025)], 4), round(estimates[int((len(estimates)-1)*.975)], 4)]
+
+
+def paired_mode_difference_ci(left: list[dict], right: list[dict], metric: str, *, seed: int = 20261031, samples: int = 2000) -> dict | None:
+    """Paired bootstrap of per-query domain-mean deltas for fair mode comparison."""
+    def query_values(rows):
+        values: dict[str, list[float]] = defaultdict(list)
+        for row in rows:
+            if row.get(metric) is not None:
+                values[row['query']].append(row[metric])
+        return {query: statistics.mean(scores) for query, scores in values.items()}
+    a, b = query_values(left), query_values(right)
+    common = sorted(a.keys() & b.keys())
+    if len(common) < 2:
+        return None
+    deltas = [a[query] - b[query] for query in common]
+    rng = random.Random(seed)
+    estimates = sorted(statistics.mean(deltas[rng.randrange(len(deltas))] for _ in deltas) for _ in range(samples))
+    return {'paired_queries':len(common), 'mean_delta':round(statistics.mean(deltas),4),
+            'bootstrap_95_percent_ci':[round(estimates[int((samples-1)*.025)],4),round(estimates[int((samples-1)*.975)],4)],
+            'interpretation':'positive favors the first named mode'}
 
 
 def evaluate_mode(mode: str, catalogs: dict, queries: list[dict]) -> tuple[dict, list[dict]]:
@@ -105,6 +157,8 @@ def evaluate_mode(mode: str, catalogs: dict, queries: list[dict]) -> tuple[dict,
                 "precision_at_5": hits / 5,
                 "recall_at_5": hits / len(relevant) if relevant else 0.0,
                 "mrr_at_5": next((1 / rank for rank, item_id in enumerate(returned_ids, 1) if item_id in relevant), 0.0),
+                "ndcg_at_5": (sum(1 / math.log2(rank + 1) for rank, item_id in enumerate(returned_ids, 1) if item_id in relevant) /
+                              sum(1 / math.log2(rank + 1) for rank in range(1, min(len(relevant), 5) + 1))) if relevant else 0.0,
                 "hard_constraint_compliance": float(all(compliant(rec.item, row.get("constraints", {})) for rec in returned)) if returned else None,
                 "returned_count": len(returned), "hits": hits,
                 "constraint_violations":sum(not compliant(rec.item,row.get('constraints',{})) for rec in returned),
@@ -118,8 +172,16 @@ def evaluate_mode(mode: str, catalogs: dict, queries: list[dict]) -> tuple[dict,
             })
     domain_metrics = {domain: aggregate_rows(by_domain[domain]) for domain in ("book", "movie")}
     active = [metrics for metrics in domain_metrics.values() if metrics["queries"]]
-    metric_keys = ("precision_at_5", "recall_at_5", "mrr_at_5", "hard_constraint_compliance", "answer_rate", "precision_when_returned", "slot_fill_rate", "nonempty_compliant_query_rate")
+    metric_keys = ("precision_at_5", "recall_at_5", "mrr_at_5", "ndcg_at_5", "hard_constraint_compliance", "answer_rate", "precision_when_returned", "slot_fill_rate", "nonempty_compliant_query_rate")
     macro = {key: round(statistics.mean(metrics[key] for metrics in active if metrics[key] is not None), 4) if any(metrics[key] is not None for metrics in active) else None for key in metric_keys} if active else {}
+    categories = sorted({row['category'] or 'uncategorized' for row in details})
+    by_category = {category: {domain: aggregate_rows([row for row in details if (row['category'] or 'uncategorized') == category and row['domain'] == domain])
+                              for domain in ('book', 'movie') if any((row['category'] or 'uncategorized') == category and row['domain'] == domain for row in details)}
+                   for category in categories}
+    uncertainty = {domain: {metric: bootstrap_ci([row for row in details if row['domain'] == domain], metric)
+                            for metric in ('precision_at_5', 'recall_at_5', 'mrr_at_5', 'ndcg_at_5')}
+                   for domain in ('book', 'movie') if any(row['domain'] == domain for row in details)}
+    uncertainty['domain_macro'] = {metric: bootstrap_ci(details, metric) for metric in ('precision_at_5', 'recall_at_5', 'mrr_at_5', 'ndcg_at_5')}
     used_fallback = mode == "hybrid" and not semantic_ran
     return {
         "status": "measured" if not used_fallback else "measured with TF-IDF fallback; semantic component unavailable",
@@ -130,6 +192,9 @@ def evaluate_mode(mode: str, catalogs: dict, queries: list[dict]) -> tuple[dict,
         "index_preparation_ms": round(preparation_ms, 2),
         "mean_query_latency_ms_after_indexing": round(statistics.mean(latencies), 3) if latencies else None,
         "by_domain": domain_metrics,
+        "by_category": by_category,
+        "bootstrap_95_percent_ci": uncertainty,
+        "bootstrap_note": "Percentile cluster bootstrap over query texts (2,000 resamples; fixed seed). Intervals describe this labeled sample and are not population accuracy guarantees.",
         "macro_average_of_book_and_movie_metrics": macro,
     }, details
 
@@ -170,21 +235,35 @@ def evaluate_preferences(examples: list[dict]) -> dict:
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--modes', nargs='+', choices=['tfidf', 'semantic', 'hybrid'],
+                        default=['tfidf', 'semantic', 'hybrid'])
+    args = parser.parse_args()
     queries = json.loads(QUERY_FILE.read_text(encoding="utf-8"))
     preference_examples = json.loads(PREFERENCE_FILE.read_text(encoding="utf-8"))
     catalogs = load_active_catalogs()
 
     results = {
-        "metric_definitions":{"hard_constraint_compliance":"fraction of returned records satisfying all explicit constraints; null when no records returned", "answer_rate":"fraction of query-domain cases with any result", "precision_when_returned":"mean judged hits / returned count over answered cases only", "precision_at_5":"judged hits / 5, including intentionally unfilled slots", "nonempty_compliant_query_rate":"legacy metric: fraction of query-domain cases both answered and fully compliant"},
+        "metric_definitions":{"hard_constraint_compliance":"fraction of returned records satisfying all explicit constraints; null when no records returned", "answer_rate":"fraction of query-domain cases with any result", "precision_when_returned":"mean judged hits / returned count over answered cases only", "precision_at_5":"judged hits / 5, including intentionally unfilled slots", "recall_at_5":"fraction of labeled relevant IDs present in top five", "mrr_at_5":"reciprocal rank of the first labeled relevant ID, zero when absent", "ndcg_at_5":"binary-gain normalized discounted cumulative gain at five", "nonempty_compliant_query_rate":"fraction of query-domain cases both answered and fully compliant"},
         "active_catalog": {domain: {"records": len(items), "source_counts": {source: sum(item.source == source for item in items) for source in sorted({item.source for item in items})}} for domain, items in catalogs.items()},
-        "retrieval_benchmark": {"query_count": len(queries), "judgment_method": "Developer-authored relevance IDs grounded in catalog metadata; no independent human evaluation.", "mixed_media_aggregation": "Book and movie metrics are calculated independently for each mixed query, then domain-level means are macro-averaged.", "models": {}},
+        "retrieval_benchmark": {"query_count": len(queries), "category_counts": dict(Counter(row.get('category', 'uncategorized') for row in queries)), "judgment_method": "Developer-authored relevance IDs grounded in catalog metadata; no independent human evaluation.", "mixed_media_aggregation": "Book and movie metrics are calculated independently for each mixed query, then domain-level means are macro-averaged.", "models": {}},
         "preference_extraction": evaluate_preferences(preference_examples),
     }
     query_details = []
-    for mode in ("tfidf", "semantic", "hybrid"):
+    details_by_mode = {}
+    for mode in args.modes:
         metrics, details = evaluate_mode(mode, catalogs, queries)
         results["retrieval_benchmark"]["models"][mode] = metrics
+        details_by_mode[mode] = details
         query_details.extend(details)
+    comparisons = {}
+    for left, right in (("hybrid", "tfidf"), ("hybrid", "semantic"), ("semantic", "tfidf")):
+        if left in details_by_mode and right in details_by_mode:
+            comparisons[f"{left}_minus_{right}"] = {
+                metric: paired_mode_difference_ci(details_by_mode[left], details_by_mode[right], metric)
+                for metric in ("precision_at_5", "recall_at_5", "mrr_at_5", "ndcg_at_5")
+            }
+    results["retrieval_benchmark"]["paired_mode_comparisons"] = comparisons
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     (OUTPUT_DIR / "evaluation_results.json").write_text(json.dumps(results, indent=2), encoding="utf-8")
@@ -193,15 +272,17 @@ def main() -> None:
             writer = csv.DictWriter(file, fieldnames=query_details[0].keys(),lineterminator='\n')
             writer.writeheader(); writer.writerows(query_details)
     catalog_summary = ", ".join(f"{domain}: {values['records']:,}" for domain, values in results["active_catalog"].items())
-    lines = ["# StoryScout evaluation summary", "", f"Active catalog: {catalog_summary}.", f"Retrieval benchmark: {len(queries)} developer-authored queries. Relevance labels are metadata-based and not independently human-rated.", "", "Mixed-media queries are scored separately for each active domain; book and movie averages are then macro-averaged.", "", "## Retrieval", ""]
+    lines = ["# StoryScout evaluation summary", "", f"Active catalog: {catalog_summary}.", f"Retrieval benchmark: {len(queries)} developer-authored queries. Relevance labels are metadata-based and not independently human-rated.", "", "Mixed-media queries are scored separately for each active domain; book and movie averages are then macro-averaged. Bootstrap intervals are clustered by query text and describe this labeled sample only.", "", "## Retrieval", ""]
     for mode, metrics in results["retrieval_benchmark"]["models"].items():
         lines += [f"### {mode}", f"Status: {metrics['status']}", ""]
         if metrics.get("by_domain"):
             for domain, values in metrics["by_domain"].items():
-                lines.append(f"- {domain}: P@5 {values['precision_at_5']}, Recall@5 {values['recall_at_5']}, MRR@5 {values['mrr_at_5']}, hard-filter compliance {values['hard_constraint_compliance']} ({values['queries']} domain queries)")
+                ci=metrics['bootstrap_95_percent_ci'].get(domain,{})
+                lines.append(f"- {domain}: P@5 {values['precision_at_5']}, Recall@5 {values['recall_at_5']}, MRR@5 {values['mrr_at_5']}, nDCG@5 {values['ndcg_at_5']}, hard-filter compliance {values['hard_constraint_compliance']} ({values['queries']} domain queries; MRR 95% interval {ci.get('mrr_at_5')})")
             macro = metrics["macro_average_of_book_and_movie_metrics"]
             lines.append(f"- Domain macro average: P@5 {macro['precision_at_5']}, Recall@5 {macro['recall_at_5']}, MRR@5 {macro['mrr_at_5']}, hard-filter compliance {macro['hard_constraint_compliance']}")
             lines.append(f"- Mean search latency after indexing: {metrics['mean_query_latency_ms_after_indexing']} ms; index setup: {metrics['index_preparation_ms']} ms")
+            lines.append("- Per-category metrics are in `evaluation_results.json` under `by_category`.")
         lines.append("")
     lines += ["## Preference extraction", "", f"{results['preference_extraction']['labeled_conversations']} developer-authored labeled conversations; overall field exact match {results['preference_extraction']['overall_labeled_field_exact_match']}.", "", "| Field | Exact match | Support |", "|---|---:|---:|"]
     for field, values in results["preference_extraction"]["field_exact_match"].items():
