@@ -64,6 +64,20 @@ def test_different_picks_exclude_only_served_results_and_preserve_filters(variet
         assert second['state']['preferences']['max_runtime']==90
 
 
+def test_more_returns_a_full_unseen_batch_and_echoes_active_filters(variety_engine):
+    with TestClient(create_app(variety_engine)) as client:
+        first=client.post('/api/chat',json={'message':'Comedy movies under 100 minutes','per_domain':5}).json()
+        first_rows=first['results']['movie']
+        assert len(first_rows)==5
+        assert 'Movies' in first['reply'] and 'comedy' in first['reply'] and '100 minutes' in first['reply']
+        second=client.post('/api/chat',json={'message':'Show different recommendations','state':first['state'],'per_domain':5}).json()
+        second_rows=second['results']['movie']
+        assert second_rows
+        assert not ({x['item']['id'] for x in first_rows} & {x['item']['id'] for x in second_rows})
+        assert all('comedy' in x['item']['genres'] and x['item']['runtime_minutes']<=100 for x in second_rows)
+        assert second['state']['preferences']['max_runtime']==100
+
+
 def test_reset_clears_retained_topic_and_seen_ids(variety_engine):
     state=ConversationState()
     variety_engine.handle('Comedy movies about friendship',state)

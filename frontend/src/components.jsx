@@ -90,7 +90,7 @@ export function Cover({ item, large = false }) {
   );
 }
 
-export function StoryCard({ rec, saved, onSave, onDetails, compact = false }) {
+export function StoryCard({ rec, saved, onSave, onDetails, onChoose, compact = false }) {
   const item = rec.item || rec;
   const liveSource = item.source === "bigbook-api";
   return (
@@ -150,6 +150,12 @@ export function StoryCard({ rec, saved, onSave, onDetails, compact = false }) {
           </div>
         )}
         <div className="card-actions">
+          {rec.match_type === "title_lookup" && onChoose && (
+            <button className="save-button" onClick={() => onChoose(item)}>
+              <Check size={15} />
+              <span>Choose this title</span>
+            </button>
+          )}
           {!compact && !liveSource ? (
             <button
               className={`save-button ${saved ? "is-saved" : ""}`}

@@ -112,7 +112,7 @@ def create_app(engine: StoryScoutEngine | None = None) -> FastAPI:
         all_items = [x for items in current.catalogs.values() for x in items]
         starters = [next((x for x in all_items if x.title == title and x.source.startswith("demo")), None) for title in titles]
         return {"counts": {k: len(v) for k, v in current.catalogs.items()}, "status": catalog_status(all_items),
-                "title_directory_count":len(current.title_directory.records),"search_version":"3.3-live-bigbook-candidates",
+                "title_directory_count":len(current.title_directory.records),"search_version":"3.4-validated-nemotron-nlp",
                 "catalog_profile":os.getenv('STORYSCOUT_CATALOG_PROFILE','full'),"embedding_backend":os.getenv('STORYSCOUT_EMBEDDING_BACKEND','torch'),
                 "genres": GENRES, "moods": MOODS, "modes": modes(current), "model": MODEL_NAME,
                 "movie_title_source": "TMDB on-demand" if current.movie_source and current.movie_source.configured else "local catalog",
@@ -153,6 +153,7 @@ def create_app(engine: StoryScoutEngine | None = None) -> FastAPI:
             current.last_diagnostics={}
             current.last_title_matches=[]
             current.last_title_lookup=False
+            current.last_interpretation={"status": "not_needed"}
             if parse:
                 reply, results = current.handle(request.message, state, reference_id=request.reference_id, lookup_id=request.lookup_id, search_action=request.search_action)
             elif pref.contradiction_messages:
@@ -160,11 +161,12 @@ def create_app(engine: StoryScoutEngine | None = None) -> FastAPI:
             else:
                 reference = current.get_item(state.selected_reference_id)
                 results = current.recommend(state.last_content_query, state, reference)
-                reply = "Your preferences are applied. Here are the matching stories." if any(results.values()) else current.empty_message(state)
+                reply = current._request_confirmation(state) if any(results.values()) else current.empty_message(state)
             title_matches = [{"item": item_payload(item), "explanation": explanation, "match_type": "title_lookup", "title_match_kind":current.last_title_match_kind} for item, explanation in current.last_title_matches]
             title_lookup = current.last_title_lookup
             context_action = current.last_context_action if parse else "refine"
             diagnostics={k:dict(v) for k,v in current.last_diagnostics.items()}
+            interpretation=dict(current.last_interpretation)
         results = {domain: group[:request.per_domain] for domain, group in results.items()}
         state.last_recommendations = [rec.item.id for group in results.values() for rec in group]
         state.seen_recommendations=[] if parse and parse_preferences(request.message).intent=='reset' else list(dict.fromkeys(([] if context_action == 'new' else prior_seen)+state.last_recommendations))[-300:]
@@ -173,7 +175,7 @@ def create_app(engine: StoryScoutEngine | None = None) -> FastAPI:
         retained_fields = [key for key, value in asdict(state.preferences).items() if value and key != 'contradiction_messages' and before_preferences.get(key) == value and context_action != 'new']
         trace = {"context_action":context_action, "retained_preferences":retained_fields, "intent": "title_lookup" if title_lookup else (parsed.intent if parse else "preference_edit"), "method": "rule baseline" + (" + optional NVIDIA interpretation" if current.query_interpreter else ""),
                  "extracted_fields": sorted(parsed.explicit_fields) if parse and not title_lookup else [], "active_modes": modes(current),
-                 "retrieval":diagnostics,"content_query":state.last_content_query,
+                 "interpretation":interpretation,"retrieval":diagnostics,"content_query":state.last_content_query,
                  "latency_ms": round((time.perf_counter() - start) * 1000, 1)}
         return {"reply": reply, "title_matches": title_matches, "state": asdict(state), "results": {domain: [{"item": item_payload(rec.item), "similarity_score": rec.score,
                 "lexical_score": rec.lexical_score, "semantic_score": rec.semantic_score, "explanation": rec.explanation,

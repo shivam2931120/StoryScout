@@ -3,7 +3,7 @@ import re
 from .schemas import ConversationState, CatalogItem, Recommendation
 from .preferences import parse_preferences, merge_preferences
 from .intents import detect_media
-from .title_matching import resolve_title, correct_catalog_query, TitleDirectory
+from .title_matching import resolve_title, correct_catalog_query, TitleDirectory, title_key
 from .cross_media import reference_context
 from .explanations import explain, explain_reference
 from .query_understanding import build_search_query
@@ -20,6 +20,7 @@ class StoryScoutEngine:
         self.last_title_lookup = False
         self.last_title_match_kind = "none"
         self.last_context_action = "auto"
+        self.last_interpretation = {"status": "not_needed"}
 
     def _lookup_title(self, query, all_items, selection="both"):
         matches, approximate, explicit = self.title_directory.lookup(query, all_items, selection)
@@ -40,8 +41,18 @@ class StoryScoutEngine:
                 remote = [item for item in remote if item.media_type == preferred]
             if selection == "books":
                 if remote:
-                    matches, approximate = remote, False
-                    self.title_directory.last_match_kind = "exact" if any(phrase == item.title.casefold() for item in remote) else "partial"
+                    # Identity lookup is title-first: put exact normalized title
+                    # matches ahead of series/partial matches, and use creator
+                    # and year only as stable tie-breakers. Never rank a title
+                    # by synopsis relevance for this path.
+                    remote.sort(key=lambda item: (
+                        title_key(item.title) != title_key(phrase),
+                        -len(phrase_terms & set(title_key(item.title).split())),
+                        item.title.casefold(), item.year or 0, item.authors or "",
+                    ))
+                    exact_remote = [item for item in remote if title_key(item.title) == title_key(phrase)]
+                    matches, approximate = (exact_remote or remote), False
+                    self.title_directory.last_match_kind = "exact" if exact_remote else "partial"
                 elif matches:
                     matches = [item for item in matches if item.media_type == "book"]
             elif remote:
@@ -120,6 +131,7 @@ class StoryScoutEngine:
 
     def handle(self, text: str, state: ConversationState, *, reference_id: str | None = None, lookup_id: str | None = None, search_action: str = "auto") -> tuple[str, dict[str, list[Recommendation]]]:
         self.last_diagnostics={}
+        self.last_interpretation = {"status": "not_needed"}
         self.last_title_matches = []
         self.last_title_lookup = False
         self.last_title_match_kind = "none"
@@ -141,6 +153,9 @@ class StoryScoutEngine:
             if lookup_id:
                 selected = self.get_item(lookup_id)
                 matches, approximate, explicit = ([selected] if selected else []), False, True
+                if selected:
+                    self.title_directory.last_match_kind = "exact"
+                    self.title_directory.last_entity = selected.title
             if matches or explicit:
                 self.last_title_lookup = True
                 self.last_title_match_kind = self.title_directory.last_match_kind
@@ -170,14 +185,25 @@ class StoryScoutEngine:
                     if state.preferences.negative_content and not item.verified_warnings:
                         explanation += " Content suitability is unknown; no verified warning labels are available."
                     self.last_title_matches.append((item, explanation))
+                if len(self.last_title_matches) > 1:
+                    # Keep candidate ordering stable and identity-oriented when
+                    # multiple editions, adaptations, or franchise titles match.
+                    entity_key = title_key(self.title_directory.last_entity)
+                    self.last_title_matches.sort(key=lambda row: (
+                        title_key(row[0].title) != entity_key,
+                        row[0].year is None,
+                        row[0].year or 0,
+                        (row[0].authors or row[0].director or "").casefold(),
+                        row[0].id,
+                    ))
                 if not matches:
                     reply = f"That title is not in the local title directory under ‘{self.title_directory.last_entity}’. It may be missing or spelled differently. Try the full title, release year, or author. For a topic search, say ‘stories about …’. I have not substituted unrelated titles."
                 elif approximate:
                     reply = "Did you mean one of these titles? Choose the intended match."
                 elif self.last_title_match_kind == "partial":
-                    reply = "These catalog titles contain that name. Choose the one you meant."
+                    reply = "I found several titles containing that phrase. Choose the intended title to see related stories."
                 else:
-                    reply = "Found the title in the catalog." if len(matches) == 1 else "Several titles match. Open the one you meant."
+                    reply = "Found the title in the catalog." if len(matches) == 1 else "Several titles match. Choose the intended title to see related stories."
                 state.selected_reference_id = matches[0].id if len(matches) == 1 and self.last_title_match_kind == "exact" and not approximate else None
                 return reply, {}
         search_query = text
@@ -185,28 +211,44 @@ class StoryScoutEngine:
         if self.query_interpreter and parsed.intent not in {"reset", "help", "show_preferences", "explain", "more"}:
             interpreted = self.query_interpreter.interpret(text, state.media_selection, state.preferences)
             if interpreted:
-                model_intent = interpreted.get("intent")
-                if model_intent and not (parsed.intent == "recommend" and model_intent == "help"):
-                    parsed.intent = model_intent
+                self.last_interpretation = {"status": "used", "purpose": "soft preference extraction and query expansion"}
+                # Rules own explicit instructions and hard constraints. The LLM
+                # supplies missing soft attributes and a short expansion only.
+                if parsed.intent == "recommend" and interpreted.get("intent") in {"similar", "refine"}:
+                    parsed.intent = interpreted["intent"]
                 requested_media = interpreted.get("media_selection")
-                if parsed.media_selection is None and requested_media in {"books", "movies", "both"}:
+                if parsed.media_selection is None and not state.has_explicit_media and requested_media in {"books", "movies", "both"}:
                     parsed.media_selection = requested_media
-                if interpreted.get("reference_title"):
-                    parsed.reference_query = str(interpreted["reference_title"]).strip()
-                    parsed.preferences.referenced_title = parsed.reference_query
+                reference = interpreted.get("reference_title")
+                if not parsed.reference_query and reference and title_key(reference) in title_key(text):
+                    parsed.reference_query = reference
+                    parsed.preferences.referenced_title = reference
                     parsed.explicit_fields.add("referenced_title")
-                search_query = str(interpreted.get("search_query") or text).strip() or text
-                for name in ("preferred_genres", "excluded_genres", "themes", "negative_content"):
-                    values = list(getattr(parsed.preferences, name))
-                    values.extend(str(value).lower() for value in (interpreted.get(name) or []))
-                    setattr(parsed.preferences, name, list(dict.fromkeys(values)))
-                for name in ("desired_mood", "language", "min_year", "max_year", "max_pages", "max_runtime"):
-                    value = interpreted.get(name)
-                    if name not in parsed.explicit_fields and value is not None:
-                        setattr(parsed.preferences, name, value)
-                parsed.explicit_fields.update(str(value) for value in (interpreted.get("explicit_fields") or []))
+                expansion = interpreted.get("search_query", "").strip()
+                search_query = text + (" " + expansion if expansion else "")
+                from .preferences import GENRES, MOODS
+                for name, vocabulary in (("preferred_genres", GENRES), ("excluded_genres", GENRES), ("themes", None)):
+                    if name in parsed.explicit_fields or "clear_" + name in parsed.explicit_fields:
+                        continue
+                    if name in {"preferred_genres", "excluded_genres"} and ("clear_genres" in parsed.explicit_fields or "replace_genres" in parsed.explicit_fields):
+                        continue
+                    values = [v.lower() for v in interpreted.get(name, []) if vocabulary is None or v.lower() in vocabulary]
+                    if name == "preferred_genres":
+                        values = [v for v in values if v not in parsed.preferences.excluded_genres + state.preferences.excluded_genres]
+                    if name == "excluded_genres":
+                        values = [v for v in values if v not in parsed.preferences.preferred_genres]
+                    if values:
+                        setattr(parsed.preferences, name, list(dict.fromkeys(values)))
+                        parsed.explicit_fields.add(name)
+                mood = interpreted.get("desired_mood")
+                if mood in MOODS and not ({"desired_mood", "clear_desired_mood"} & parsed.explicit_fields):
+                    parsed.preferences.desired_mood = mood
+                    parsed.explicit_fields.add("desired_mood")
+                # Numeric/year/language and content-safety constraints are never
+                # added or replaced by unverified model output.
             else:
                 nemotron_failed = True
+                self.last_interpretation = {"status": "fallback", "reason": getattr(self.query_interpreter, "last_error_code", "unavailable")}
         state.messages.append({"role": "user", "content": text})
         if parsed.intent == "reset": self.reset(state); return "Preferences and recommendation context reset.", {}
         if parsed.media_selection:
@@ -268,7 +310,7 @@ class StoryScoutEngine:
         state.last_content_query=topic
         results = self.recommend(effective, state, reference, exclude_seen=parsed.intent=='more', prepared=True)
         if any(results.values()):
-            summary = "Here are stories to explore, selected for your request."
+            summary = self._request_confirmation(state)
             if nemotron_failed:
                 summary += " I used local search for this request."
             return summary, results
@@ -293,14 +335,14 @@ class StoryScoutEngine:
             if not query and not any((state.preferences.preferred_genres,state.preferences.excluded_genres,state.preferences.max_pages,state.preferences.max_runtime,state.preferences.min_year,state.preferences.max_year,state.preferences.language)):
                 query='An engaging story about discovery, human relationships and adventure'
             topic = (reference_context(reference) + ' ' if reference else '') + state.last_content_query
-            results[domain] = self.indexes[domain].search(query, state.preferences, top_k=5, exclude_ids=exclude,seen_ids=set(state.seen_recommendations),topic_query=topic)
+            results[domain] = self.indexes[domain].search(query, state.preferences, top_k=10, exclude_ids=exclude,seen_ids=set(state.seen_recommendations),topic_query=topic)
             local_diagnostics = dict(self.indexes[domain].last_diagnostics)
             if domain == "book" and self.book_source and self.book_source.configured:
                 # Keep the live request bounded: one search plus at most six
                 # detail lookups per recommendation turn.
                 remote_items = self.book_source.search(query or topic or "books", number=12, details_limit=6)
                 remote_recs = self.indexes[domain].rank_external(
-                    query, remote_items, state.preferences, top_k=5, topic_query=topic,
+                    query, remote_items, state.preferences, top_k=10, topic_query=topic,
                     exclude_ids=exclude | (set(state.seen_recommendations) if exclude_seen else set()),
                 )
                 remote_diagnostics = dict(getattr(self.indexes[domain], "last_external_diagnostics", {}))
@@ -310,7 +352,7 @@ class StoryScoutEngine:
                 for rec in sorted(combined.values(), key=lambda rec: (-rec.score, rec.item.id)):
                     identity = (rec.item.title.casefold().strip(), (rec.item.authors or "").casefold().strip())
                     deduplicated.setdefault(identity, rec)
-                results[domain] = list(deduplicated.values())[:5]
+                results[domain] = list(deduplicated.values())[:10]
                 local_diagnostics["on_demand_source"] = "Big Book API, NLP-reranked; no remote records cached"
                 local_diagnostics["on_demand_candidates"] = remote_diagnostics.get("candidate_count", 0)
                 local_diagnostics["on_demand_eligible"] = remote_diagnostics.get("eligible_count", 0)
@@ -326,6 +368,28 @@ class StoryScoutEngine:
     def preference_summary(self, state: ConversationState) -> str:
         p = state.preferences
         return f"Active media: {state.media_selection}. Genres: {', '.join(p.preferred_genres) or 'none'}. Excluded: {', '.join(p.excluded_genres) or 'none'}. Mood: {p.desired_mood or 'none'}. Themes: {', '.join(p.themes) or 'none'}. Years: {p.min_year or 'any'}–{p.max_year or 'any'}. Book pages: {p.max_pages or 'any'}. Movie runtime: {p.max_runtime or 'any'} minutes."
+
+    @staticmethod
+    def _request_confirmation(state: ConversationState) -> str:
+        """Echo active constraints in short, user-checkable language."""
+        p = state.preferences
+        parts = ["Books" if state.media_selection == "books" else "Movies" if state.media_selection == "movies" else "Books and movies"]
+        parts.extend(p.preferred_genres)
+        if p.desired_mood:
+            parts.append(p.desired_mood)
+        if p.themes:
+            parts.extend(p.themes[:2])
+        if p.max_pages and state.media_selection in {"books", "both"}:
+            parts.append(f"up to {p.max_pages} pages")
+        if p.max_runtime and state.media_selection in {"movies", "both"}:
+            parts.append(f"up to {p.max_runtime} minutes")
+        if p.min_year or p.max_year:
+            parts.append(f"{p.min_year or 'any year'}–{p.max_year or 'present'}")
+        if p.excluded_genres:
+            parts.append("no " + ", no ".join(p.excluded_genres))
+        if p.language:
+            parts.append(p.language)
+        return "Searching with: " + " · ".join(dict.fromkeys(parts)) + "."
 
     def explain_last(self, state: ConversationState) -> str:
         if not state.last_recommendations: return "There are no recommendations to explain yet."

@@ -276,7 +276,7 @@ export default function App() {
           reference_id: overrides.referenceId || null,
           lookup_id: overrides.lookupId || null,
           search_action: overrides.action || searchAction,
-          per_domain: 3,
+          per_domain: 5,
         },
       );
       const turn = {
@@ -708,7 +708,7 @@ export default function App() {
                         <section className="recommendation-group">
                           <div className="group-header"><h2>Matching titles</h2><span>Catalog lookup · preferences retained</span></div>
                           <div className="recommendation-grid">
-                            {turn.title_matches.map(rec => <StoryCard key={rec.item.id} rec={rec} saved={savedIds.has(rec.item.id)} onSave={saveStory} onDetails={setDetails} />)}
+                            {turn.title_matches.map(rec => <StoryCard key={rec.item.id} rec={rec} saved={savedIds.has(rec.item.id)} onSave={saveStory} onDetails={setDetails} onChoose={(item) => send(`Find ${item.media_type === "book" ? "books" : "movies"} with themes similar to ${item.title}.`, { referenceId: item.id, action: "similar" })} />)}
                           </div>
                         </section>
                       )}
@@ -758,6 +758,7 @@ export default function App() {
                         <p>
                           Intent: {turn.trace.intent} · {turn.trace.method}
                         </p>
+                        {turn.trace.interpretation && <p>Query assistance: {turn.trace.interpretation.status === "used" ? "Nemotron expansion applied; retrieval and filters run locally" : turn.trace.interpretation.status === "fallback" ? "Local NLP fallback" : "Local NLP only for this request"}.</p>}
                           {turn.trace.content_query && <p>Retained topic: {turn.trace.content_query}</p>}
                           {Object.entries(turn.trace.retrieval || {}).map(([domain,info])=><p key={domain}>{label(domain)}: {info.catalog_size.toLocaleString()} catalog entries → {info.eligible_count.toLocaleString()} eligible after hard filters; {info.plot_text_candidates.toLocaleString()} with full plot text. {info.diversification}. {Object.entries(info.filter_rejections).map(([reason,count])=>`${reason}: ${count.toLocaleString()}`).join(' · ')}</p>)}
                         <p>Context: {turn.trace.context_action || "auto"}. Retained preferences: {turn.trace.retained_preferences?.join(", ") || "none"}.</p>

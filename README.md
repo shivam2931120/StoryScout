@@ -35,6 +35,23 @@ Set
 `STORYSCOUT_USE_NVIDIA=true` and a private backend `NVIDIA_API_KEY` only if you
 want the optional interpreter. Local filtering and ranking remain in Python.
 
+The Render blueprint enables this option when its private key is configured.
+The interpreter validates response types, enum values, numeric bounds and field names,
+and sends the exact JSON schema to NVIDIA. It adds missing soft preferences and
+query expansion; explicit local rules retain control of media selection, numeric
+limits, year/language constraints, preference removal, reset and exclusions.
+The original query is retained alongside expansion terms for local TF-IDF and
+sentence-embedding search. Requests time out after 12 seconds with no automatic
+retry; failure continues through local NLP. Exact title lookups and local control
+commands skip the model. Each response trace reports `used`, `fallback` or
+`not_needed`. No pretrained model is trained by this feature.
+
+Official endpoint reference: [NVIDIA Nemotron chat completions](https://docs.api.nvidia.com/nim/reference/nvidia-nemotron-3-5-lightning-30b-a3b-infer).
+A successful live interpretation was verified on 2026-10-31. Regression tests use
+controlled model responses; they are not evidence of a measured overall retrieval
+accuracy gain. Run `.venv/bin/pytest tests/test_nemotron.py -q` to verify precedence,
+response validation, fallback, inherited media and local retrieval.
+
 Original Streamlit application:
 
 ```bash

@@ -65,9 +65,31 @@ def test_bigbook_title_lookup_respects_books_selection(engine):
     state = ConversationState(media_selection="books", has_explicit_media=True)
     reply, results = engine.handle("Percy Jackson", state)
     assert not results
-    assert "contain that name" in reply
+    assert "several titles" in reply
     assert engine.last_title_matches[0][0].id == item.id
     assert engine.title_directory.get(item.id) is None  # Never added to persistent/local identity data.
+
+
+def test_exact_remote_book_title_wins_over_series_partial_matches(engine):
+    exact = CatalogItem(
+        "book_bigbook_exact", "book", "Percy Jackson", "A demigod discovers Greek myths.",
+        authors="Rick Riordan", source="bigbook-api", retrieval_text="Greek myths",
+    )
+    sequel = CatalogItem(
+        "book_bigbook_sequel", "book", "Percy Jackson and the Sea of Monsters", "A quest at sea.",
+        authors="Rick Riordan", source="bigbook-api", retrieval_text="A quest at sea",
+    )
+
+    class Source:
+        configured = True
+
+        def search(self, query, **kwargs):
+            return [sequel, exact]
+
+    engine.book_source = Source()
+    engine.handle("Percy Jackson", ConversationState(media_selection="books"))
+    assert [item.title for item, _ in engine.last_title_matches] == ["Percy Jackson"]
+    assert engine.last_title_match_kind == "exact"
 
 
 def test_external_book_hard_page_filter_does_not_accept_unknown(engine):

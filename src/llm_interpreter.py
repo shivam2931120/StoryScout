@@ -1,4 +1,4 @@
-"""Optional OpenAI query interpretation; retrieval and result filtering stay local."""
+"""Optional Nemotron query interpretation; retrieval and result filtering stay local."""
 from __future__ import annotations
 
 import json
@@ -48,9 +48,7 @@ class NemotronQueryInterpreter:
         self.model = model or os.getenv("STORYSCOUT_NVIDIA_MODEL", "nvidia/nemotron-3.5-lightning-30b-a3b")
         self.last_call_ok: bool | None = None
         self.last_error_code: str | None = None
-        if client is None:
-            from openai import OpenAI
-            client = OpenAI(api_key=api_key, base_url="https://integrate.api.nvidia.com/v1", timeout=20.0, max_retries=1)
+        self.api_key = api_key
         self.client = client
 
     def interpret(self, text: str, selection: str, preferences: Preferences) -> dict[str, Any] | None:
@@ -67,7 +65,7 @@ class NemotronQueryInterpreter:
             "max_runtime": preferences.max_runtime,
         }
         try:
-            response = self.client.chat.completions.create(
+            arguments = dict(
                 model=self.model,
                 messages=[
                     {"role": "system", "content": (
@@ -85,7 +83,8 @@ class NemotronQueryInterpreter:
                         "inside explicit_fields. Valid explicit_fields names: preferred_genres, excluded_genres, desired_mood, themes, "
                         "language, min_year, max_year, max_pages, max_runtime, negative_content, referenced_title. For short topic or "
                         "character phrases, produce a useful catalog search query rather than help. Correct obvious misspellings, "
-                        "expand character names into matching catalog concepts, and keep search_query short."
+                        "expand character names into matching catalog concepts, and keep search_query short. "
+                        "Do not add keys. The exact JSON schema is: " + json.dumps(QUERY_SCHEMA)
                     )},
                     {"role": "user", "content": json.dumps({"message": text, "active_preferences": active}, ensure_ascii=False)},
                 ],
@@ -93,7 +92,19 @@ class NemotronQueryInterpreter:
                 max_tokens=1000,
                 extra_body={"chat_template_kwargs": {"enable_thinking": False}},
             )
-            content = response.choices[0].message.content
+            if self.client is not None:
+                response = self.client.chat.completions.create(**arguments)
+                content = response.choices[0].message.content
+            else:
+                import httpx
+                extra = arguments.pop("extra_body")
+                response = httpx.post(
+                    "https://integrate.api.nvidia.com/v1/chat/completions",
+                    headers={"Authorization": f"Bearer {self.api_key}"},
+                    json={**arguments, **extra, "temperature": 0}, timeout=12.0,
+                )
+                response.raise_for_status()
+                content = response.json()["choices"][0]["message"]["content"]
             if not content:
                 self.last_call_ok = False
                 self.last_error_code = "empty_response"
@@ -102,6 +113,7 @@ class NemotronQueryInterpreter:
             if content.startswith("```"):
                 content = content.removeprefix("```json").removeprefix("```").removesuffix("```").strip()
             payload = json.loads(content)
+            validate_payload(payload)
             required = set(QUERY_SCHEMA["required"])
             if not isinstance(payload, dict) or not required.issubset(payload):
                 self.last_call_ok = False
@@ -131,3 +143,23 @@ class NemotronQueryInterpreter:
             status = getattr(exc, "status_code", None)
             self.last_error_code = f"http_{status}" if status else type(exc).__name__
             return None
+
+
+def validate_payload(payload: Any) -> None:
+    """Enforce the small transport schema without accepting coercions."""
+    if not isinstance(payload, dict) or set(payload) != set(QUERY_SCHEMA["required"]):
+        raise ValueError("Invalid interpreter fields")
+    types = {"string": str, "integer": int, "array": list, "null": type(None)}
+    for name, spec in QUERY_SCHEMA["properties"].items():
+        value = payload[name]
+        allowed = spec["type"] if isinstance(spec["type"], list) else [spec["type"]]
+        if not any(type(value) is types[t] for t in allowed):
+            raise ValueError("Invalid interpreter value type")
+        if "enum" in spec and value not in spec["enum"]:
+            raise ValueError("Invalid interpreter enum")
+        if isinstance(value, list) and (len(value) > 30 or any(type(x) is not str or len(x) > 100 for x in value)):
+            raise ValueError("Invalid interpreter list")
+        if isinstance(value, str) and len(value) > 1000:
+            raise ValueError("Interpreter text too long")
+        if type(value) is int and not 1 <= value <= (2100 if "year" in name else 10000 if name == "max_pages" else 1000):
+            raise ValueError("Interpreter number outside bounds")
