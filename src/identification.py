@@ -108,6 +108,7 @@ def identify(engine, text, state):
             excerpts.append(sentences[best])
         documents[rec.item.id]=' '.join(dict.fromkeys(excerpts))[:2200]
         evidence[rec.item.id]=rows
+    source_plots={rec.item.id:plot_text(rec.item).casefold() for rec in candidates}
     assessment='local passage overlap'
     if candidates and interpreter and hasattr(interpreter,'identify_task'):
         payload=interpreter.identify_task('assess', {'clues':[{'text':c.text,'uncertain':c.uncertain} for c in clues]},
@@ -119,7 +120,7 @@ def identify(engine, text, state):
                 item_id=row.get('id'); clue=row.get('clue'); quote=row.get('quote'); verdict=row.get('verdict')
                 if item_id not in documents or type(clue) is not int or not 0<=clue<len(clues): continue
                 if verdict not in {'supported','contradicted'} or type(quote) is not str or not 10<=len(quote)<=200: continue
-                if quote.casefold() not in documents[item_id].casefold(): continue
+                if quote.casefold() not in documents[item_id].casefold() or quote.casefold() not in source_plots[item_id]: continue
                 if any(x['clue']==clue for x in accepted.get(item_id,[])): continue
                 accepted.setdefault(item_id,[]).append({'clue':clue,'verdict':verdict,'quote':quote,'method':'Nemotron inference; quote checked against source passage'})
             if accepted:
