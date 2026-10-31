@@ -148,9 +148,20 @@ class StoryScoutEngine:
         if search_action == 'similar':
             state.last_content_query = ''
         parsed = parse_preferences(text)
-        from .identification import is_identification, identify
-        continuing_identification = bool(state.identification_query and search_action in {'auto','refine'} and parsed.intent not in {'reset','help','explain','show_preferences','more'} and not re.search(r'\b(?:recommend|suggest|similar)\b', text, re.I))
+        from .identification import is_identification, starts_identification, identify
+        new_identification = search_action == 'identify' or starts_identification(text)
+        exact_identity = not re.fullmatch(r'\d{4}', text.strip()) and (
+            title_key(text) in self.title_directory.keys or
+            any(title_key(text)==title_key(item.title) for items in self.catalogs.values() for item in items))
+        continuing_identification = bool(state.identification_query and not new_identification and not exact_identity and search_action in {'auto','refine'} and parsed.intent not in {'reset','help','explain','show_preferences','more'} and not re.search(r'\b(?:recommend|suggest|similar)\b', text, re.I))
         if not reference_id and (search_action == 'identify' or is_identification(text) or continuing_identification):
+            self.last_context_action='identify_refine' if continuing_identification else 'identify_new'
+            if not continuing_identification:
+                state.identification_query=''
+                state.pending_title_choices.clear()
+                state.preferences.themes=[]
+                state.preferences.desired_mood=None
+                state.preferences.referenced_title=None
             if parsed.media_selection:
                 state.media_selection=parsed.media_selection
                 state.has_explicit_media=True
@@ -170,7 +181,9 @@ class StoryScoutEngine:
                     state.preferences.min_year=state.preferences.max_year=int(exact_year[1])
             if state.preferences.contradiction_messages:
                 return 'Please resolve these preferences: '+ ' '.join(state.preferences.contradiction_messages), {}
-            state.identification_query=((state.identification_query+'; ') if continuing_identification else '')+text
+            repeated = continuing_identification and text.strip().casefold() in {part.strip().casefold() for part in state.identification_query.split('; ')}
+            if not repeated:
+                state.identification_query=((state.identification_query+'; ') if continuing_identification else '')+text
             state.identification_query=state.identification_query[-4000:]
             state.selected_reference_id=None
             state.last_content_query=''

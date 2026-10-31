@@ -24,15 +24,21 @@ def is_identification(text):
     return bool(re.search(r"\b(?:identify (?:this|a|the)|what (?:(?:is|was) (?:the |that )?)?(?:movie|film|book)|which (?:movie|film|book)|can(?:not|'t|’t) remember (?:the |its )?(?:name|title)|trying to remember|forgot (?:the |its )?(?:name|title)|a (?:man|woman|boy|girl) (?:who |goes |wakes |finds ))",lower))
 
 
+def starts_identification(text):
+    """A complete identification question starts a separate story search."""
+    lower=text.lower().replace("what's", "what is")
+    return bool(re.search(r"\b(?:identify (?:this|a|the|another)|what (?:(?:is|was) (?:the |that )?)?(?:movie|film|book)|which (?:movie|film|book)|trying to remember|can(?:not|'t|’t) remember (?:the |its )?(?:name|title)|forgot (?:the |its )?(?:name|title))\b",lower))
+
+
 def local_clues(text):
     text = re.sub(r"^(?:identify (?:this|the) (?:movie|film|book)|what (?:is|was) (?:the |that )?(?:movie|film|book)(?: where| about)?)[\s:?.]*", "", text, flags=re.I)
-    parts = re.split(r"[.;!?\n]+|\b(?:and then|but|also)\b", text, flags=re.I)
+    parts = re.split(r"[.;!?\n]+|\b(?:and then|but|also|while)\b", text, flags=re.I)
     return [PlotClue(p.strip()[:240], bool(re.search(r"\b(maybe|perhaps|possibly|think|not sure)\b",p,re.I))) for p in parts if len(p.strip().split())>=3][:6] or [PlotClue(text[:240])]
 
 
 def plot_text(item):
     if item.retrieval_text:
-        return item.retrieval_text
+        return (item.description+'\n' if item.description_provenance or item.source=='demo' else '')+item.retrieval_text
     if item.source.startswith(('movielens','project-gutenberg','wikidata-catalog','openlibrary-catalog')) and not item.description_provenance:
         return ''
     return item.description
@@ -58,6 +64,10 @@ def recall_candidates(index, query, preferences):
     from .retrieval import _query_vector, combine_hybrid_scores, calibrate_semantic_scores
     vector=index.vectorizer.transform([lexical_query(index,query)])
     lexical=cosine_similarity(index.matrix,vector).ravel()
+    if not hasattr(index,'identification_summary_matrix'):
+        index.identification_summary_matrix=index.vectorizer.transform([item.description if item.source=='demo' or item.description_provenance else '' for item in index.items])
+    summary_lexical=cosine_similarity(index.identification_summary_matrix,vector).ravel()
+    lexical=np.maximum(lexical,.65*summary_lexical)
     semantic=None
     scores=lexical
     if index.semantic_available:
@@ -86,6 +96,8 @@ def identify(engine, text, state):
                 if isinstance(row,dict) and type(row.get('text')) is str and 5<=len(row['text'])<=240 and row['text'].casefold() in text.casefold() and type(row.get('uncertain',False)) is bool:
                     validated.append(PlotClue(row['text'], row.get('uncertain',False)))
             if validated:
+                fragments=[PlotClue(part.text,c.uncertain or part.uncertain) for c in validated for part in local_clues(c.text)]
+                validated=list({c.text.casefold():c for c in fragments}.values())[:6]
                 clues=validated; extraction='Nemotron source-span extraction'
     query=' '.join(c.text for c in clues)
     factual=state.preferences.clone()
@@ -122,7 +134,7 @@ def identify(engine, text, state):
             if values[best]>=.18 and len(overlap)>=2:
                 rows.append({'clue':number,'verdict':'text_overlap','quote':sentences[best][:200], 'method':'local TF-IDF passage overlap'})
             excerpts.append(sentences[best])
-        documents[rec.item.id]=text_source[:1000]+'\n'+' '.join(dict.fromkeys(excerpts))[:1200]
+        documents[rec.item.id]=text_source[:6000]+'\n'+' '.join(dict.fromkeys(excerpts))[:1200]
         evidence[rec.item.id]=rows
     source_plots={rec.item.id:plot_text(rec.item) for rec in candidates}
     assessment='local passage overlap'
@@ -147,7 +159,7 @@ def identify(engine, text, state):
                 if any(x['clue']==clue for x in accepted.get(item_id,[])): continue
                 accepted.setdefault(item_id,[]).append({'clue':clue,'verdict':verdict,'quote':quote,'method':'Nemotron inference; quote checked against source passage'})
             if accepted:
-                evidence.update(accepted); assessment='Nemotron clue comparison with source-quote validation'
+                evidence={item_id:accepted.get(item_id,[]) for item_id in evidence}; assessment='Nemotron clue comparison with source-quote validation'
     for rec in candidates:
         rows=evidence[rec.item.id]
         weights=[.5 if c.uncertain else 1. for c in clues]

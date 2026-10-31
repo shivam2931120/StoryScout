@@ -800,11 +800,11 @@ export default function App() {
                 <div className="conversation-dock">
                   <div className="search-context-controls">
                     <div role="group" aria-label="Search context">
-                      <button type="button" disabled={busy} aria-pressed={searchAction !== "new"} onClick={() => setSearchAction("refine")}>Follow-up</button>
-                      <button type="button" disabled={busy} aria-pressed={searchAction === "identify" || !!current.state.identification_query} onClick={() => setSearchAction("identify")}>Identify a story</button>
+                      <button type="button" disabled={busy} aria-pressed={searchAction === "refine"} onClick={() => setSearchAction("refine")}>Follow-up</button>
+                      <button type="button" disabled={busy} aria-pressed={searchAction === "identify"} onClick={() => setSearchAction("identify")}>{current.state.identification_query ? "Identify another story" : "Identify a story"}</button>
                       <button type="button" disabled={busy} aria-pressed={searchAction === "new"} onClick={() => setSearchAction("new")}>New search</button>
                     </div>
-                    {searchAction === "new" ? <span>Clears filters and topic; keeps this chat.</span> : current.state.last_content_query ? <span className="retained-topic">Topic: {current.state.last_content_query}<button type="button" aria-label="Clear search topic" disabled={busy} onClick={() => applyPreferences({...current.state, last_content_query:"", selected_reference_id:null, preferences:{...current.state.preferences, referenced_title:null}})}><X size={12}/></button></span> : <span>Visible preferences stay active.</span>}
+                    {searchAction === "new" ? <span>Clears filters and topic; keeps this chat.</span> : current.state.last_content_query ? <span className="retained-topic">Topic: {current.state.last_content_query}<button type="button" aria-label="Clear search topic" disabled={busy} onClick={() => applyPreferences({...current.state, last_content_query:"", selected_reference_id:null, preferences:{...current.state.preferences, referenced_title:null}})}><X size={12}/></button></span> : current.state.identification_query ? <span>{searchAction === "identify" ? "Starts a separate story search." : "A new identification question starts fresh. Add details to continue this story."}</span> : <span>Visible preferences stay active.</span>}
                   </div>
                   <div className="active-preferences">
                     <SlidersHorizontal size={12} />

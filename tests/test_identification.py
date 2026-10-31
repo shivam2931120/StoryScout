@@ -145,3 +145,52 @@ def test_model_quote_typography_is_normalized_back_to_original_source(identifier
     _,results,details=identify(identifier,'A thief enters sleeping people’s dreams to steal secrets',ConversationState(media_selection='movies'))
     assert details['assessment'].startswith('Nemotron')
     assert 'people’s dreams' in results['movie'][0].explanation
+
+
+def test_new_identification_questions_replace_previous_clues(identifier):
+    with TestClient(create_app(identifier)) as client:
+        state={'media_selection':'movies','preferences':{'max_runtime':200,'excluded_genres':['horror'],'themes':['space']}}
+        questions=[
+            'Identify this movie: a thief enters sleeping people’s dreams.',
+            'What movie has a thief stealing jewels from a casino?',
+            'What movie is about a child traveling through dreams to rescue a friend?',
+        ]
+        for question in questions:
+            result=client.post('/api/chat',json={'message':question,'state':state,'search_action':'refine'}).json()
+            state=result['state']
+            assert state['identification_query']==question
+            assert result['trace']['context_action']=='identify_new'
+            assert state['preferences']['max_runtime']==200
+            assert state['preferences']['excluded_genres']==['horror']
+            assert state['preferences']['themes']==[]
+            assert all(clue['text'].casefold() in question.casefold() for clue in result['identification']['clues'])
+        follow=client.post('/api/chat',json={'message':'It was animated','state':state}).json()
+        assert follow['trace']['context_action']=='identify_refine'
+        assert questions[-1] in follow['state']['identification_query']
+        assert questions[0] not in follow['state']['identification_query']
+        assert follow['results']['movie'][0]['item']['id']=='movie_animation'
+
+
+def test_identify_another_story_action_and_exact_title_after_identification(identifier):
+    state=ConversationState(media_selection='movies')
+    identifier.handle('Identify this movie: a thief enters dreams',state)
+    identifier.handle('A thief steals jewels from a casino',state,search_action='identify')
+    assert 'enters dreams' not in state.identification_query
+    assert identifier.last_context_action=='identify_new'
+    identifier.handle('Dream Job',state)
+    assert identifier.last_title_lookup
+    assert state.identification_query==''
+    assert identifier.last_title_matches[0][0].id=='movie_dream'
+
+
+def test_model_unknowns_do_not_keep_positive_keyword_coverage(identifier):
+    class Model:
+        def identify_task(self,task,clues,candidates):
+            if task=='extract': return None
+            return {'evidence':[{'id':'movie_dream','clue':0,'verdict':'supported',
+                'quote':'A thief enters sleeping people’s dreams to steal secrets.'}]}
+    identifier.query_interpreter=Model()
+    _,results,details=identify(identifier,'A thief enters sleeping people’s dreams to steal secrets',ConversationState(media_selection='movies'))
+    assert details['assessment'].startswith('Nemotron')
+    assert results['movie'][0].item.id=='movie_dream'
+    assert all(r.score_components['clue_coverage']==0 for r in results['movie'] if r.item.id!='movie_dream')

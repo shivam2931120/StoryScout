@@ -112,7 +112,7 @@ def create_app(engine: StoryScoutEngine | None = None) -> FastAPI:
         all_items = [x for items in current.catalogs.values() for x in items]
         starters = [next((x for x in all_items if x.title == title and x.source.startswith("demo")), None) for title in titles]
         return {"counts": {k: len(v) for k, v in current.catalogs.items()}, "status": catalog_status(all_items),
-                "title_directory_count":len(current.title_directory.records),"search_version":"3.5-plot-identification",
+                "title_directory_count":len(current.title_directory.records),"search_version":"3.6-identification-context",
                 "catalog_profile":os.getenv('STORYSCOUT_CATALOG_PROFILE','full'),"embedding_backend":os.getenv('STORYSCOUT_EMBEDDING_BACKEND','torch'),
                 "genres": GENRES, "moods": MOODS, "modes": modes(current), "model": MODEL_NAME,
                 "movie_title_source": "TMDB on-demand" if current.movie_source and current.movie_source.configured else "local catalog",
@@ -175,7 +175,7 @@ def create_app(engine: StoryScoutEngine | None = None) -> FastAPI:
             identification=current.last_identification
         results = {domain: group[:request.per_domain] for domain, group in results.items()}
         state.last_recommendations = [rec.item.id for group in results.values() for rec in group]
-        state.seen_recommendations=[] if parse and parse_preferences(request.message).intent=='reset' else list(dict.fromkeys(([] if context_action == 'new' else prior_seen)+state.last_recommendations))[-300:]
+        state.seen_recommendations=[] if parse and parse_preferences(request.message).intent=='reset' else list(dict.fromkeys(([] if context_action in {'new','identify_new'} else prior_seen)+state.last_recommendations))[-300:]
         state.messages = state.messages[-60:]
         parsed = parse_preferences(request.message)
         retained_fields = [key for key, value in asdict(state.preferences).items() if value and key != 'contradiction_messages' and before_preferences.get(key) == value and context_action != 'new']

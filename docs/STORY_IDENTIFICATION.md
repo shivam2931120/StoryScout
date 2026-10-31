@@ -34,8 +34,8 @@ identification against those filters.
 ## Offline and free-tier behavior
 
 No extra model weights are loaded. Existing TF-IDF, passage and embedding caches
-are reused. Two optional NVIDIA requests each have a 12-second timeout and no
-retry. If extraction or assessment fails, local extraction/retrieval/evidence
+are reused. Optional NVIDIA extraction has a 12-second timeout; candidate comparison has
+a 25-second timeout, bounded output and no retry. If extraction or assessment fails, local extraction/retrieval/evidence
 continue. No external provider records are acquired by identification; its
 coverage is limited to the local catalog's described records. In particular,
 Big Book API availability alone does not add books to this plot index.
@@ -83,3 +83,20 @@ JSON apostrophe escaping, whitespace and typographic quote differences, then
 returns an actual source span capped at 200 characters. Incoming quotes up to
 500 characters are accepted only when they match both supplied excerpts and the
 original plot.
+
+## New searches versus follow-up clues
+
+A complete question such as “What movie is about …?” or “Identify this movie: …”
+always starts a separate identification, including when sent in an existing chat.
+“Identify another story” also clears remembered clues. Additional statements such
+as “I remember a spinning top” continue the current description. Exact known title
+queries return to title lookup. New identifications clear old narrative themes
+and mood while retaining visible factual filters and media selection. The response
+trace records `identify_new` or `identify_refine`.
+
+Recall includes source-provided concise descriptions as a separate lexical field
+so long plot documents do not hide a short, distinctive summary. Comparison gets
+up to 6,000 source characters plus 1,200 characters of selected clue passages per
+candidate, including original demonstration descriptions. Following a successful
+model assessment, omitted candidates have unknown clue coverage; earlier keyword
+overlap is not retained as positive model evidence.
