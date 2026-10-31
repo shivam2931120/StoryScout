@@ -112,7 +112,7 @@ def create_app(engine: StoryScoutEngine | None = None) -> FastAPI:
         all_items = [x for items in current.catalogs.values() for x in items]
         starters = [next((x for x in all_items if x.title == title and x.source.startswith("demo")), None) for title in titles]
         return {"counts": {k: len(v) for k, v in current.catalogs.items()}, "status": catalog_status(all_items),
-                "title_directory_count":len(current.title_directory.records),"search_version":"3.4-validated-nemotron-nlp",
+                "title_directory_count":len(current.title_directory.records),"search_version":"3.5-plot-identification",
                 "catalog_profile":os.getenv('STORYSCOUT_CATALOG_PROFILE','full'),"embedding_backend":os.getenv('STORYSCOUT_EMBEDDING_BACKEND','torch'),
                 "genres": GENRES, "moods": MOODS, "modes": modes(current), "model": MODEL_NAME,
                 "movie_title_source": "TMDB on-demand" if current.movie_source and current.movie_source.configured else "local catalog",
@@ -154,30 +154,36 @@ def create_app(engine: StoryScoutEngine | None = None) -> FastAPI:
             current.last_title_matches=[]
             current.last_title_lookup=False
             current.last_interpretation={"status": "not_needed"}
+            current.last_identification=None
             if parse:
                 reply, results = current.handle(request.message, state, reference_id=request.reference_id, lookup_id=request.lookup_id, search_action=request.search_action)
             elif pref.contradiction_messages:
                 reply, results = "Please resolve these preferences: " + " ".join(pref.contradiction_messages), {}
             else:
-                reference = current.get_item(state.selected_reference_id)
-                results = current.recommend(state.last_content_query, state, reference)
-                reply = current._request_confirmation(state) if any(results.values()) else current.empty_message(state)
+                if state.identification_query:
+                    from src.identification import identify
+                    reply,results,current.last_identification=identify(current,state.identification_query,state)
+                else:
+                    reference = current.get_item(state.selected_reference_id)
+                    results = current.recommend(state.last_content_query, state, reference)
+                    reply = current._request_confirmation(state) if any(results.values()) else current.empty_message(state)
             title_matches = [{"item": item_payload(item), "explanation": explanation, "match_type": "title_lookup", "title_match_kind":current.last_title_match_kind} for item, explanation in current.last_title_matches]
             title_lookup = current.last_title_lookup
             context_action = current.last_context_action if parse else "refine"
             diagnostics={k:dict(v) for k,v in current.last_diagnostics.items()}
             interpretation=dict(current.last_interpretation)
+            identification=current.last_identification
         results = {domain: group[:request.per_domain] for domain, group in results.items()}
         state.last_recommendations = [rec.item.id for group in results.values() for rec in group]
         state.seen_recommendations=[] if parse and parse_preferences(request.message).intent=='reset' else list(dict.fromkeys(([] if context_action == 'new' else prior_seen)+state.last_recommendations))[-300:]
         state.messages = state.messages[-60:]
         parsed = parse_preferences(request.message)
         retained_fields = [key for key, value in asdict(state.preferences).items() if value and key != 'contradiction_messages' and before_preferences.get(key) == value and context_action != 'new']
-        trace = {"context_action":context_action, "retained_preferences":retained_fields, "intent": "title_lookup" if title_lookup else (parsed.intent if parse else "preference_edit"), "method": "rule baseline" + (" + optional NVIDIA interpretation" if current.query_interpreter else ""),
+        trace = {"context_action":context_action, "retained_preferences":retained_fields, "intent": "identify" if identification else "title_lookup" if title_lookup else (parsed.intent if parse else "preference_edit"), "method": "rule baseline" + (" + optional NVIDIA interpretation" if current.query_interpreter else ""),
                  "extracted_fields": sorted(parsed.explicit_fields) if parse and not title_lookup else [], "active_modes": modes(current),
                  "interpretation":interpretation,"retrieval":diagnostics,"content_query":state.last_content_query,
                  "latency_ms": round((time.perf_counter() - start) * 1000, 1)}
-        return {"reply": reply, "title_matches": title_matches, "state": asdict(state), "results": {domain: [{"item": item_payload(rec.item), "similarity_score": rec.score,
+        return {"reply": reply, "identification":identification, "title_matches": title_matches, "state": asdict(state), "results": {domain: [{"item": item_payload(rec.item), "similarity_score": rec.score,
                 "lexical_score": rec.lexical_score, "semantic_score": rec.semantic_score, "explanation": rec.explanation,
                 "score_components":rec.score_components,"matched_terms":rec.matched_terms,"passage_match":rec.passage_match} for rec in group] for domain, group in results.items()},
                 "choices": [item_payload(current.get_item(x)) for x in state.pending_title_choices if current.get_item(x)], "trace": trace}
@@ -207,7 +213,7 @@ def create_app(engine: StoryScoutEngine | None = None) -> FastAPI:
             entity_path=ROOT/f"artifacts/entity_search/{name}.json"
             if entity_path.exists():
                 entity_evaluation[name]={key:value for key,value in json.loads(entity_path.read_text()).items() if key!="rows"}
-        return {"entity_search":entity_evaluation,"passage_evaluation":passage_evaluation,"results": json.loads(path.read_text()) if path.exists() else None,
+        return {"identification": json.loads((ROOT/"artifacts/identification/tfidf.json").read_text()) if (ROOT/"artifacts/identification/tfidf.json").exists() else None, "entity_search":entity_evaluation,"passage_evaluation":passage_evaluation,"results": json.loads(path.read_text()) if path.exists() else None,
                 "summary": (directory / "evaluation_summary.md").read_text() if (directory / "evaluation_summary.md").exists() else "Not evaluated yet.",
                 "genre_classifier": json.loads((ROOT / "artifacts/genre_classifier_results.json").read_text()) if (ROOT / "artifacts/genre_classifier_results.json").exists() else None,
                 "genre_text_classifier": json.loads((ROOT/'artifacts/genre_text_results.json').read_text()) if (ROOT/'artifacts/genre_text_results.json').exists() else None,

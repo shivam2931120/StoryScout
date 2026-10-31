@@ -37,6 +37,7 @@ class StateInput(BaseModel):
     messages: list[MessageInput] = Field(default_factory=list, max_length=80)
     retrieval_mode: Literal["tfidf", "semantic", "hybrid"] = "hybrid"
     last_content_query: str = Field(default='', max_length=4000)
+    identification_query: str = Field(default="", max_length=4000)
     seen_recommendations: list[str] = Field(default_factory=list, max_length=300)
 
     def to_domain(self) -> ConversationState:
@@ -51,7 +52,7 @@ class ChatRequest(BaseModel):
     state: StateInput = Field(default_factory=StateInput)
     reference_id: str | None = Field(default=None, max_length=200)
     lookup_id: str | None = Field(default=None, max_length=200)
-    search_action: Literal["auto", "new", "refine", "similar"] = "auto"
+    search_action: Literal["auto", "new", "refine", "similar", "identify"] = "auto"
     per_domain: int = Field(default=3, ge=1, le=5)
 
 

@@ -19,6 +19,7 @@ class StoryScoutEngine:
         self.last_title_matches = []
         self.last_title_lookup = False
         self.last_title_match_kind = "none"
+        self.last_identification = None
         self.last_context_action = "auto"
         self.last_interpretation = {"status": "not_needed"}
 
@@ -114,7 +115,7 @@ class StoryScoutEngine:
 
     def reset(self, state: ConversationState) -> ConversationState:
         state.messages.clear(); state.preferences = state.preferences.__class__(); state.media_selection = "both"; state.has_explicit_media = False; state.selected_reference_id = None; state.last_recommendations.clear(); state.pending_title_choices.clear()
-        state.last_content_query=''; state.seen_recommendations.clear()
+        state.last_content_query=''; state.identification_query=''; state.seen_recommendations.clear()
         return state
 
     def new_search(self, state):
@@ -122,6 +123,7 @@ class StoryScoutEngine:
         state.preferences = state.preferences.__class__()
         state.selected_reference_id = None
         state.last_content_query = ''
+        state.identification_query = ''
         state.last_recommendations.clear()
         state.seen_recommendations.clear()
         state.pending_title_choices.clear()
@@ -130,6 +132,7 @@ class StoryScoutEngine:
         return ["book", "movie"] if selection == "both" else (["book"] if selection == "books" else ["movie"])
 
     def handle(self, text: str, state: ConversationState, *, reference_id: str | None = None, lookup_id: str | None = None, search_action: str = "auto") -> tuple[str, dict[str, list[Recommendation]]]:
+        self.last_identification = None
         self.last_diagnostics={}
         self.last_interpretation = {"status": "not_needed"}
         self.last_title_matches = []
@@ -145,6 +148,37 @@ class StoryScoutEngine:
         if search_action == 'similar':
             state.last_content_query = ''
         parsed = parse_preferences(text)
+        from .identification import is_identification, identify
+        continuing_identification = bool(state.identification_query and search_action in {'auto','refine'} and parsed.intent not in {'reset','help','explain','show_preferences','more'} and not re.search(r'\b(?:recommend|suggest|similar)\b', text, re.I))
+        if not reference_id and (search_action == 'identify' or is_identification(text) or continuing_identification):
+            if parsed.media_selection:
+                state.media_selection=parsed.media_selection
+                state.has_explicit_media=True
+            fields=parsed.explicit_fields & {'max_pages','max_runtime','year','language','excluded_genres','clear_max_pages','clear_max_runtime','clear_year'}
+            incoming=parsed.preferences.clone()
+            incoming.preferred_genres=[]; incoming.themes=[]; incoming.desired_mood=None; incoming.negative_content=[]; incoming.referenced_title=None
+            state.preferences=merge_preferences(state.preferences,incoming,text,fields)
+            if continuing_identification and not re.search(r'\b(?:maybe|perhaps|possibly|think|not sure)\b',text,re.I):
+                if re.search(r"\b(?:live action|(?:not|wasn't|wasn’t|isn't|isn’t) animated)\b",text,re.I):
+                    state.preferences.excluded_genres=list(dict.fromkeys(state.preferences.excluded_genres+['animation']))
+                    state.preferences.preferred_genres=[g for g in state.preferences.preferred_genres if g!='animation']
+                elif re.search(r'\banimated\b',text,re.I):
+                    state.preferences.preferred_genres=['animation']
+                    state.preferences.excluded_genres=[g for g in state.preferences.excluded_genres if g!='animation']
+                exact_year=re.fullmatch(r'(?:in |from |released in |published in )?((?:18|19|20)\d{2})[.!]?',text.strip(),re.I)
+                if exact_year:
+                    state.preferences.min_year=state.preferences.max_year=int(exact_year[1])
+            if state.preferences.contradiction_messages:
+                return 'Please resolve these preferences: '+ ' '.join(state.preferences.contradiction_messages), {}
+            state.identification_query=((state.identification_query+'; ') if continuing_identification else '')+text
+            state.identification_query=state.identification_query[-4000:]
+            state.selected_reference_id=None
+            state.last_content_query=''
+            state.messages.append({'role':'user','content':text})
+            reply,results,self.last_identification=identify(self,state.identification_query,state)
+            return reply,results
+        if parsed.intent not in {'explain','show_preferences'}:
+            state.identification_query=''
         # Resolve the complete title before interpreting words such as dark, no,
         # short or romance as instructions. Similarity requests keep the NLP path.
         controls = {"reset", "reset my preferences", "help", "show preferences", "why did you recommend this"}

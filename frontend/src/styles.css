@@ -2435,3 +2435,7 @@ body:has(dialog[open]) {
   font-size: 12px;
   line-height: 1.5;
 }
+
+.identification-clues { padding: 16px; margin: 12px 0 20px; background: var(--low); border-radius: 12px; color: var(--secondary); font-size: 13px; }
+.identification-clues strong { color: var(--accent); }
+.identification-clues ul { padding-left: 20px; line-height: 1.7; }

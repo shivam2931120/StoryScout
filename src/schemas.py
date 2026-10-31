@@ -87,6 +87,7 @@ class ConversationState:
     retrieval_mode: str = "hybrid"
     pending_title_choices: list[str] = field(default_factory=list)
     last_content_query: str = ""
+    identification_query: str = ""
     seen_recommendations: list[str] = field(default_factory=list)
 
 

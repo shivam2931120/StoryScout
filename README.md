@@ -210,3 +210,13 @@ FastAPI process. On Render, open the StoryScout service’s **Environment** page
 add `BIGBOOK_API_KEY`, and enter it there as a secret. Never put it in React/Vite
 variables, catalog files, source control, or request URLs. Rotate the key if it
 has been exposed.
+
+### Identify a story from its plot
+
+Use **Identify a story** in the chat, or ask “Identify this movie: a thief enters
+people's dreams…”. StoryScout extracts remembered clues, searches local plot and
+passage indexes, checks candidate evidence, and asks a follow-up. Optional
+Nemotron assistance extracts source spans and compares supplied plot excerpts;
+local hybrid retrieval and factual filtering select the candidates. Results are
+possible matches with evidence, not confidence percentages or guaranteed
+identifications. See [identification methodology and evaluation](docs/STORY_IDENTIFICATION.md).

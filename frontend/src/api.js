@@ -58,6 +58,7 @@ export const emptyState = () => ({
   messages: [],
   retrieval_mode: "hybrid",
   last_content_query: "",
+  identification_query: "",
   seen_recommendations: [],
 });
 export const newConversation = () => ({

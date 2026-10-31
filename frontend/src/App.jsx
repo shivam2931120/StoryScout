@@ -286,6 +286,7 @@ export default function App() {
         results: result.results,
         choices: result.choices,
         title_matches: result.title_matches,
+        identification: result.identification,
         state: result.state,
         trace: result.trace,
         time: Date.now(),
@@ -595,6 +596,9 @@ export default function App() {
                         busy={busy}
                         disabled={!meta}
                       />
+                      <button type="button" className="text-button" aria-pressed={searchAction === "identify"} disabled={busy} onClick={() => setSearchAction(searchAction === "identify" ? "auto" : "identify")}>
+                        <Search size={15} /> {searchAction === "identify" ? "Identify a story: describe the plot in the search box" : "Trying to remember a title? Identify it from the plot"}
+                      </button>
                       <div className="suggestion-grid">
                         {examples.map(({ icon: Icon, text, query }) => (
                           <button
@@ -684,6 +688,13 @@ export default function App() {
                         </span>
                         <p>{turn.reply}</p>
                       </div>
+                      {turn.identification && (
+                        <div className="identification-clues">
+                          <strong>Clues used to identify the story</strong>
+                          <ul>{turn.identification.clues.map((clue, i) => <li key={i}>{clue.text}{clue.uncertain ? " (uncertain memory)" : ""}</li>)}</ul>
+                          <span>Possible matches based on available plot text. Add another clue to narrow them down.</span>
+                        </div>
+                      )}
                       {turn.choices?.length > 0 && (
                         <div className="reference-choices">
                           <p>Which title did you mean?</p>
@@ -722,11 +733,11 @@ export default function App() {
                                 <Film size={17} />
                               )}{" "}
                               {domain === "book"
-                                ? "Books to explore"
-                                : "Movies to explore"}
+                                ? (turn.identification ? "Possible book matches" : "Books to explore")
+                                : (turn.identification ? "Possible movie matches" : "Movies to explore")}
                               <span className="count-badge">{recs.length}</span>
                             </h2>
-                            <span>{turn.trace.retrieval?.[domain]?.eligible_count?.toLocaleString() ?? '—'} eligible · diversified by NLP</span>
+                            <span>{turn.identification ? "Clue and plot matching" : `${turn.trace.retrieval?.[domain]?.eligible_count?.toLocaleString() ?? '—'} eligible · diversified by NLP`}</span>
                           </div>
                           {recs.length ? (
                             <div>
@@ -790,6 +801,7 @@ export default function App() {
                   <div className="search-context-controls">
                     <div role="group" aria-label="Search context">
                       <button type="button" disabled={busy} aria-pressed={searchAction !== "new"} onClick={() => setSearchAction("refine")}>Follow-up</button>
+                      <button type="button" disabled={busy} aria-pressed={searchAction === "identify" || !!current.state.identification_query} onClick={() => setSearchAction("identify")}>Identify a story</button>
                       <button type="button" disabled={busy} aria-pressed={searchAction === "new"} onClick={() => setSearchAction("new")}>New search</button>
                     </div>
                     {searchAction === "new" ? <span>Clears filters and topic; keeps this chat.</span> : current.state.last_content_query ? <span className="retained-topic">Topic: {current.state.last_content_query}<button type="button" aria-label="Clear search topic" disabled={busy} onClick={() => applyPreferences({...current.state, last_content_query:"", selected_reference_id:null, preferences:{...current.state.preferences, referenced_title:null}})}><X size={12}/></button></span> : <span>Visible preferences stay active.</span>}
