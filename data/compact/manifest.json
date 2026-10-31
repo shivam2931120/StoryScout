@@ -1,6 +1,6 @@
 {
   "profile": "compact",
-  "policy": "deterministic source-backed subset; demo first, then described supplemental titles, known movie runtimes/source plots and described books/subject mappings; stable SHA-256 tie breaking",
+  "policy": "deterministic source-backed subset; demo first, then source-plotted identification reference titles, described supplemental titles, known movie runtimes/source plots and described books/subject mappings; stable SHA-256 tie breaking",
   "counts": {
     "book": 1000,
     "movie": 1500

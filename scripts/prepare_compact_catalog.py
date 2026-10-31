@@ -11,6 +11,18 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
 from src.data_loader import load_active_catalogs
 
+# Explicit demonstration/reference coverage, using existing source-backed plots.
+# These names retain real records; they never create titles or missing metadata.
+IDENTIFICATION_ANCHORS = {
+    'inception', 'the matrix', 'matrix, the', 'memento', 'titanic',
+    'jurassic park', 'shutter island', 'the truman show', 'truman show, the',
+    'the sixth sense', 'sixth sense, the', 'finding nemo', 'the lion king',
+    'lion king, the', 'fight club', 'the prestige', 'prestige, the',
+    'eternal sunshine of the spotless mind', 'the shawshank redemption',
+    'shawshank redemption, the', 'forrest gump', 'the silence of the lambs',
+    'silence of the lambs, the', 'the godfather', 'godfather, the',
+}
+
 def prepare():
     os.environ.pop('STORYSCOUT_CATALOG_PROFILE',None)
     catalogs=load_active_catalogs()
@@ -18,7 +30,7 @@ def prepare():
     for domain,limit in [('book',1000),('movie',1500)]:
         items=catalogs[domain]
         def priority(x):
-            return (not x.source.startswith('demo'),not (x.id.startswith(('book_ol_','movie_wd_','movie_pub_')) and bool(x.description_provenance)),not bool(x.runtime_minutes if domain=='movie' else x.description_provenance),not bool(x.retrieval_text if domain=='movie' else x.subject_genres),hashlib.sha256(x.id.encode()).hexdigest())
+            return (not x.source.startswith('demo'),not (domain=='movie' and x.title.casefold() in IDENTIFICATION_ANCHORS and bool(x.retrieval_text)),not (x.id.startswith(('book_ol_','movie_wd_','movie_pub_')) and bool(x.description_provenance)),not bool(x.runtime_minutes if domain=='movie' else x.description_provenance),not bool(x.retrieval_text if domain=='movie' else x.subject_genres),hashlib.sha256(x.id.encode()).hexdigest())
         selected=sorted(items,key=priority)[:limit]
         result[domain]=[asdict(x) for x in sorted(selected,key=lambda x:x.id)]
     destination=ROOT/'data/compact/catalogs.json.gz'
@@ -36,7 +48,7 @@ def prepare():
             directory.append(record)
     with gzip.open(destination.parent/'titles.json.gz', 'wt', encoding='utf-8') as target:
         json.dump(directory, target, ensure_ascii=False)
-    summary={'profile' :'compact','policy':'deterministic source-backed subset; demo first, then described supplemental titles, known movie runtimes/source plots and described books/subject mappings; stable SHA-256 tie breaking',
+    summary={'profile' :'compact','policy':'deterministic source-backed subset; demo first, then source-plotted identification reference titles, described supplemental titles, known movie runtimes/source plots and described books/subject mappings; stable SHA-256 tie breaking',
              'counts':{k:len(v) for k,v in result.items()},'source_counts':{k:len(v) for k,v in catalogs.items()}}
     (destination.parent/'manifest.json').write_text(json.dumps(summary,indent=2))
     print(json.dumps(summary),flush=True)

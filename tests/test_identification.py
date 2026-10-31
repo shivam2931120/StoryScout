@@ -118,3 +118,18 @@ def test_answer_to_animation_question_actually_narrows_results(identifier):
     state.preferences=Preferences()
     identifier.handle('Maybe it was live action',state)
     assert 'animation' not in state.preferences.excluded_genres
+
+
+def test_compact_catalog_retains_source_plotted_reference_titles(tmp_path, monkeypatch):
+    from scripts import prepare_compact_catalog as compact
+    movies=[CatalogItem(f'movie_{i}','movie',f'Catalog record {i}','A source plot.',retrieval_text='A source plot.',source='source') for i in range(1501)]
+    anchor=CatalogItem('movie_anchor','movie','Inception','A source plot about dreams.',retrieval_text='A source plot about dreams.',source='source')
+    monkeypatch.setattr(compact,'ROOT',tmp_path)
+    monkeypatch.setattr(compact,'load_active_catalogs',lambda:{'book':[], 'movie':movies+[anchor]})
+    compact.prepare()
+    import gzip,json
+    with gzip.open(tmp_path/'data/compact/catalogs.json.gz','rt') as stream: saved=json.load(stream)
+    assert len(saved['movie'])==1500
+    retained=next(x for x in saved['movie'] if x['id']==anchor.id)
+    assert retained['runtime_minutes'] is None
+    assert set(x['id'] for x in saved['movie']) <= set(x.id for x in movies+[anchor])

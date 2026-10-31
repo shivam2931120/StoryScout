@@ -66,3 +66,8 @@ can prevent identification. The model cannot add an unknown title as a result.
 Mixed identification ranks compare per-domain cosine/reranking heuristics; these
 scores are not cross-domain calibrated. Unlike the main recommendation evaluation,
 this small diagnostic reports a combined top-three identity shortlist.
+
+The compact selection explicitly retains a small documented set of popular
+reference titles when existing source plots are available (including Inception).
+The 1,500-movie cap is unchanged; omitted or undescribed titles still cannot be
+identified from plot text. The selection list is in `prepare_compact_catalog.py`.
