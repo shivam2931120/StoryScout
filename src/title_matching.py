@@ -217,9 +217,13 @@ class TitleDirectory:
                 if ids:kind='suggestion'
         items=[active.get(item_id) or self.get(item_id) for item_id in sorted(ids)]
         items=[item for item in items if item and (year is None or item.year==year) and (not author or title_key(author) in title_key(item.authors or item.director or ''))]
+        # A selected medium is a hard identity filter. Previously we only used
+        # the narrowed list when it was non-empty; if no book matched, that
+        # condition left movie matches in place and surfaced them in a
+        # Books-only view (and vice versa).
         preferred=requested or {'books':'book','movies':'movie'}.get(selection)
-        narrowed=[item for item in items if item.media_type==preferred]
-        if requested or narrowed:items=narrowed
+        if preferred:
+            items=[item for item in items if item.media_type==preferred]
         unique={}
         for item in items:
             identity=(item.media_type,title_key(item.title),item.year,title_key(item.authors or '') if item.media_type=='book' else '')

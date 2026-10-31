@@ -60,6 +60,22 @@ def test_ambiguous_matches_keep_media_and_year(directory_engine):
     assert len(directory_engine.last_title_matches) == 2
 
 
+@pytest.mark.parametrize("selection, expected", [("books", []), ("movies", ["movie_outside"])])
+def test_title_lookup_never_falls_back_to_an_unselected_medium(directory_engine, selection, expected):
+    state = ConversationState(media_selection=selection)
+    directory_engine.handle("Love & Other Drugs", state)
+    assert [item.id for item, _ in directory_engine.last_title_matches] == expected
+
+
+def test_api_title_lookup_respects_book_only_selection(directory_engine):
+    with TestClient(create_app(directory_engine)) as client:
+        state = asdict(ConversationState(media_selection="books"))
+        body = client.post("/api/chat", json={"message": "Love & Other Drugs", "state": state}).json()
+    assert body["title_matches"] == []
+    assert not body["results"].get("movie")
+    assert body["state"]["media_selection"] == "books"
+
+
 def test_lookup_is_not_a_cross_client_or_reset_leak(directory_engine):
     with TestClient(create_app(directory_engine)) as client:
         first = client.post('/api/chat', json={'message': 'Love & Other Drugs'}).json()
